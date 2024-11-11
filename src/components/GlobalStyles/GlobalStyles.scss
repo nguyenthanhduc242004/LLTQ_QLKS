@@ -1,0 +1,69 @@
+@import 'normalize.css';
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+
+:root {
+    --primary: #4c3575;
+    --primary-rgb: 76, 53, 117;
+    --accent-color: rgb(224, 81, 112);
+    --accent-rgb: 224, 81, 112;
+    --text-color: #212529;
+    --border-color: #dee2e6;
+    --black: #000;
+    --white: #fff;
+    --text-muted-color: #9399a1;
+    --border-color: #e4e9ed;
+    --dynamic-color: #e05170;
+    --reverse-color: #17161a;
+
+    --bs-gray-600: #6c757d;
+}
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.6rem;
+    line-height: 1.5;
+    text-rendering: optimizespeed;
+    background-image: linear-gradient(180deg, #f5f5f5, #caccc6);
+    height: 100vh;
+    color: var(--text-color);
+}
+
+button {
+    cursor: pointer;
+}
+
+button,
+input,
+[tabIndex] {
+    border: none;
+}
+
+a[href] {
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+
+.App {
+    display: flex;
+    height: 100vh;
+}
+
+.brand-name {
+    color: var(--accent-color);
+    font-weight: 700;
+    font-size: 2rem;
+    padding-left: 0.8rem;
+}

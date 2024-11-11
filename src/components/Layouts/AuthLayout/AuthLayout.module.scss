@@ -1,0 +1,27 @@
+.wrapper {
+    width: 596px;
+    padding: 0 48px;
+    margin: auto auto;
+}
+
+.logo-section {
+    display: flex;
+    justify-content: center;
+
+    a {
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+        padding: 0 48px;
+    }
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    color: var(--text-muted-color);
+
+    a {
+        padding: 0 4px;
+    }
+}

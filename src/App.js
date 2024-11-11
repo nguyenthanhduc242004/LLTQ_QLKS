@@ -1,7 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import Following from './pages/Following';
-import { DefaultLayout } from './components/Layouts';
+import Signin from './pages/Signin';
+import { DefaultLayout, AuthLayout } from './components/Layouts';
+import Signup from './pages/Signup';
 
 function App() {
     return (
@@ -16,11 +17,19 @@ function App() {
                     }
                 />
                 <Route
-                    path="/following"
+                    path="/Signin"
                     element={
-                        <DefaultLayout>
-                            <Following />
-                        </DefaultLayout>
+                        <AuthLayout>
+                            <Signin />
+                        </AuthLayout>
+                    }
+                />
+                <Route
+                    path="/signup"
+                    element={
+                        <AuthLayout>
+                            <Signup />
+                        </AuthLayout>
                     }
                 />
             </Routes>
