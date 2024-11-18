@@ -50,7 +50,7 @@ function Signin() {
                     </a>
                 </div>
             </form>
-            <div class="center">
+            <div className={cx('center')}>
                 <button className={cx('main-button')}>ĐĂNG NHẬP</button>
             </div>            
             <div className={cx('above-footer')}>

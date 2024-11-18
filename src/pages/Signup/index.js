@@ -47,7 +47,7 @@ function Signup() {
                                     id="password"
                                     name="password"
                                     type="password"
-                                    placeholder="8+ characters required"
+                                    placeholder="Mật khẩu có 8 ký tự trở lên"
                                     className={cx('form-control', 'form-input')}
                                 />
                                 <span className={cx('form-message')}></span>
@@ -62,7 +62,7 @@ function Signup() {
                                     id="confirmPassword"
                                     name="confirmPassword"
                                     type="password"
-                                    placeholder="8+ characters required"
+                                    placeholder="Mật khẩu có 8 ký tự trở lên"
                                     className={cx('form-control', 'form-input')}
                                 />
                                 <span className={cx('form-message')}></span>
@@ -71,18 +71,10 @@ function Signup() {
                     </div>
                 </div>
 
-                <div className={cx('form-group')}>
-                    <input name="checkbox" type="checkbox" className={cx('form-control', 'form-checkbox')} />
-                    <label for="checkbox" className={cx('form-label')}>
-                        Tôi đồng ý với
-                        <a href="/" className={cx('checkbox-link')}>
-                            Điều khoản và Điều kiện
-                        </a>
-                    </label>
-                    <span className={cx('form-message')}></span>
-                </div>
             </form>
-            <button className={cx('main-button')}>ĐĂNG KÝ</button>
+            <div className={cx('center')}>
+                <button className={cx('main-button')}>ĐĂNG KÝ</button>
+            </div>
             <div className={cx('above-footer')}>
                 <span>Đã có tài khoản?</span>
                 <a href="/signin">Đăng nhập</a>

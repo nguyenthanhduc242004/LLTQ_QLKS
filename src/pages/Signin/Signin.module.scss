@@ -14,11 +14,9 @@
     display: block;
     width: 100%;
     padding: 12px 16px;
-    //border-radius: 0.8rem;
+    border-radius: 0.8rem;
     //border: 0.1rem solid var(--border-color);
     background-color:rgb(239, 238, 237); //mau giong mau nen nhung khong thay
-    border-bottom-left-radius: 0.8rem;
-    border-bottom-right-radius: 0.8rem;
     border-bottom: 1px solid #392859;
 }
 
@@ -45,14 +43,13 @@
 .center {
     display: flex;
     justify-content: center;
-    //chua lam cho button vo chinh giua man hinh
 }
 .main-button {
     display: block;
     font-size: 1.5rem;
     color: var(--white);
     padding: 14px 16px;
-    width: 35%;
+    width: 45%;
     position: relative;
     background: var(--primary);
     border-radius: 0.8rem;
