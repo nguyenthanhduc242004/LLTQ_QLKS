@@ -32,6 +32,14 @@ function App() {
                         </AuthLayout>
                     }
                 />
+                <Route
+                    path="/revenue"
+                    element={
+                        <DefaultLayout>
+                            <RevenueChart />
+                        </DefaultLayout>
+                    }
+                />
             </Routes>
         </div>
     );

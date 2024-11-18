@@ -1,0 +1,28 @@
+.chart-container {
+    padding: 20px;
+    text-align: center;
+}
+
+.details-table {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    display: inline-block;
+    width: 60%;
+}
+
+.details-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.details-table th,
+.details-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+.details-table th {
+    background-color: #f4f4f4;
+}
