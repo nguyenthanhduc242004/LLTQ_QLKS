@@ -15,7 +15,9 @@
     width: 100%;
     padding: 12px 16px;
     border-radius: 0.8rem;
-    border: 0.1rem solid var(--border-color);
+    //border: 0.1rem solid var(--border-color);
+    background-color:rgb(239, 238, 237); //mau giong mau nen nhung khong thay
+    border-bottom: 1px solid #392859;
 }
 
 .form-group__password {
@@ -38,17 +40,20 @@
     height: 16px;
     margin: 0 8px;
 }
-
+.center {
+    display: flex;
+    justify-content: center;
+}
 .main-button {
     display: block;
     font-size: 1.5rem;
     color: var(--white);
     padding: 14px 16px;
-    width: 100%;
+    width: 45%;
+    position: relative;
     background: var(--primary);
     border-radius: 0.8rem;
     margin: 16px 0 28px;
-
     &:hover {
         background-color: #392859;
         cursor: pointer;

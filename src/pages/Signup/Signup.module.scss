@@ -14,13 +14,16 @@
     border-radius: 0.8rem;
     border: 0.1rem solid var(--border-color);
 }
-
+.center {
+    display: flex;
+    justify-content: center;
+}
 .main-button {
     display: block;
     font-size: 1.5rem;
     color: var(--white);
     padding: 14px 16px;
-    width: 100%;
+    width: 45%;
     background: var(--primary);
     border-radius: 0.8rem;
     margin: 16px 0 28px;

@@ -26,9 +26,6 @@ function Signin() {
                         <label for="password" className={cx('form-label')}>
                             Mật khẩu
                         </label>
-                        <a href="/" className="forgotPassword">
-                            Quên mật khẩu?
-                        </a>
                     </div>
                     <input
                         id="password"
@@ -47,8 +44,15 @@ function Signin() {
                     </label>
                     <span className={cx('form-message')}></span>
                 </div>
+                <div>
+                    <a href="/" className="forgotPassword">
+                            Quên mật khẩu?
+                    </a>
+                </div>
             </form>
-            <button className={cx('main-button')}>ĐĂNG NHẬP</button>
+            <div className={cx('center')}>
+                <button className={cx('main-button')}>ĐĂNG NHẬP</button>
+            </div>            
             <div className={cx('above-footer')}>
                 <span>Bạn chưa có tài khoản?</span>
                 <a href="/signup">Đăng ký</a>
