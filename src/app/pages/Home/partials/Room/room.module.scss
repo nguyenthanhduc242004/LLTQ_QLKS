@@ -1,0 +1,104 @@
+.wrapper {
+    &:hover {
+        transform: translateY(-2px);
+        transition: transform 0.2s;
+        cursor: pointer;
+        box-shadow: 0 4px 8px #0000001a;
+    }
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.2s;
+}
+
+.room-image {
+    padding-top: 50%;
+    background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThMKzonrXOUCtFwrLG-SO3NzYrQS1Sz-Ak8w&s');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.body {
+    background-color: var(--white);
+    padding: 16px;
+    font-size: 1.4rem;
+}
+
+.body-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+}
+
+.room-name {
+    font-size: 2rem;
+}
+
+.room-number {
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.room-size {
+    display: flex;
+    align-items: center;
+}
+
+.bed-detail {
+    display: flex;
+    align-items: center;
+    margin-left: 8px;
+}
+
+.icon {
+    margin-right: 4px;
+}
+
+.btn-extend,
+.btn-check-in,
+.btn-check-out {
+    font-size: 1.8rem;
+    padding: 12px 24px;
+    border-radius: 6px;
+}
+
+.btn-check-in {
+    margin-top: 16px;
+    float: right;
+    background-color: var(--accent-color);
+    color: var(--white);
+    transition: opacity 0.2s;
+
+    &:hover {
+        opacity: 0.7;
+    }
+}
+
+.btn-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+}
+
+.btn-extend {
+    background-color: var(--white);
+    transition: color 0.2s;
+
+    &:hover {
+        color: var(--accent-color);
+        text-decoration: underline;
+    }
+}
+
+.btn-check-out {
+    float: right;
+    background-color: #1ec700;
+    color: var(--white);
+    transition: opacity 0.2s;
+
+    &:hover {
+        opacity: 0.7;
+    }
+}
