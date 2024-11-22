@@ -10,7 +10,8 @@ function RoomType({ classNames, type }) {
     const nav = useNavigate();
 
     const handleClick = () => {
-        nav('checkin');
+        if (type === ROOM_TYPE) nav('checkin');
+        else if (type === CHECKOUT_ROOM) nav('checkout');
     };
 
     return (
@@ -29,8 +30,13 @@ function RoomType({ classNames, type }) {
                                 <BedIcon className={cx('icon')} />1 giường sofa đơn, 1 giường king size
                             </span>
                         </div>
-                        <button className={cx('btn-check-in')}>Đặt phòng</button>
-                        <div className="clear" />
+                        <div className={cx('btn-wrapper')}>
+                            <div className={cx('price')}>
+                                Giá phòng:
+                                <span className={cx('price-number')}>2.400.000đ/ngày</span>
+                            </div>
+                            <button className={cx('btn-check-in')}>Đặt phòng</button>
+                        </div>
                     </>
                 )}
                 {type === CHECKOUT_ROOM && (

@@ -55,6 +55,13 @@
     margin-right: 4px;
 }
 
+.btn-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+}
+
 .btn-extend,
 .btn-check-in,
 .btn-check-out {
@@ -64,7 +71,6 @@
 }
 
 .btn-check-in {
-    margin-top: 16px;
     float: right;
     background-color: var(--accent-color);
     color: var(--white);
@@ -75,11 +81,12 @@
     }
 }
 
-.btn-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 16px;
+.price {
+    span {
+        display: block;
+        color: #1ec700;
+        font-size: 1.8rem;
+    }
 }
 
 .btn-extend {
