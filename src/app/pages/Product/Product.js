@@ -71,6 +71,12 @@ function RoomList() {
                     <SearchIcon />
                     <input type="text" />
                 </div>
+                {console.log(
+                    floor !== 'Chọn tầng' ||
+                        roomType !== 'Chọn hạng phòng' ||
+                        bedDetail !== 'Chi tiết giường' ||
+                        roomState !== 'Tình trạng',
+                )}
                 <button
                     className={cx('remove-filter-btn')}
                     style={{

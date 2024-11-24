@@ -1,24 +1,16 @@
 import classNames from 'classnames/bind';
-import styles from './room.module.scss';
 import { BedIcon, ClockIcon, PersonIcon, RoomSizeIcon } from '../../../../components/Icons';
-import { CHECKOUT_ROOM, ROOM_TYPE } from './roomStore';
-import { useNavigate } from 'react-router-dom';
+import styles from './room.module.scss';
+import { TYPE_CHECKIN, TYPE_CHECKOUT, TYPE_ROOM_TYPE } from './roomStore';
 
 const cx = classNames.bind(styles);
 
 function RoomType({ classNames, type }) {
-    const nav = useNavigate();
-
-    const handleClick = () => {
-        if (type === ROOM_TYPE) nav('checkin');
-        else if (type === CHECKOUT_ROOM) nav('checkout');
-    };
-
     return (
-        <div className={classNames + ' ' + cx('wrapper')} onClick={handleClick}>
+        <a href={'#' + type} className={classNames + ' ' + cx('wrapper')}>
             <div className={cx('room-image')} />
             <div className={cx('body')}>
-                {type === ROOM_TYPE && (
+                {type === TYPE_ROOM_TYPE && (
                     <>
                         <p className={cx('room-name')}>Phòng Executive Suite</p>
                         <div className={cx('body-container')}>
@@ -39,7 +31,7 @@ function RoomType({ classNames, type }) {
                         </div>
                     </>
                 )}
-                {type === CHECKOUT_ROOM && (
+                {(type === TYPE_CHECKIN || type === TYPE_CHECKOUT) && (
                     <>
                         <div className={cx('body-container')}>
                             <p className={cx('room-name')}>Phòng Executive Suite</p>
@@ -55,14 +47,36 @@ function RoomType({ classNames, type }) {
                                 14:00 18/11/2024
                             </span>
                         </div>
-                        <div className={cx('btn-wrapper')}>
-                            <button className={cx('btn-extend')}>Gia hạn</button>
-                            <button className={cx('btn-check-out')}>Thanh toán</button>
-                        </div>
+                        {type === TYPE_CHECKOUT && (
+                            <div className={cx('btn-wrapper')}>
+                                <button className={cx('btn-left')}>Gia hạn</button>
+                                <button
+                                    className={cx('btn-right')}
+                                    style={{
+                                        backgroundColor: '#1ec700',
+                                    }}
+                                >
+                                    Thanh toán
+                                </button>
+                            </div>
+                        )}
+                        {type === TYPE_CHECKIN && (
+                            <div className={cx('btn-wrapper')}>
+                                <button className={cx('btn-left')}>Hủy đặt phòng</button>
+                                <button
+                                    className={cx('btn-right')}
+                                    style={{
+                                        backgroundColor: '#ff5900',
+                                    }}
+                                >
+                                    Check-in
+                                </button>
+                            </div>
+                        )}
                     </>
                 )}
             </div>
-        </div>
+        </a>
     );
 }
 

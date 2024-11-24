@@ -8,6 +8,8 @@
     border-radius: 16px;
     overflow: hidden;
     transition: all 0.2s;
+    color: var(--text-color);
+    display: block;
 }
 
 .room-image {
@@ -62,9 +64,9 @@
     margin-top: 16px;
 }
 
-.btn-extend,
+.btn-left,
 .btn-check-in,
-.btn-check-out {
+.btn-right {
     font-size: 1.8rem;
     padding: 12px 24px;
     border-radius: 6px;
@@ -89,7 +91,7 @@
     }
 }
 
-.btn-extend {
+.btn-left {
     background-color: var(--white);
     transition: color 0.2s;
 
@@ -99,9 +101,8 @@
     }
 }
 
-.btn-check-out {
+.btn-right {
     float: right;
-    background-color: #1ec700;
     color: var(--white);
     transition: opacity 0.2s;
 

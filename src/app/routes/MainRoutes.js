@@ -1,8 +1,9 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import DefaultLayout from '../layouts/DefaultLayout';
+import GuestList from '../pages/GuestList';
 import Home from '../pages/Home';
 import RoomList from '../pages/RoomList';
-import Checkin from '../pages/Checkin';
+import StaffList from '../pages/StaffList';
 
 export default function MainRoutes() {
     return (
@@ -24,7 +25,22 @@ export default function MainRoutes() {
                         </DefaultLayout>
                     }
                 />
-                <Route path="/checkin" element={<Checkin />} />
+                <Route
+                    path="/danh-sach-khach-hang"
+                    element={
+                        <DefaultLayout>
+                            <GuestList />
+                        </DefaultLayout>
+                    }
+                />
+                <Route
+                    path="/danh-sach-nhan-vien"
+                    element={
+                        <DefaultLayout>
+                            <StaffList />
+                        </DefaultLayout>
+                    }
+                />
             </Routes>
         </BrowserRouter>
     );

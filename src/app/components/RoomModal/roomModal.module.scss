@@ -1,35 +1,29 @@
-.wrapper {
-    background-color: #ccc;
-    padding: 12px 0;
-}
-
-.inner {
-    margin: auto;
-    background-color: var(--white);
-    padding: 20px 40px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 800px;
-    background-image: var(--white);
-
-    input,
-    select {
-        width: 100%;
-        padding: 10px;
-        margin: 10px 0;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-}
-
 .center-horizontal {
     display: flex;
     justify-content: center;
 }
 
+.wrapper {
+    margin: auto;
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 800px;
+
+    input,
+    select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+}
+
 .main-heading {
     text-align: center;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .room-wrapper {
@@ -81,11 +75,11 @@
 
 .reservation-information,
 .booker-information {
-    margin: 0 20px;
+    margin: 0 16px;
 }
 
 .heading {
-    margin-top: 16px;
+    margin-top: 12px;
 }
 
 .input-with-label {
@@ -107,4 +101,13 @@
     color: var(--white);
     float: right;
     margin-top: 12px;
+}
+
+.room-state-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.room-state {
+    margin-left: 8px;
 }

@@ -1,2 +1,3 @@
-export const ROOM_TYPE = 0;
-export const CHECKOUT_ROOM = 1;
+export const TYPE_ROOM_TYPE = 'room-type';
+export const TYPE_CHECKIN = 'checkin';
+export const TYPE_CHECKOUT = 'checkout';
