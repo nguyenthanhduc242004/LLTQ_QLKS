@@ -1,20 +1,12 @@
 import classNames from 'classnames/bind';
-// import { signify } from 'react-signify';
 import { CustomerIcon, HomeIcon, PaymentIcon, RoomIcon, StaffsIcon } from '../../../components/Icons';
 import Image from '../../../components/Image';
 import styles from './Sidebar.module.scss';
 import { Link } from 'react-router-dom';
 import '../../../styles/grid.scss';
+import { sCurrentPage } from './sidebarStore';
 
 const cx = classNames.bind(styles);
-
-// const sFocusingTab = signify(0);
-
-const handleSidebarItemClick = (e) => {
-    const focusedSidebarItem = document.querySelector(`.${cx('sidebar-item')}.${cx('focus')}`);
-    focusedSidebarItem.classList.remove(cx('focus'));
-    e.target.classList.add(cx('focus'));
-};
 
 function Sidebar() {
     return (
@@ -45,26 +37,41 @@ function Sidebar() {
             </div>
 
             {/* Sidebar Items */}
-            <Link to="/" className={cx('sidebar-item', 'focus')} onClick={handleSidebarItemClick}>
-                <HomeIcon className={cx('left-icon')} />
-                Trang chủ
-            </Link>
-            <Link to="/danh-sach-phong" className={cx('sidebar-item')} onClick={handleSidebarItemClick}>
-                <RoomIcon className={cx('left-icon')} />
-                Danh sách phòng
-            </Link>
-            <Link to="/danh-sach-khach-hang" className={cx('sidebar-item')} onClick={handleSidebarItemClick}>
-                <CustomerIcon className={cx('left-icon')} />
-                Danh sách khách hàng
-            </Link>
-            <Link to="/danh-sach-nhan-vien" className={cx('sidebar-item')} onClick={handleSidebarItemClick}>
-                <StaffsIcon className={cx('left-icon')} />
-                Danh sách nhân viên
-            </Link>
-            <Link to="/thanh-toan" className={cx('sidebar-item')} onClick={handleSidebarItemClick}>
-                <PaymentIcon className={cx('left-icon')} />
-                Thanh toán
-            </Link>
+            <sCurrentPage.Wrap>
+                {(value) => (
+                    <>
+                        <Link to="/" className={cx('sidebar-item', value === '/' ? 'focus' : '')}>
+                            <HomeIcon className={cx('icon')} />
+                            Trang chủ
+                        </Link>
+                        <Link
+                            to="/danh-sach-phong"
+                            className={cx('sidebar-item', value === '/danh-sach-phong' ? 'focus' : '')}
+                        >
+                            <RoomIcon className={cx('icon')} />
+                            Danh sách phòng
+                        </Link>
+                        <Link
+                            to="/danh-sach-khach-hang"
+                            className={cx('sidebar-item', value === '/danh-sach-khach-hang' ? 'focus' : '')}
+                        >
+                            <CustomerIcon className={cx('icon')} />
+                            Danh sách khách hàng
+                        </Link>
+                        <Link
+                            to="/danh-sach-nhan-vien"
+                            className={cx('sidebar-item', value === '/danh-sach-nhan-vien' ? 'focus' : '')}
+                        >
+                            <StaffsIcon className={cx('icon')} />
+                            Danh sách nhân viên
+                        </Link>
+                        <Link to="/thanh-toan" className={cx('sidebar-item', value === '/thanh-toan' ? 'focus' : '')}>
+                            <PaymentIcon className={cx('icon')} />
+                            Thanh toán
+                        </Link>
+                    </>
+                )}
+            </sCurrentPage.Wrap>
         </aside>
     );
 }

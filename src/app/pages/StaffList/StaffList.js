@@ -2,10 +2,16 @@ import classNames from 'classnames/bind';
 import styles from './staffList.module.scss';
 import { SearchIcon } from '../../components/Icons';
 import StaffItem from './partials/StaffItem';
+import { useEffect } from 'react';
+import { sCurrentPage } from '../../layouts/DefaultLayout/Sidebar/sidebarStore';
 
 const cx = classNames.bind(styles);
 
 function StaffList() {
+    useEffect(() => {
+        sCurrentPage.set('/danh-sach-nhan-vien');
+    }, []);
+
     return (
         <div className={cx('wrapper') + ' grid'}>
             <div className={cx('header')}>

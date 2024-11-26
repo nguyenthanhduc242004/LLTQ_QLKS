@@ -2,10 +2,16 @@ import classNames from 'classnames/bind';
 import styles from './guestList.module.scss';
 import { SearchIcon } from '../../components/Icons';
 import GuestItem from './partials/GuestItem';
+import { useEffect } from 'react';
+import { sCurrentPage } from '../../layouts/DefaultLayout/Sidebar/sidebarStore';
 
 const cx = classNames.bind(styles);
 
 function GuestList() {
+    useEffect(() => {
+        sCurrentPage.set('/danh-sach-khach-hang');
+    }, []);
+
     return (
         <div className={cx('wrapper') + ' grid'}>
             <div className={cx('header')}>

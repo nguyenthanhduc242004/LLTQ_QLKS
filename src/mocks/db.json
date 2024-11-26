@@ -1,0 +1,71 @@
+{
+    "room-types": [
+        {
+            "id": "1",
+            "roomTypeText": "Phòng Executive Suit",
+            "size": 70,
+            "bedDetail": "1 giường sofa đơn, 1 giường king size",
+            "price": 2499000
+        },
+        {
+            "id": "2",
+            "roomTypeText": "Phòng Deluxe Twin",
+            "size": 60,
+            "bedDetail": "1 giường đôi",
+            "price": 2200000
+        }
+    ],
+    "rooms": [
+        {
+            "roomId": "P1.01",
+            "roomTypeText": "Phòng Executive Suit",
+            "price": 2499000,
+            "size": 70,
+            "bedDetail": "1 giường sofa đơn, 1 giường king size",
+            "state": 0,
+            "checkinDate": "2024-11-25",
+            "checkoutDate": "2024-11-27",
+            "guestId": "054204004505",
+            "guestName": "Nguyễn Thành Đức",
+            "guestPhone": "0345967735",
+            "guestEmail": "nguyenthanhduc242004@gmail.com",
+            "guestDob": "2004-04-02",
+            "guestGender": "male",
+            "guestAddress": ""
+        },
+        {
+            "roomId": "P1.02",
+            "roomTypeText": "Phòng Deluxe Twin",
+            "price": 2200000,
+            "size": 70,
+            "bedDetail": "1 giường đôi",
+            "state": 1,
+            "checkinDate": "2024-11-26",
+            "checkoutDate": "2024-11-28",
+            "guestId": "035236534765",
+            "guestName": "Phan Thanh Đăng",
+            "guestPhone": "0395349283",
+            "guestEmail": "DangPT@gmail.com",
+            "guestDob": "2004-01-01",
+            "guestGender": "male",
+            "guestAddress": ""
+        },
+        {
+            "roomId": "P2.01",
+            "roomTypeText": "Phòng Deluxe King",
+            "price": 2000000,
+            "size": 50,
+            "bedDetail": "1 giường king size",
+            "state": 2,
+            "checkinDate": "2024-11-27",
+            "checkoutDate": "2024-11-29",
+            "guestId": "058374837235",
+            "guestName": "Nguyễn Văn A",
+            "guestPhone": "0395837465",
+            "guestEmail": "ANV@gmail.com",
+            "guestDob": "2004-02-24",
+            "guestGender": "male",
+            "guestAddress": ""
+        }
+    ]
+}

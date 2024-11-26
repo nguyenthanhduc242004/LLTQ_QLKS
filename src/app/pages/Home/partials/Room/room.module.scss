@@ -64,49 +64,10 @@
     margin-top: 16px;
 }
 
-.btn-left,
-.btn-check-in,
-.btn-right {
-    font-size: 1.8rem;
-    padding: 12px 24px;
-    border-radius: 6px;
-}
-
-.btn-check-in {
-    float: right;
-    background-color: var(--accent-color);
-    color: var(--white);
-    transition: opacity 0.2s;
-
-    &:hover {
-        opacity: 0.7;
-    }
-}
-
 .price {
     span {
         display: block;
         color: #1ec700;
         font-size: 1.8rem;
-    }
-}
-
-.btn-left {
-    background-color: var(--white);
-    transition: color 0.2s;
-
-    &:hover {
-        color: var(--accent-color);
-        text-decoration: underline;
-    }
-}
-
-.btn-right {
-    float: right;
-    color: var(--white);
-    transition: opacity 0.2s;
-
-    &:hover {
-        opacity: 0.7;
     }
 }
