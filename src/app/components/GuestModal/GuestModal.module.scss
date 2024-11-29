@@ -1,0 +1,37 @@
+.wrapper {
+    position: relative;
+}
+
+.heading {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.btn-wrapper {
+    display: flex;
+    justify-content: end;
+    margin-top: 12px;
+}
+
+.edit-btn,
+.cancel-btn {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    padding: 4px 8px;
+    color: var(--white);
+    border-radius: 12px;
+}
+
+.edit-btn {
+    background-color: #2797f2;
+}
+.cancel-btn {
+    background-color: #f2493d;
+}
+
+.icon {
+    margin-left: 4px;
+}

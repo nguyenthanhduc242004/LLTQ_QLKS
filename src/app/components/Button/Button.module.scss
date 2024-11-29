@@ -4,7 +4,6 @@
     border-radius: 6px;
     display: flex;
     align-items: center;
-    transition: color 0.2s;
 
     &.normal {
         color: var(--text-color);
@@ -14,6 +13,7 @@
             color: var(--accent-color);
             text-decoration: underline;
         }
+        transition: color 0.2s;
     }
 
     &.primary {
@@ -32,6 +32,13 @@
         &.check-out {
             background-color: #1ec700;
         }
+        &.confirm {
+            background-color: #2797f2;
+        }
+    }
+
+    & + .wrapper {
+        margin-left: 20px;
     }
 }
 

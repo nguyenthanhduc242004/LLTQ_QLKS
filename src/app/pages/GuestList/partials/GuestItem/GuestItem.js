@@ -3,16 +3,21 @@ import styles from './guestItem.module.scss';
 
 const cx = classNames.bind(styles);
 
-function GuestItem({ className }) {
+function GuestItem({ className, onClick, data }) {
+    var gender;
+    if (data.guestGender === 'male') gender = 'Nam';
+    else if (data.guestGender === 'female') gender = 'Nữ';
+    const dob = new Date(data.guestDob.split('-')).toLocaleDateString();
+
     return (
-        <div className={className + ' ' + cx('wrapper') + ' row'}>
-            <p className="col c-2 m-2 l-2">054204004505</p>
-            <p className="col c-3 m-3 l-3">Nguyễn Thành Văn Nguyễn Đức</p>
-            <p className="col c-1 m-1 l-1">Nam</p>
-            <p className="col c-1 m-1 l-1">12/12/2024</p>
-            <p className="col c-3 m-3 l-3">nguyenthanhduc242004@gmail.com</p>
-            <p className="col c-2 m-2 l-2">0345967735</p>
-        </div>
+        <a href={'#khach-hang'} className={className + ' ' + cx('wrapper') + ' row'} onClick={onClick}>
+            <p className="col c-2 m-2 l-2">{data.guestId}</p>
+            <p className="col c-3 m-3 l-3">{data.guestName}</p>
+            <p className="col c-1 m-1 l-1">{gender}</p>
+            <p className="col c-1 m-1 l-1">{dob}</p>
+            <p className="col c-3 m-3 l-3">{data.guestEmail}</p>
+            <p className="col c-2 m-2 l-2">{data.guestPhone}</p>
+        </a>
     );
 }
 

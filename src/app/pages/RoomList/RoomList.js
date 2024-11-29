@@ -5,6 +5,10 @@ import { CaretDownIcon, RemoveFilterIcon, SearchIcon } from '../../components/Ic
 import { useEffect, useState } from 'react';
 import { sCurrentPage } from '../../layouts/DefaultLayout/Sidebar/sidebarStore';
 import { get } from '../../modules/lib/httpHandle';
+import { signify } from 'react-signify';
+import { TYPE_CHECKIN, TYPE_CHECKOUT, TYPE_ROOM_TYPE } from '../Home/partials/Room';
+import RoomModal from '../../components/RoomModal';
+import '../../styles/modal.scss';
 
 const cx = classNames.bind(styles);
 
@@ -25,6 +29,8 @@ const roomStateToString = (state) => {
 
 // Có nguy cơ gây ra lỗi!!!
 document.addEventListener('click', removeFocus);
+
+const sShowModal = signify({});
 
 function RoomList() {
     console.log('RoomList re-rendered!');
@@ -215,8 +221,54 @@ function RoomList() {
                 <p className="col c-2 m-2 l-2">Check-in/Check-out</p>
             </div>
             {rooms.map((item, index) => (
-                <RoomListItem key={index} data={item} />
+                <RoomListItem
+                    key={index}
+                    data={item}
+                    onClick={() => {
+                        var type;
+                        if (item.state === 0) type = TYPE_ROOM_TYPE;
+                        else if (item.state === 1) type = TYPE_CHECKIN;
+                        else if (item.state === 2) type = TYPE_CHECKOUT;
+                        sShowModal.set({
+                            type,
+                            data: item,
+                        });
+                    }}
+                />
             ))}
+            <sShowModal.HardWrap>
+                {(value) => {
+                    console.log('sShowModal re-rendered!');
+                    if (value.type === TYPE_ROOM_TYPE) {
+                        return (
+                            <div id={value.type} className="modal">
+                                <a href="/danh-sach-phong#" className="modal-overlay">
+                                    {' '}
+                                </a>
+                                <RoomModal type={value.type} className="modal-body" data={value.data} />
+                            </div>
+                        );
+                    } else if (value.type === TYPE_CHECKIN) {
+                        return (
+                            <div id={value.type} className="modal">
+                                <a href="/danh-sach-phong#" className="modal-overlay">
+                                    {' '}
+                                </a>
+                                <RoomModal type={value.type} className="modal-body" data={value.data} />
+                            </div>
+                        );
+                    } else if (value.type === TYPE_CHECKOUT) {
+                        return (
+                            <div id={value.type} className="modal">
+                                <a href="/danh-sach-phong#" className="modal-overlay">
+                                    {' '}
+                                </a>
+                                <RoomModal type={value.type} className="modal-body" data={value.data} />
+                            </div>
+                        );
+                    }
+                }}
+            </sShowModal.HardWrap>
         </div>
     );
 }

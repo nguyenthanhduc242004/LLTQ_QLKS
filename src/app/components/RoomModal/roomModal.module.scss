@@ -4,21 +4,6 @@
 }
 
 .wrapper {
-    margin: auto;
-    background-color: var(--white);
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 800px;
-
-    input,
-    select {
-        width: 100%;
-        padding: 10px;
-        margin-top: 8px;
-        margin-bottom: 8px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
 }
 
 .main-heading {
@@ -74,23 +59,43 @@
 }
 
 .reservation-information,
-.booker-information {
+.guest-information {
     margin: 0 16px;
 }
 
-.heading {
+.heading-wrapper {
+    display: flex;
+    align-items: center;
     margin-top: 12px;
 }
 
-.input-with-label {
+.edit-btn,
+.cancel-btn {
     display: flex;
     align-items: center;
+    margin-left: 8px;
+    padding: 2px 4px;
+    font-size: 1.4rem;
+    border-radius: 12px;
+    color: var(--white);
+}
 
-    input,
-    select {
-        flex: 1;
-        margin-left: 12px;
-    }
+.edit-btn {
+    background-color: #2797f2;
+}
+
+.cancel-btn {
+    background-color: #f2493d;
+}
+
+.edit-icon,
+.cancel-icon {
+    margin-left: 4px;
+}
+
+.btn-wrapper {
+    display: flex;
+    justify-content: end;
 }
 
 .btn {

@@ -22,16 +22,7 @@
             "price": 2499000,
             "size": 70,
             "bedDetail": "1 giường sofa đơn, 1 giường king size",
-            "state": 0,
-            "checkinDate": "2024-11-25",
-            "checkoutDate": "2024-11-27",
-            "guestId": "054204004505",
-            "guestName": "Nguyễn Thành Đức",
-            "guestPhone": "0345967735",
-            "guestEmail": "nguyenthanhduc242004@gmail.com",
-            "guestDob": "2004-04-02",
-            "guestGender": "male",
-            "guestAddress": ""
+            "state": 0
         },
         {
             "roomId": "P1.02",
@@ -66,6 +57,35 @@
             "guestDob": "2004-02-24",
             "guestGender": "male",
             "guestAddress": ""
+        }
+    ],
+    "guests": [
+        {
+            "guestId": "035236534765",
+            "guestName": "Phan Thanh Đăng",
+            "guestPhone": "0395349283",
+            "guestEmail": "DangPT@gmail.com",
+            "guestDob": "2004-01-01",
+            "guestGender": "male",
+            "guestAddress": ""
+        },
+        {
+            "guestId": "058374837235",
+            "guestName": "Nguyễn Văn A",
+            "guestPhone": "0395837465",
+            "guestEmail": "ANV@gmail.com",
+            "guestDob": "2004-02-24",
+            "guestGender": "male",
+            "guestAddress": ""
+        }
+    ],
+    "staffs": [
+        {
+            "id": 1,
+            "staffName": "Đặng Phú Thiện",
+            "staffType": "Nhân viên dọn dẹp",
+            "createdDate": "2024-04-24",
+            "citizenId": "040203040212"
         }
     ]
 }

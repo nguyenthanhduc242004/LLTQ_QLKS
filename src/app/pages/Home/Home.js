@@ -6,13 +6,10 @@ import { get } from '../../modules/lib/httpHandle';
 import styles from './home.module.scss';
 import Heading from './partials/Heading';
 import Room, { TYPE_ROOM_TYPE, TYPE_CHECKIN, TYPE_CHECKOUT } from './partials/Room';
-import { sShowModalType } from './homeStore';
+import { sShowModal } from './homeStore';
+import '../../styles/modal.scss';
 
 const cx = classNames.bind(styles);
-
-var unreservedRooms = [];
-var checkinRooms = [];
-var checkoutRooms = [];
 
 function Home() {
     const [roomTypes, setRoomTypes] = useState([]);
@@ -42,6 +39,10 @@ function Home() {
         );
     }, []);
 
+    var unreservedRooms = [];
+    var checkinRooms = [];
+    var checkoutRooms = [];
+
     rooms.forEach((item) => {
         if (item.state === 0) unreservedRooms.push(item);
         else if (item.state === 1) checkinRooms.push(item);
@@ -60,7 +61,7 @@ function Home() {
                             classNames={cx('room')}
                             data={item}
                             onClick={() => {
-                                sShowModalType.set({
+                                sShowModal.set({
                                     type: TYPE_ROOM_TYPE,
                                     data: item,
                                 });
@@ -79,7 +80,7 @@ function Home() {
                             classNames={cx('room')}
                             data={item}
                             onClick={() => {
-                                sShowModalType.set({
+                                sShowModal.set({
                                     type: TYPE_CHECKIN,
                                     data: item,
                                 });
@@ -98,7 +99,7 @@ function Home() {
                             classNames={cx('room')}
                             data={item}
                             onClick={() => {
-                                sShowModalType.set({
+                                sShowModal.set({
                                     type: TYPE_CHECKOUT,
                                     data: item,
                                 });
@@ -108,62 +109,41 @@ function Home() {
                 ))}
             </div>
 
-            <sShowModalType.HardWrap>
+            <sShowModal.HardWrap>
                 {(value) => {
-                    console.log('sShowModalType re-rendered!');
+                    console.log('sShowModal re-rendered!');
                     if (value.type === TYPE_ROOM_TYPE) {
                         return (
-                            <div id={value.type} className={cx('modal')}>
-                                <a href="/#" className={cx('modal-overlay')}>
+                            <div id={value.type} className="modal">
+                                <a href="/#" className="modal-overlay">
                                     {' '}
                                 </a>
-                                <RoomModal type={value.type} className={cx('modal-body')} data={value.data} />
+                                <RoomModal type={value.type} className="modal-body" data={value.data} />
                             </div>
                         );
                     } else if (value.type === TYPE_CHECKIN) {
                         return (
-                            <div id={value.type} className={cx('modal')}>
-                                <a href="/#" className={cx('modal-overlay')}>
+                            <div id={value.type} className="modal">
+                                <a href="/#" className="modal-overlay">
                                     {' '}
                                 </a>
-                                <RoomModal type={value.type} className={cx('modal-body')} data={value.data} />
+                                <RoomModal type={value.type} className="modal-body" data={value.data} />
                             </div>
                         );
                     } else if (value.type === TYPE_CHECKOUT) {
                         return (
-                            <div id={value.type} className={cx('modal')}>
-                                <a href="/#" className={cx('modal-overlay')}>
+                            <div id={value.type} className="modal">
+                                <a href="/#" className="modal-overlay">
                                     {' '}
                                 </a>
-                                <RoomModal type={value.type} className={cx('modal-body')} data={value.data} />
+                                <RoomModal type={value.type} className="modal-body" data={value.data} />
                             </div>
                         );
                     }
                 }}
-            </sShowModalType.HardWrap>
+            </sShowModal.HardWrap>
         </div>
     );
 }
 
 export default Home;
-
-// <div id={TYPE_ROOM_TYPE} className={cx('modal')}>
-//     <a href="/#" className={cx('modal-overlay')}>
-//         {' '}
-//     </a>
-//     <RoomModal type={TYPE_ROOM_TYPE} className={cx('modal-body')} />
-// </div>
-
-// <div id={TYPE_CHECKIN} className={cx('modal')}>
-//     <a href="/#" className={cx('modal-overlay')}>
-//         {' '}
-//     </a>
-//     <RoomModal type={TYPE_CHECKIN} className={cx('modal-body')} />
-// </div>
-
-// <div id={TYPE_CHECKOUT} className={cx('modal')}>
-//     <a href="/#" className={cx('modal-overlay')}>
-//         {' '}
-//     </a>
-//     <RoomModal type={TYPE_CHECKOUT} className={cx('modal-body')} />
-// </div>
