@@ -34,7 +34,7 @@ function Room({ classNames, type, data, onClick }) {
                             </span>
                             <span className={cx('bed-detail')}>
                                 <BedIcon className={cx('icon')} />
-                                {data.bedDetail}
+                                {data.bedDetailText}
                             </span>
                         </div>
                         <div className={cx('btn-wrapper')}>
@@ -50,14 +50,14 @@ function Room({ classNames, type, data, onClick }) {
                     <>
                         <div className={cx('body-container')}>
                             <p className={cx('room-name')}>{data.roomTypeText}</p>
-                            <p className={cx('room-number')}>{data.roomId}</p>
+                            <p className={cx('room-number')}>{data.roomNumber}</p>
                         </div>
                         {type === TYPE_CHECKIN && (
                             <>
                                 <div className={cx('body-container')}>
                                     <span className={cx('customer-name')}>
                                         <PersonIcon className={cx('icon')} />
-                                        {data.guestName}
+                                        {data.name}
                                     </span>
                                     <span className={cx('bed-detail')}>
                                         <ClockIcon className={cx('icon')} />
@@ -75,7 +75,7 @@ function Room({ classNames, type, data, onClick }) {
                                 <div className={cx('body-container')}>
                                     <span className={cx('customer-name')}>
                                         <PersonIcon className={cx('icon')} />
-                                        {data.guestName}
+                                        {data.name}
                                     </span>
                                     <span className={cx('bed-detail')}>
                                         <ClockIcon className={cx('icon')} />

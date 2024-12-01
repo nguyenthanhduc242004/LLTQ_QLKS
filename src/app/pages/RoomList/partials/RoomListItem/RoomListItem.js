@@ -22,9 +22,9 @@ function RoomListItem({ className, data, onClick }) {
     }
     return (
         <a href={'#' + type} className={className + ' ' + cx('wrapper') + ' row'} onClick={onClick}>
-            <p className="col c-1 m-1 l-1">{data.roomId}</p>
+            <p className="col c-1 m-1 l-1">{data.roomNumber}</p>
             <p className="col c-2 m-2 l-2">{data.roomTypeText}</p>
-            <p className="col c-3 m-3 l-3">{data.bedDetail}</p>
+            <p className="col c-3 m-3 l-3">{data.bedDetailText}</p>
             <p className="col c-2 m-2 l-2">{data.size}m2</p>
             <p className="col c-2 m-2 l-2">{stateText}</p>
             <p className="col c-2 m-2 l-2">{date}</p>

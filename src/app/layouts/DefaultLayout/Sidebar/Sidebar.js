@@ -65,9 +65,12 @@ function Sidebar() {
                             <StaffsIcon className={cx('icon')} />
                             Danh sách nhân viên
                         </Link>
-                        <Link to="/thanh-toan" className={cx('sidebar-item', value === '/thanh-toan' ? 'focus' : '')}>
+                        <Link
+                            to="/lich-su-dat-phong"
+                            className={cx('sidebar-item', value === '/thanh-toan' ? 'focus' : '')}
+                        >
                             <PaymentIcon className={cx('icon')} />
-                            Thanh toán
+                            Lịch sử đặt phòng
                         </Link>
                     </>
                 )}

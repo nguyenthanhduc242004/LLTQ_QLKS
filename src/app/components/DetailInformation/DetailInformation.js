@@ -57,27 +57,27 @@ function GuestInformation({ className, data = undefined, isEditing = false }) {
                     <div className="row">
                         <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
                             <span>CCCD: </span>
-                            <input type="text" value={data.guestId} {...{ disabled: !isEditing }} />
+                            <input type="text" value={data.citizenId} {...{ disabled: !isEditing }} />
                         </div>
                         <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
                             <span>Họ tên: </span>
-                            <input type="text" value={data.guestName} {...{ disabled: !isEditing }} />
+                            <input type="text" value={data.name} {...{ disabled: !isEditing }} />
                         </div>
                     </div>
                     <div className="row">
                         <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
                             <span>Điện thoại: </span>
-                            <input type="tel" value={data.guestPhone} {...{ disabled: !isEditing }} />
+                            <input type="tel" value={data.phone} {...{ disabled: !isEditing }} />
                         </div>
                         <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
                             <span>Email: </span>
-                            <input type="email" value={data.guestEmail} {...{ disabled: !isEditing }} />
+                            <input type="email" value={data.email} {...{ disabled: !isEditing }} />
                         </div>
                     </div>
                     <div className="row">
                         <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
                             <span>Ngày sinh: </span>
-                            <input type="date" value={data.guestDob} {...{ disabled: !isEditing }} />
+                            <input type="date" value={data.dob} {...{ disabled: !isEditing }} />
                         </div>
                         <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
                             <span>Giới tính: </span>

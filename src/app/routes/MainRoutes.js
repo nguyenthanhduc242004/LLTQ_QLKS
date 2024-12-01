@@ -4,6 +4,7 @@ import GuestList from '../pages/GuestList';
 import Home from '../pages/Home';
 import RoomList from '../pages/RoomList';
 import StaffList from '../pages/StaffList';
+import PaymentList from '../pages/PaymentList/PaymentList';
 
 export default function MainRoutes() {
     return (
@@ -38,6 +39,14 @@ export default function MainRoutes() {
                     element={
                         <DefaultLayout>
                             <StaffList />
+                        </DefaultLayout>
+                    }
+                />
+                <Route
+                    path="/lich-su-dat-phong"
+                    element={
+                        <DefaultLayout>
+                            <PaymentList />
                         </DefaultLayout>
                     }
                 />

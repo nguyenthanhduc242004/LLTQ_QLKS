@@ -8,6 +8,7 @@ import { signify } from 'react-signify';
 import GuestModal from '../../components/GuestModal';
 import '../../styles/modal.scss';
 import { get } from '../../modules/lib/httpHandle';
+import { removeVietnameseTones } from '../../modules/lib/removeVietnameseTones';
 
 const cx = classNames.bind(styles);
 
@@ -16,8 +17,10 @@ const sShowModal = signify({
     data: undefined,
 });
 
+var guests = [];
+
 function GuestList() {
-    const [guests, setGuests] = useState([]);
+    const [filteredGuests, setFilteredGuests] = useState([]);
 
     useEffect(() => {
         sCurrentPage.set('/danh-sach-khach-hang');
@@ -25,7 +28,8 @@ function GuestList() {
         get(
             'guests/',
             (data) => {
-                setGuests(data);
+                guests = data;
+                setFilteredGuests(data);
             },
             () => {
                 alert('Guests not found!');
@@ -33,12 +37,29 @@ function GuestList() {
         );
     }, []);
 
+    const handleSearchInput = (e) => {
+        const value = e.target.value.toLowerCase();
+        const searchingGuests = guests.filter((item) => {
+            if (item.citizenId.includes(value)) return true;
+            if (removeVietnameseTones(item.name).toLowerCase().includes(value)) return true;
+            if (item.phone.includes(value)) return true;
+            if (item.email.toLowerCase().includes(value)) return true;
+            var gender;
+            if (item.gender === 'male') gender = 'nam';
+            else if (item.gender === 'female') gender = 'nữ';
+            if (gender.includes(value)) return true;
+            if (new Date(item.dob.split('-')).toLocaleDateString().includes(value)) return true;
+            return false;
+        });
+        setFilteredGuests(searchingGuests);
+    };
+
     return (
         <div className={cx('wrapper') + ' grid'}>
             <div className={cx('header')}>
                 <div className={cx('search-wrapper')}>
                     <SearchIcon />
-                    <input type="text" />
+                    <input type="text" placeholder="Tìm kiếm..." onInput={handleSearchInput} />
                 </div>
             </div>
             <div className={'row ' + cx('list-header')}>
@@ -49,7 +70,7 @@ function GuestList() {
                 <p className="col c-3 m-3 l-3">Email</p>
                 <p className="col c-2 m-2 l-2">Điện thoại</p>
             </div>
-            {guests.map((item, index) => (
+            {filteredGuests.map((item, index) => (
                 <GuestItem
                     key={index}
                     data={item}

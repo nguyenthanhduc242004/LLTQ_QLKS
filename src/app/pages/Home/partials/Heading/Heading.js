@@ -4,9 +4,9 @@ import { ArrowRightIcon, ChevronRightIcon } from '../../../../components/Icons';
 
 const cx = classNames.bind(styles);
 
-function Heading({ label, className }) {
+function Heading({ label, className, state, onClick }) {
     return (
-        <div className={className + ' ' + cx('wrapper')}>
+        <div className={className + ' ' + cx('wrapper')} state={state} onClick={onClick}>
             <div className={cx('container')}>
                 <h2 className={cx('label')}>{label}</h2>
                 <span className={cx('icon-wrapper')}>

@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import Button from '../Button';
-import GuestInformation from '../GuestInformation';
+import GuestInformation from '../DetailInformation';
 import { CancelIcon, CheckIcon, EditIcon } from '../Icons';
 import styles from './GuestModal.module.scss';
 

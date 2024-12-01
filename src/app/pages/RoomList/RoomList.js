@@ -1,14 +1,16 @@
 import classNames from 'classnames/bind';
-import styles from './roomList.module.scss';
-import RoomListItem from './partials/RoomListItem/RoomListItem';
-import { CaretDownIcon, RemoveFilterIcon, SearchIcon } from '../../components/Icons';
 import { useEffect, useState } from 'react';
+import { signify } from 'react-signify';
+import { CaretDownIcon, RemoveFilterIcon, SearchIcon } from '../../components/Icons';
+import RoomModal from '../../components/RoomModal';
 import { sCurrentPage } from '../../layouts/DefaultLayout/Sidebar/sidebarStore';
 import { get } from '../../modules/lib/httpHandle';
-import { signify } from 'react-signify';
-import { TYPE_CHECKIN, TYPE_CHECKOUT, TYPE_ROOM_TYPE } from '../Home/partials/Room';
-import RoomModal from '../../components/RoomModal';
+import { removeVietnameseTones } from '../../modules/lib/removeVietnameseTones';
 import '../../styles/modal.scss';
+import { TYPE_CHECKIN, TYPE_CHECKOUT, TYPE_ROOM_TYPE } from '../Home/partials/Room';
+import RoomListItem from './partials/RoomListItem/RoomListItem';
+import styles from './roomList.module.scss';
+import { useLocation } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -32,65 +34,195 @@ document.addEventListener('click', removeFocus);
 
 const sShowModal = signify({});
 
+var rooms = [];
+var roomTypes = [];
+var bedDetails = [];
+var bookings = [];
+
+const getBookingsByRoomId = (id) => {
+    var res = [];
+    bookings.forEach((item) => {
+        if (item.roomId === id) res.push(item);
+    });
+    return res;
+};
+
+const getFilteredRooms = (filterOptions) => {
+    var res = [];
+    var filterState;
+    res = rooms.filter((item) => {
+        if (filterOptions.floor) if (item.floor !== Number(filterOptions.floor)) return false;
+        if (filterOptions.roomTypeId) if (item.roomTypeId !== Number(filterOptions.roomTypeId)) return false;
+        if (filterOptions.bedDetailId) if (item.bedDetailId !== Number(filterOptions.bedDetailId)) return false;
+        if (filterOptions.state) {
+            filterState = Number(filterOptions.state);
+            if (filterState === 0) {
+                if (filterOptions.firstDate || filterOptions.secondDate) {
+                    const bookingsById = getBookingsByRoomId(item.id);
+                    if (filterOptions.firstDate && filterOptions.secondDate) {
+                        for (const booking of bookingsById) {
+                            if (
+                                new Date(booking.checkoutDate.split('-')) >
+                                    new Date(filterOptions.firstDate.split('-')) &&
+                                new Date(booking.checkinDate.split('-')) < new Date(filterOptions.secondDate.split('-'))
+                            )
+                                return false;
+                        }
+                    } else if (filterOptions.firstDate) {
+                        for (const booking of bookingsById) {
+                            if (
+                                new Date(booking.checkoutDate.split('-')) > new Date(filterOptions.firstDate.split('-'))
+                            )
+                                return false;
+                        }
+                    } else if (filterOptions.secondDate) {
+                        for (const booking of bookingsById) {
+                            if (
+                                new Date(booking.checkinDate.split('-')) < new Date(filterOptions.secondDate.split('-'))
+                            )
+                                return false;
+                        }
+                    }
+                } else {
+                    if (item.state !== filterState) return false;
+                }
+            } else if (filterState === 1) {
+                if (item.state !== filterState) return false;
+                if (filterOptions.firstDate) if (item.checkinDate !== filterOptions.firstDate) return false;
+            } else if (filterState === 2) {
+                if (item.state !== filterState) return false;
+                if (filterOptions.firstDate) if (item.checkoutDate !== filterOptions.firstDate) return false;
+            }
+        }
+        return true;
+    });
+    return res;
+};
+
 function RoomList() {
     console.log('RoomList re-rendered!');
 
-    const [room, setRoom] = useState({});
     const handleFilterClick = (e) => {
         e.stopPropagation();
         removeFocus();
         const filterItem = e.target.closest('.' + cx('filter-item'));
         filterItem.lastElementChild.classList.toggle(cx('show'));
     };
+
+    const handleRemoveFilter = () => {
+        setFilterOptions({ state: -1 });
+    };
+
+    // FILTER OPTIONS:
+    const [filterOptions, setFilterOptions] = useState({ state: -1 });
     const handleFilterOptionClick = (e) => {
         e.stopPropagation();
         e.target.parentElement.classList.remove(cx('show'));
-        setRoom((prev) => ({ ...prev, [e.target.getAttribute('name')]: e.target.getAttribute('value') }));
-        console.log(room);
-    };
-    const handleRemoveFilter = () => {
-        setRoom({});
+        setFilterOptions((prev) => ({ ...prev, [e.target.getAttribute('name')]: e.target.getAttribute('value') }));
     };
 
     // Validate date input
     let secondDateMinDate;
-    if (room.firstDate) {
-        const firstDateNextDay = new Date(new Date(room.firstDate).getTime() + 24 * 60 * 60 * 1000);
+    if (filterOptions.firstDate) {
+        const firstDateNextDay = new Date(new Date(filterOptions.firstDate).getTime() + 24 * 60 * 60 * 1000);
         secondDateMinDate = firstDateNextDay.toISOString().split('T')[0];
     }
     let firstDateMaxDate;
-    if (room.secondDate && Number(room.state) === 0) {
-        const secondDatePreviousDay = new Date(new Date(room.secondDate).getTime() - 24 * 60 * 60 * 1000);
+    if (filterOptions.secondDate && Number(filterOptions.state) === 0) {
+        const secondDatePreviousDay = new Date(new Date(filterOptions.secondDate).getTime() - 24 * 60 * 60 * 1000);
         firstDateMaxDate = secondDatePreviousDay.toISOString().split('T')[0];
     }
 
+    const [filteredRooms, setFilteredRooms] = useState([]);
+
+    const handleSearchInput = (e) => {
+        const value = e.target.value.toLowerCase();
+        const searchingRooms = rooms.filter((item) => {
+            if (item.roomNumber.includes(value)) return true;
+            if (removeVietnameseTones(item.roomTypeText).toLowerCase().includes(value)) return true;
+            if (String(item.price).includes(value)) return true;
+            if (String(item.size).includes(value)) return true;
+            if (removeVietnameseTones(item.bedDetailText).toLowerCase().includes(value)) return true;
+            if (removeVietnameseTones(roomStateToString(item.state)).toLowerCase().includes(value)) return true;
+            return false;
+        });
+        setFilteredRooms(searchingRooms);
+    };
+
+    // Get state from HOME PAGE:
+    var viewAllRoomState = useLocation().state;
+    if (viewAllRoomState === null) viewAllRoomState = -1;
+
     // Get rooms
-    const [rooms, setRooms] = useState([]);
     useEffect(() => {
         sCurrentPage.set('/danh-sach-phong');
 
         get(
             'rooms/',
             (data) => {
-                setRooms(data);
+                rooms = data;
+                if (viewAllRoomState === -1) setFilteredRooms(data);
+                else setFilteredRooms(getFilteredRooms({ state: viewAllRoomState }));
             },
             () => {
                 alert('Rooms not found!');
             },
         );
+
+        get(
+            'room-types/',
+            (data) => {
+                roomTypes = data;
+            },
+            () => {
+                alert('Room types not found!');
+            },
+        );
+
+        get(
+            'bed-details/',
+            (data) => {
+                bedDetails = data;
+            },
+            () => {
+                alert('Bed details not found!');
+            },
+        );
+
+        get(
+            'bookings/',
+            (data) => {
+                bookings = data;
+            },
+            () => {
+                alert('Bookings not found!');
+            },
+        );
+
+        setFilterOptions({ state: viewAllRoomState });
     }, []);
+
+    useEffect(() => {
+        setFilteredRooms(getFilteredRooms(filterOptions));
+    }, [filterOptions]);
 
     return (
         <div className={cx('wrapper') + ' grid'}>
             <div className={cx('header')}>
                 <div className={cx('search-wrapper')}>
                     <SearchIcon />
-                    <input type="text" />
+                    <input className="search-input" type="text" placeholder="Tìm kiếm..." onInput={handleSearchInput} />
                 </div>
                 <button
                     className={cx('remove-filter-btn')}
                     style={{
-                        display: room.floor || room.roomTypeId || room.bedDetailId || room.state ? 'flex' : 'none',
+                        display:
+                            filterOptions.floor ||
+                            filterOptions.roomTypeId ||
+                            filterOptions.bedDetailId ||
+                            filterOptions.state !== -1
+                                ? 'flex'
+                                : 'none',
                     }}
                     onClick={handleRemoveFilter}
                 >
@@ -99,11 +231,11 @@ function RoomList() {
             </div>
             <div className={cx('filter-wrapper')}>
                 <div
-                    className={cx('filter-item', room.floor ? 'filtered' : '')}
+                    className={cx('filter-item', filterOptions.floor ? 'filtered' : '')}
                     onClick={handleFilterClick}
                     style={{ minWidth: '104px' }}
                 >
-                    {room.floor === undefined ? 'Chọn tầng' : 'Tầng ' + room.floor}
+                    {filterOptions.floor === undefined ? 'Chọn tầng' : 'Tầng ' + filterOptions.floor}
                     <CaretDownIcon className={cx('caret-down-icon')} />
                     <ul className={cx('floor-dropdown')}>
                         <li name="floor" value="1" onClick={handleFilterOptionClick}>
@@ -121,57 +253,46 @@ function RoomList() {
                     </ul>
                 </div>
                 <div
-                    className={cx('filter-item', room.roomTypeId ? 'filtered' : '')}
+                    className={cx('filter-item', filterOptions.roomTypeId ? 'filtered' : '')}
                     onClick={handleFilterClick}
                     style={{ minWidth: '160px' }}
                 >
-                    {room.roomTypeId === undefined ? 'Chọn hạng phòng' : room.roomTypeId}
+                    {roomTypes.find((item) => item.id === filterOptions.roomTypeId)?.roomTypeText ?? 'Chọn hạng phòng'}
                     <CaretDownIcon className={cx('caret-down-icon')} />
                     <ul className={cx('room-type-dropdown')}>
-                        {/* Đoạn này value nên là RoomTypeId */}
-                        <li name="roomTypeId" value="RoomType1" onClick={handleFilterOptionClick}>
-                            Phòng Deluxe Twin
-                        </li>
-                        <li name="roomTypeId" value="RoomType2" onClick={handleFilterOptionClick}>
-                            Phòng Deluxe Twin
-                        </li>
-                        <li name="roomTypeId" value="RoomType3" onClick={handleFilterOptionClick}>
-                            Phòng Deluxe Twin
-                        </li>
-                        <li name="roomTypeId" value="RoomType4" onClick={handleFilterOptionClick}>
-                            Phòng Deluxe TwinTwin Twin Twin{' '}
-                        </li>
+                        {roomTypes.map((item, index) => (
+                            <li key={index} name="roomTypeId" value={item.id} onClick={handleFilterOptionClick}>
+                                {item.roomTypeText}
+                            </li>
+                        ))}
                     </ul>
                 </div>
                 <div
-                    className={cx('filter-item', room.bedDetailId ? 'filtered' : '')}
+                    className={cx('filter-item', filterOptions.bedDetailId ? 'filtered' : '')}
                     onClick={handleFilterClick}
                     style={{ minWidth: '160px' }}
                 >
-                    {room.bedDetailId === undefined ? 'Chi tiết giường' : room.bedDetailId}
+                    {bedDetails.find((item) => item.id === Number(filterOptions.bedDetailId))?.bedDetailText ??
+                        'Chi tiết giường'}
                     <CaretDownIcon className={cx('caret-down-icon')} />
                     <ul className={cx('bed-detail-dropdown')}>
-                        {/* Đoạn này value nên là BedDetailId */}
-                        <li name="bedDetailId" value="BedDetail1" onClick={handleFilterOptionClick}>
-                            1 giường sofa đơn, 1 giường king size
-                        </li>
-                        <li name="bedDetailId" value="BedDetail2" onClick={handleFilterOptionClick}>
-                            Phòng Deluxe Twin
-                        </li>
-                        <li name="bedDetailId" value="BedDetail3" onClick={handleFilterOptionClick}>
-                            Phòng Deluxe Twin
-                        </li>
-                        <li name="bedDetailId" value="BedDetail4" onClick={handleFilterOptionClick}>
-                            Phòng Deluxe TwinTwin Twin Twin{' '}
-                        </li>
+                        {bedDetails.map((item, index) => (
+                            <li key={index} name="bedDetailId" value={item.id} onClick={handleFilterOptionClick}>
+                                {item.bedDetailText}
+                            </li>
+                        ))}
                     </ul>
                 </div>
                 <div
-                    className={cx('filter-item', 'filter-item__room-state', room.state ? 'filtered' : '')}
+                    className={cx(
+                        'filter-item',
+                        'filter-item__room-state',
+                        filterOptions.state !== -1 ? 'filtered' : '',
+                    )}
                     onClick={handleFilterClick}
                     style={{ minWidth: '120px' }}
                 >
-                    {room.state === undefined ? 'Tình trạng' : roomStateToString(room.state)}
+                    {filterOptions.state === -1 ? 'Tình trạng' : roomStateToString(filterOptions.state)}
                     <CaretDownIcon className={cx('caret-down-icon')} />
                     <ul className={cx('room-state-dropdown')}>
                         <li name="state" value="0" onClick={handleFilterOptionClick}>
@@ -189,24 +310,29 @@ function RoomList() {
                     type="date"
                     max={firstDateMaxDate}
                     name="firstDate"
-                    className={cx('date-input', room.firstDate ? 'filtered' : '')}
-                    value={room.firstDate ? room.firstDate : ''}
-                    onInput={(e) => setRoom((prev) => ({ ...prev, [e.target.getAttribute('name')]: e.target.value }))}
+                    className={cx('date-input', filterOptions.firstDate ? 'filtered' : '')}
+                    value={filterOptions.firstDate ? filterOptions.firstDate : ''}
+                    onInput={(e) =>
+                        setFilterOptions((prev) => ({ ...prev, [e.target.getAttribute('name')]: e.target.value }))
+                    }
                     style={{
-                        display: room.state ? 'flex' : 'none',
+                        display: filterOptions.state ? 'flex' : 'none',
                     }}
                 />
-                {Number(room.state) === 0 && (
+                {Number(filterOptions.state) === 0 && (
                     <>
                         <span className={cx('divider')}>-</span>
                         <input
                             type="date"
                             min={secondDateMinDate}
                             name="secondDate"
-                            value={room.secondDate ? room.secondDate : ''}
-                            className={cx('date-input', room.secondDate ? 'filtered' : '')}
+                            value={filterOptions.secondDate ? filterOptions.secondDate : ''}
+                            className={cx('date-input', filterOptions.secondDate ? 'filtered' : '')}
                             onInput={(e) =>
-                                setRoom((prev) => ({ ...prev, [e.target.getAttribute('name')]: e.target.value }))
+                                setFilterOptions((prev) => ({
+                                    ...prev,
+                                    [e.target.getAttribute('name')]: e.target.value,
+                                }))
                             }
                         />
                     </>
@@ -220,11 +346,11 @@ function RoomList() {
                 <p className="col c-2 m-2 l-2">Tình trạng</p>
                 <p className="col c-2 m-2 l-2">Check-in/Check-out</p>
             </div>
-            {rooms.map((item, index) => (
+            {filteredRooms.map((item, index) => (
                 <RoomListItem
                     key={index}
                     data={item}
-                    onClick={() => {
+                    onClick={(e) => {
                         var type;
                         if (item.state === 0) type = TYPE_ROOM_TYPE;
                         else if (item.state === 1) type = TYPE_CHECKIN;

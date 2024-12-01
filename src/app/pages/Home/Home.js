@@ -1,19 +1,27 @@
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import RoomModal from '../../components/RoomModal';
 import { sCurrentPage } from '../../layouts/DefaultLayout/Sidebar/sidebarStore';
 import { get } from '../../modules/lib/httpHandle';
-import styles from './home.module.scss';
-import Heading from './partials/Heading';
-import Room, { TYPE_ROOM_TYPE, TYPE_CHECKIN, TYPE_CHECKOUT } from './partials/Room';
-import { sShowModal } from './homeStore';
 import '../../styles/modal.scss';
+import styles from './home.module.scss';
+import { sShowModal } from './homeStore';
+import Heading from './partials/Heading';
+import Room, { TYPE_CHECKIN, TYPE_CHECKOUT, TYPE_ROOM_TYPE } from './partials/Room';
 
 const cx = classNames.bind(styles);
 
 function Home() {
     const [roomTypes, setRoomTypes] = useState([]);
-    const [rooms, setRooms] = useState([]);
+    const [bookings, setBookings] = useState([]);
+
+    const navigate = useNavigate();
+    const handleViewAllClick = (e) => {
+        const state = e.target.closest('.' + cx('heading')).getAttribute('state');
+        // localStorage.setItem('showAllRoomState', state);
+        navigate('/danh-sach-phong', { state });
+    };
 
     useEffect(() => {
         sCurrentPage.set('/');
@@ -29,23 +37,21 @@ function Home() {
         );
 
         get(
-            'rooms/',
+            'bookings/',
             (data) => {
-                setRooms(data);
+                setBookings(data);
             },
             () => {
-                alert('Rooms not found!');
+                alert('Bookings not found!');
             },
         );
     }, []);
 
-    var unreservedRooms = [];
     var checkinRooms = [];
     var checkoutRooms = [];
 
-    rooms.forEach((item) => {
-        if (item.state === 0) unreservedRooms.push(item);
-        else if (item.state === 1) checkinRooms.push(item);
+    bookings.forEach((item) => {
+        if (item.state === 1) checkinRooms.push(item);
         else if (item.state === 2) checkoutRooms.push(item);
     });
 
@@ -71,7 +77,7 @@ function Home() {
                 ))}
             </div>
 
-            <Heading label="Phòng chờ check-in" className={cx('heading')} />
+            <Heading label="Phòng chờ check-in" state="1" className={cx('heading')} onClick={handleViewAllClick} />
             <div className="row">
                 {checkinRooms.map((item, index) => (
                     <div key={index} className="col c-4 l-4 m-4">
@@ -79,7 +85,7 @@ function Home() {
                             type={TYPE_CHECKIN}
                             classNames={cx('room')}
                             data={item}
-                            onClick={() => {
+                            onClick={(e) => {
                                 sShowModal.set({
                                     type: TYPE_CHECKIN,
                                     data: item,
@@ -90,7 +96,7 @@ function Home() {
                 ))}
             </div>
 
-            <Heading label="Phòng Tới Hạn" className={cx('heading')} />
+            <Heading label="Phòng Tới Hạn" state="2" className={cx('heading')} onClick={handleViewAllClick} />
             <div className="row">
                 {checkoutRooms.map((item, index) => (
                     <div key={index} className="col c-4 l-4 m-4">
@@ -98,7 +104,7 @@ function Home() {
                             type={TYPE_CHECKOUT}
                             classNames={cx('room')}
                             data={item}
-                            onClick={() => {
+                            onClick={(e) => {
                                 sShowModal.set({
                                     type: TYPE_CHECKOUT,
                                     data: item,
