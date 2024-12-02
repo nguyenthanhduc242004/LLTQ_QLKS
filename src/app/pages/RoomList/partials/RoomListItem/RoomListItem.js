@@ -14,11 +14,11 @@ function RoomListItem({ className, data, onClick }) {
     } else if (data.state === 1) {
         stateText = 'Chờ check-in';
         type = TYPE_CHECKIN;
-        date = new Date(data.checkinDate.split('-')).toLocaleDateString();
+        date = new Date(data.checkinDate).toLocaleDateString();
     } else if (data.state === 2) {
         stateText = 'Chờ check-out';
         type = TYPE_CHECKOUT;
-        date = new Date(data.checkoutDate.split('-')).toLocaleDateString();
+        date = new Date(data.checkoutDate).toLocaleDateString();
     }
     return (
         <a href={'#' + type} className={className + ' ' + cx('wrapper') + ' row'} onClick={onClick}>
