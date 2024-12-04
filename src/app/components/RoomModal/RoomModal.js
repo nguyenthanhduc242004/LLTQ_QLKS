@@ -205,7 +205,8 @@ function RoomModal({ className, type, data }) {
                     <div className="col c-6 m-6 l-6">
                         <span>Ngày nhận phòng: </span>
                         <input
-                            ref={checkinDateInput}
+                            ref={checkinDateInput} 
+                            
                             {...{
                                 disabled: type !== TYPE_ROOM_TYPE && (!isEditing || type !== TYPE_CHECKIN),
                                 value: !!date.checkinDate && !isEditing ? date.checkinDate : data.checkinDate,
@@ -305,7 +306,9 @@ function RoomModal({ className, type, data }) {
             {/* BUTTONS: BEGIN */}
             <div className={cx('btn-wrapper')}>
                 {type === TYPE_ROOM_TYPE && (
-                    <Button label="Đặt phòng" type={TYPE_ROOM_TYPE} primary icon={<BookIcon />} className={cx('btn')} />
+                    <Button label="Đặt phòng" onClick={function(e) {
+                        
+                    }} type={TYPE_ROOM_TYPE} primary icon={<BookIcon />} className={cx('btn')}  />
                 )}
                 {isEditing && (
                     <>
@@ -341,6 +344,10 @@ function RoomModal({ className, type, data }) {
             {/* BUTTONS: BEGIN */}
         </div>
     );
+}
+async function addBooking() 
+{
+
 }
 
 export default RoomModal;

@@ -104,10 +104,12 @@ function Home() {
                             type={TYPE_CHECKOUT}
                             classNames={cx('room')}
                             data={item}
-                            onClick={(e) => {
+                            onClick={(e) => { 
+                                
                                 sShowModal.set({
                                     type: TYPE_CHECKOUT,
-                                    data: item,
+                                    data: item 
+                                    
                                 });
                             }}
                         />
