@@ -16,7 +16,7 @@ import {
 } from '../Icons';
 import styles from './roomModal.module.scss';
 import { useEffect, useRef, useState } from 'react';
-import { get } from '../../modules/lib/httpHandle';
+import { get, post } from '../../modules/lib/httpHandle';
 
 const cx = classNames.bind(styles);
 
@@ -31,24 +31,23 @@ function RoomModal({ className, type, data }) {
     const checkoutDateInput = useRef();
 
     const [submitData, setSubmitData] = useState({});
-
-    const [date, setDate] = useState({
-        checkinDate: undefined,
-        checkoutDate: undefined,
-    });
     const [isReservationInformationEditing, setIsReservationInformationEditing] = useState(false);
     const [isGuestInformationEditing, setIsGuestInformationEditing] = useState(false);
     const [filteredRooms, setFilteredRooms] = useState([]);
 
-    const getFilteredRooms = () => {
+    const getFilteredRooms = (id) => {
         return rooms.filter((room) => {
             var condition = true;
-            bookings.forEach((booking) => {
+            var bookingsExceptTheOneThatIsEditing = bookings;
+            if (type === TYPE_CHECKIN) {
+                bookingsExceptTheOneThatIsEditing = bookings.filter((item) => item.id !== id);
+            }
+            bookingsExceptTheOneThatIsEditing.forEach((booking) => {
                 if (booking.roomId === Number(room.id)) {
                     if (
                         !(
-                            new Date(booking.checkoutDate.split('-')) <= new Date(date.checkinDate.split('-')) ||
-                            new Date(booking.checkinDate.split('-')) >= new Date(date.checkoutDate.split('-'))
+                            new Date(booking.checkoutDate.split('-')) <= new Date(submitData.checkinDate.split('-')) ||
+                            new Date(booking.checkinDate.split('-')) >= new Date(submitData.checkoutDate.split('-'))
                         )
                     )
                         condition = false;
@@ -58,21 +57,21 @@ function RoomModal({ className, type, data }) {
         });
     };
 
+    const getRoomById = (id) => {
+        return rooms.find((item) => {
+            return Number(item.id) === id;
+        });
+    };
+
     useEffect(() => {
-        if (!!date.checkinDate && !!date.checkoutDate) {
-            setFilteredRooms(getFilteredRooms());
+        if (!!submitData.checkinDate && !!submitData.checkoutDate) {
+            setFilteredRooms(getFilteredRooms(data.id));
         }
-    }, [date]);
+    }, [submitData]);
 
     const handleWindowClick = () => {
         setIsReservationInformationEditing(false);
         setIsGuestInformationEditing(false);
-        setDate(() => {
-            return {
-                checkinDate: undefined,
-                checkoutDate: undefined,
-            };
-        });
         setSubmitData({});
     };
 
@@ -117,41 +116,66 @@ function RoomModal({ className, type, data }) {
         mainHeading = 'CHI TIẾT ĐẶT PHÒNG';
     }
 
-    const handleDateInput = (e) => {
-        setDate((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    };
-
     const today = new Date();
     const todayString = today.toISOString().split('T')[0];
     const tomorrow = new Date(new Date().getTime() + dayTimeInMills);
 
-    const checkinNextDay = new Date(new Date(date.checkinDate).getTime() + dayTimeInMills);
+    const checkinNextDay = new Date(new Date(submitData.checkinDate).getTime() + dayTimeInMills);
     const checkoutMinDate = checkinNextDay > tomorrow ? checkinNextDay : tomorrow;
     const checkoutMinDateString = checkoutMinDate.toISOString().split('T')[0];
 
     var checkinMaxDateString = '';
-    if (date.checkoutDate) {
-        const checkoutPreviousDay = new Date(new Date(date.checkoutDate).getTime() - dayTimeInMills);
+    if (submitData.checkoutDate) {
+        const checkoutPreviousDay = new Date(new Date(submitData.checkoutDate).getTime() - dayTimeInMills);
         const checkoutPreviousDayString = checkoutPreviousDay.toISOString().split('T')[0];
         checkinMaxDateString = checkoutPreviousDayString;
     }
 
     const handleReservationInforamtionEditBtnClick = () => {
         if (isReservationInformationEditing) {
-            setDate({
+            setSubmitData((prev) => ({
+                ...prev,
                 checkinDate: undefined,
                 checkoutDate: undefined,
-            });
+                roomId: undefined,
+            }));
         } else {
-            setDate({
+            setSubmitData((prev) => ({
+                ...prev,
                 checkinDate: data.checkinDate,
                 checkoutDate: data.checkoutDate,
-            });
+                roomId: data.roomId,
+            }));
         }
         setIsReservationInformationEditing((prev) => !prev);
     };
 
     const handleGuestInformationEditBtnClick = () => {
+        if (isGuestInformationEditing) {
+            setSubmitData((prev) => ({
+                ...prev,
+                citizenId: undefined,
+                guestName: undefined,
+                phone: undefined,
+                email: undefined,
+                dob: undefined,
+                gender: undefined,
+                address: undefined,
+                guestId: undefined,
+            }));
+        } else {
+            setSubmitData((prev) => ({
+                ...prev,
+                citizenId: data.citizenId,
+                guestName: data.guestName,
+                phone: data.phone,
+                email: data.email,
+                dob: data.dob,
+                gender: data.gender,
+                address: data.address,
+                guestId: data.guestId,
+            }));
+        }
         setIsGuestInformationEditing((prev) => !prev);
     };
 
@@ -163,7 +187,7 @@ function RoomModal({ className, type, data }) {
         type === 'booking-detail'
     )
         roomSelectType = 0;
-    else if (!!date.checkinDate && !!date.checkoutDate) roomSelectType = 1;
+    else if (!!submitData.checkinDate && !!submitData.checkoutDate) roomSelectType = 1;
     else roomSelectType = 2;
 
     // SUBMITS:
@@ -172,6 +196,41 @@ function RoomModal({ className, type, data }) {
     };
     const handleBookingSubmit = () => {
         console.log(submitData);
+    };
+
+    // UPDATE:
+    const handleUpdateConfirm = () => {
+        console.log(submitData);
+        if (isReservationInformationEditing) {
+            if (
+                submitData.checkinDate !== data.checkinDate ||
+                submitData.checkoutDate !== data.checkoutDate ||
+                submitData.roomId !== data.roomId
+            ) {
+                // Trả response về y như post, chỉnh giao diện sau khi post tui làm sau.
+                alert('UPDATING A BOOKING!');
+                setIsReservationInformationEditing(false);
+            } else {
+                alert('Bạn chưa thay đổi thông tin đặt phòng!');
+            }
+        }
+        if (isGuestInformationEditing) {
+            if (
+                submitData.citizenId !== data.citizenId ||
+                submitData.guestName !== data.guestName ||
+                submitData.phone !== data.phone ||
+                submitData.email !== data.email ||
+                submitData.dob !== data.dob ||
+                submitData.gender !== data.gender ||
+                submitData.address !== data.address
+            ) {
+                // Trả response về y như post, chỉnh giao diện sau khi post tui làm sau.
+                alert('UPDATING A GUEST!');
+                setIsGuestInformationEditing(false);
+            } else {
+                alert('Bạn chưa thay đổi thông tin người đặt!');
+            }
+        }
     };
 
     return (
@@ -233,8 +292,7 @@ function RoomModal({ className, type, data }) {
                                 min={todayString}
                                 max={checkinMaxDateString}
                                 name="checkinDate"
-                                value={date.checkinDate ? date.checkinDate : undefined}
-                                onInput={handleDateInput}
+                                value={submitData.checkinDate ? submitData.checkinDate : undefined}
                                 onChange={handleChange}
                             />
                         ) : (
@@ -244,11 +302,10 @@ function RoomModal({ className, type, data }) {
                                     (type === TYPE_CHECKIN && !isReservationInformationEditing) ||
                                     type === 'booking-detail'
                                 }
-                                value={date.checkinDate !== undefined ? date.checkinDate : data.checkinDate}
+                                value={submitData.checkinDate !== undefined ? submitData.checkinDate : data.checkinDate}
                                 type="date"
                                 max={checkinMaxDateString}
                                 name="checkinDate"
-                                onInput={handleDateInput}
                                 onChange={handleChange}
                             />
                         )}
@@ -260,9 +317,8 @@ function RoomModal({ className, type, data }) {
                                 ref={checkoutDateInput}
                                 type="date"
                                 min={checkoutMinDateString}
-                                value={date.checkoutDate}
+                                value={submitData.checkoutDate}
                                 name="checkoutDate"
-                                onInput={handleDateInput}
                                 onChange={handleChange}
                             />
                         ) : (
@@ -271,11 +327,12 @@ function RoomModal({ className, type, data }) {
                                     (type !== TYPE_ROOM_TYPE && !isReservationInformationEditing) ||
                                     type === 'booking-detail'
                                 }
-                                value={date.checkoutDate !== undefined ? date.checkoutDate : data.checkoutDate}
+                                value={
+                                    submitData.checkoutDate !== undefined ? submitData.checkoutDate : data.checkoutDate
+                                }
                                 type="date"
                                 min={checkoutMinDateString}
                                 name="checkoutDate"
-                                onInput={handleDateInput}
                                 onChange={handleChange}
                             />
                         )}
@@ -284,15 +341,12 @@ function RoomModal({ className, type, data }) {
                 <div className="row">
                     <div className="col" style={{ flex: '1' }}>
                         {roomSelectType === 0 && (
-                            <select name="room" required defaultValue={data.roomNumber} disabled>
-                                <option value={data.roomNumber}>Phòng {data.roomNumber}</option>
+                            <select name="room" required defaultValue={data.roomId} disabled>
+                                <option value={data.roomId}>Phòng {data.roomNumber}</option>
                             </select>
                         )}
                         {roomSelectType === 1 && (
-                            <select name="roomId" required defaultValue="0" onChange={handleChange}>
-                                <option value="0" disabled>
-                                    Chọn phòng
-                                </option>
+                            <select name="roomId" required defaultValue={data.roomId} onChange={handleChange}>
                                 {filteredRooms.map((item, index) => (
                                     <option key={index} value={item.id}>
                                         Phòng {item.roomNumber}
@@ -355,7 +409,7 @@ function RoomModal({ className, type, data }) {
                     <DetailInformation
                         className={cx('guest-information')}
                         data={data}
-                        isEditing={isGuestInformationEditing}
+                        isGuestInformationEditing={isGuestInformationEditing}
                         setSubmitData={setSubmitData}
                     />
                 </>
@@ -382,24 +436,40 @@ function RoomModal({ className, type, data }) {
                                 ? false
                                 : true
                         }
-                        // {...{
-                        //     disabled:
-                        // sData.value.checkinDate &&
-                        // sData.value.checkoutDate &&
-                        // sData.value.roomId &&
-                        // sData.value.citizenId &&
-                        // sData.value.guestName &&
-                        // sData.value.phone,
-                        // }}
                     />
                 )}
-                {isReservationInformationEditing && (
+                {(isReservationInformationEditing || isGuestInformationEditing) && (
                     <>
                         <Button className={cx('btn')} label="Hủy" />
-                        <Button className={cx('btn')} label="Xác nhận" type="confirm" primary icon={<CheckIcon />} />
+                        <Button
+                            className={cx('btn')}
+                            label="Xác nhận"
+                            type="confirm"
+                            primary
+                            icon={<CheckIcon />}
+                            onClick={handleUpdateConfirm}
+                            disabled={
+                                (submitData.checkinDate &&
+                                    submitData.checkoutDate &&
+                                    submitData.roomId &&
+                                    submitData.citizenId &&
+                                    submitData.guestName &&
+                                    submitData.phone) ||
+                                (!isGuestInformationEditing &&
+                                    submitData.checkinDate &&
+                                    submitData.checkoutDate &&
+                                    submitData.roomId) ||
+                                (!isReservationInformationEditing &&
+                                    submitData.citizenId &&
+                                    submitData.guestName &&
+                                    submitData.phone)
+                                    ? false
+                                    : true
+                            }
+                        />
                     </>
                 )}
-                {!isReservationInformationEditing && type === TYPE_CHECKIN && (
+                {!isReservationInformationEditing && !isGuestInformationEditing && type === TYPE_CHECKIN && (
                     <>
                         <Button className={cx('btn')} label="Hủy đặt phòng" />
                         <Button
@@ -411,7 +481,7 @@ function RoomModal({ className, type, data }) {
                         />
                     </>
                 )}
-                {!isReservationInformationEditing && type === TYPE_CHECKOUT && (
+                {!isReservationInformationEditing && !isGuestInformationEditing && type === TYPE_CHECKOUT && (
                     <>
                         <Button className={cx('btn')} label="Gia hạn" type={TYPE_CHECKIN} />
                         <Button
