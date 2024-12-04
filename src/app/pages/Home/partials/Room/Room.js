@@ -57,7 +57,7 @@ function Room({ classNames, type, data, onClick }) {
                                 <div className={cx('body-container')}>
                                     <span className={cx('customer-name')}>
                                         <PersonIcon className={cx('icon')} />
-                                        {data.name}
+                                        {data.guestName}
                                     </span>
                                     <span className={cx('bed-detail')}>
                                         <ClockIcon className={cx('icon')} />
@@ -75,7 +75,7 @@ function Room({ classNames, type, data, onClick }) {
                                 <div className={cx('body-container')}>
                                     <span className={cx('customer-name')}>
                                         <PersonIcon className={cx('icon')} />
-                                        {data.name}
+                                        {data.guestName}
                                     </span>
                                     <span className={cx('bed-detail')}>
                                         <ClockIcon className={cx('icon')} />
