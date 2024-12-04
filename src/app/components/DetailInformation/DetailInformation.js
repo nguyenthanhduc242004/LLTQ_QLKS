@@ -1,9 +1,9 @@
 import classNames from 'classnames/bind';
-import styles from './GuestInformation.module.scss';
+import styles from './DetailInformation.module.scss';
 
 const cx = classNames.bind(styles);
 
-function GuestInformation({ className, data = undefined, isGuestInformationEditing = false, setSubmitData }) {
+function DetailInformation({ className, data = undefined, isEditing = false, setSubmitData }) {
     const handleChange = (e) => {
         setSubmitData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
@@ -70,7 +70,7 @@ function GuestInformation({ className, data = undefined, isGuestInformationEditi
                     </div>
                 </>
             )}
-            {data !== undefined && !isGuestInformationEditing && (
+            {data !== undefined && !isEditing && (
                 <>
                     <div className="row">
                         <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
@@ -143,7 +143,7 @@ function GuestInformation({ className, data = undefined, isGuestInformationEditi
                     </div>
                 </>
             )}
-            {data !== undefined && isGuestInformationEditing && (
+            {data !== undefined && isEditing && (
                 <>
                     <div className="row">
                         <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
@@ -213,4 +213,4 @@ function GuestInformation({ className, data = undefined, isGuestInformationEditi
     );
 }
 
-export default GuestInformation;
+export default DetailInformation;

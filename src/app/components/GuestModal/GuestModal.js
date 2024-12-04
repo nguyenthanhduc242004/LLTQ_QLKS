@@ -1,19 +1,42 @@
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import Button from '../Button';
-import GuestInformation from '../DetailInformation';
 import { CancelIcon, CheckIcon, EditIcon } from '../Icons';
 import styles from './GuestModal.module.scss';
+import DetailInformation from '../DetailInformation';
 
 const cx = classNames.bind(styles);
 
 function GuestModal({ className, data }) {
     const [isEditing, setIsEditing] = useState(false);
+    const [submitData, setSubmitData] = useState({});
+
+    const handleWindowClick = () => {
+        setIsEditing(false);
+    };
+
+    const handleUpdateConfirm = () => {
+        if (
+            submitData.citizenId !== data.citizenId ||
+            submitData.guestName !== data.guestName ||
+            submitData.phone !== data.phone ||
+            submitData.email !== data.email ||
+            submitData.dob !== data.dob ||
+            submitData.gender !== data.gender ||
+            submitData.address !== data.address
+        ) {
+            alert('UPDATING A GUEST');
+            setIsEditing(false);
+        } else {
+            alert('Bạn chưa thay đổi thông tin khách hàng!');
+        }
+    };
 
     useEffect(() => {
-        window.addEventListener('click', () => {
-            setIsEditing(false);
-        });
+        window.addEventListener('click', handleWindowClick);
+        return () => {
+            window.removeEventListener('click', handleWindowClick);
+        };
     }, []);
 
     return (
@@ -29,6 +52,7 @@ function GuestModal({ className, data }) {
                     className={cx('edit-btn')}
                     onClick={() => {
                         setIsEditing(true);
+                        setSubmitData(data);
                     }}
                 >
                     Sửa
@@ -38,7 +62,7 @@ function GuestModal({ className, data }) {
             {isEditing && (
                 <button
                     className={cx('cancel-btn')}
-                    onClick={(e) => {
+                    onClick={() => {
                         setIsEditing(false);
                     }}
                 >
@@ -46,8 +70,7 @@ function GuestModal({ className, data }) {
                     <CancelIcon className={cx('icon')} />
                 </button>
             )}
-            <GuestInformation data={data} isEditing={isEditing} />
-            {}
+            <DetailInformation data={data} isEditing={isEditing} setSubmitData={setSubmitData} />
             {isEditing && (
                 <div className={cx('btn-wrapper')}>
                     <Button
@@ -56,7 +79,13 @@ function GuestModal({ className, data }) {
                             setIsEditing(false);
                         }}
                     />
-                    <Button label="Xác nhận" type="confirm" primary icon={<CheckIcon />} />
+                    <Button
+                        label="Xác nhận"
+                        type="confirm"
+                        primary
+                        icon={<CheckIcon />}
+                        onClick={handleUpdateConfirm}
+                    />
                 </div>
             )}
         </div>
