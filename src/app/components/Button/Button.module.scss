@@ -40,6 +40,11 @@
     & + .wrapper {
         margin-left: 20px;
     }
+
+    &.disabled {
+        opacity: 0.7;
+        pointer-events: none;
+    }
 }
 
 .icon {

@@ -17,7 +17,8 @@
     ],
     "bed-details": [
         { "id": 1, "bedDetailText": "1 giường sofa đơn, 1 giường king size" },
-        { "id": 2, "bedDetailText": "1 giường đôi" }
+        { "id": 2, "bedDetailText": "1 giường đôi" },
+        { "id": 3, "bedDetailText": "1 giường king size" }
     ],
     "rooms": [
         {
@@ -42,36 +43,19 @@
             "size": 70,
             "bedDetailId": 2,
             "bedDetailText": "1 giường đôi",
-            "state": 1,
-            "checkinDate": "2024-11-26",
-            "checkoutDate": "2024-11-28",
-            "citizenId": "035236534765",
-            "name": "Phan Thanh Đăng",
-            "phone": "0395349283",
-            "email": "DangPT@gmail.com",
-            "dob": "2004-01-01",
-            "gender": "male",
-            "address": ""
+            "state": 1
         },
         {
             "id": 3,
             "roomNumber": "P2.01",
             "floor": 2,
+            "roomTypeId": 3,
             "roomTypeText": "Phòng Deluxe King",
             "price": 2000000,
             "size": 50,
             "bedDetailId": 3,
             "bedDetailText": "1 giường king size",
-            "state": 2,
-            "checkinDate": "2024-11-27",
-            "checkoutDate": "2024-11-29",
-            "citizenId": "058374837235",
-            "name": "Nguyễn Văn A",
-            "phone": "0395837465",
-            "email": "ANV@gmail.com",
-            "dob": "2004-02-24",
-            "gender": "male",
-            "address": ""
+            "state": 2
         }
     ],
     "guests": [
@@ -136,9 +120,12 @@
             "totalPrice": 4400000,
 
             "roomNumber": "P1.02",
+            "floor": 1,
+            "roomTypeId": 2,
             "roomTypeText": "Phòng Deluxe Twin",
             "price": 2200000,
             "size": 70,
+            "bedDetailId": 2,
             "bedDetailText": "1 giường đôi",
             "state": 1,
             "citizenId": "035236534765",
@@ -151,6 +138,10 @@
         },
         {
             "id": 2,
+            "roomNumber": "P2.01",
+            "floor": 2,
+            "roomTypeId": 3,
+            "roomTypeText": "Phòng Deluxe King",
             "roomId": 3,
             "guestId": 2,
             "guestName": "Nguyễn Văn A",
@@ -161,10 +152,9 @@
             "isPaid": false,
             "totalPrice": 4000000,
 
-            "roomNumber": "P2.01",
-            "roomTypeText": "Phòng Deluxe King",
             "price": 2000000,
             "size": 50,
+            "bedDetailId": 3,
             "bedDetailText": "1 giường king size",
             "state": 2,
             "citizenId": "058374837235",
@@ -177,29 +167,34 @@
         },
         {
             "id": 2,
-            "roomId": 3,
-            "guestId": 2,
-            "guestName": "Nguyễn Văn A",
-            "staffId": 2,
-            "staffName": "Phan Thanh Đăng S2",
-            "checkinDate": "2024-11-27",
-            "checkoutDate": "2024-11-29",
-            "isPaid": true,
-            "totalPrice": 4000000,
 
+            "roomId": 3,
             "roomNumber": "P2.01",
+            "state": 2,
+            "floor": 2,
+            "roomTypeId": 3,
             "roomTypeText": "Phòng Deluxe King",
             "price": 2000000,
             "size": 50,
+            "bedDetailId": 3,
             "bedDetailText": "1 giường king size",
-            "state": 2,
+
+            "guestId": 2,
+            "guestName": "Nguyễn Văn A",
             "citizenId": "058374837235",
-            "name": "Nguyễn Văn A",
             "phone": "0395837465",
             "email": "ANV@gmail.com",
             "dob": "2004-02-24",
             "gender": "male",
-            "address": ""
+            "address": "",
+
+            "staffId": 2,
+            "staffName": "Phan Thanh Đăng S2",
+
+            "checkinDate": "2024-11-27",
+            "checkoutDate": "2024-11-29",
+            "isPaid": true,
+            "totalPrice": 4000000
         }
     ]
 }

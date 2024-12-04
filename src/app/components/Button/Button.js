@@ -3,9 +3,14 @@ import styles from './Button.module.scss';
 
 const cx = classNames.bind(styles);
 
-function Button({ className, label, type, icon, primary, onClick }) {
+function Button({ className, label, type, icon, primary, onClick, disabled }) {
     return (
-        <button className={cx('wrapper', type, primary ? 'primary' : 'normal') + ' ' + className} onClick={onClick}>
+        <button
+            className={
+                cx('wrapper', type, primary ? 'primary' : 'normal', disabled ? 'disabled' : '') + ' ' + className
+            }
+            onClick={onClick}
+        >
             {icon && <span className={cx('icon')}>{icon}</span>}
             {label}
         </button>

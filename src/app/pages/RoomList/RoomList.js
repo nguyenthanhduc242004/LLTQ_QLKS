@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { signify } from 'react-signify';
 import { CaretDownIcon, RemoveFilterIcon, SearchIcon } from '../../components/Icons';
 import RoomModal from '../../components/RoomModal';
@@ -34,73 +34,104 @@ document.addEventListener('click', removeFocus);
 
 const sShowModal = signify({});
 
-var rooms = [];
+// var rooms = [];
 var roomTypes = [];
 var bedDetails = [];
-var bookings = [];
-
-const getBookingsByRoomId = (id) => {
-    var res = [];
-    bookings.forEach((item) => {
-        if (item.roomId === id) res.push(item);
-    });
-    return res;
-};
-
-const getFilteredRooms = (filterOptions) => {
-    var res = [];
-    var filterState;
-    res = rooms.filter((item) => {
-        if (filterOptions.floor) if (item.floor !== Number(filterOptions.floor)) return false;
-        if (filterOptions.roomTypeId) if (item.roomTypeId !== Number(filterOptions.roomTypeId)) return false;
-        if (filterOptions.bedDetailId) if (item.bedDetailId !== Number(filterOptions.bedDetailId)) return false;
-        if (filterOptions.state) {
-            filterState = Number(filterOptions.state);
-            if (filterState === 0) {
-                if (filterOptions.firstDate || filterOptions.secondDate) {
-                    const bookingsById = getBookingsByRoomId(item.id);
-                    if (filterOptions.firstDate && filterOptions.secondDate) {
-                        for (const booking of bookingsById) {
-                            if (
-                                new Date(booking.checkoutDate.split('-')) >
-                                    new Date(filterOptions.firstDate.split('-')) &&
-                                new Date(booking.checkinDate.split('-')) < new Date(filterOptions.secondDate.split('-'))
-                            )
-                                return false;
-                        }
-                    } else if (filterOptions.firstDate) {
-                        for (const booking of bookingsById) {
-                            if (
-                                new Date(booking.checkoutDate.split('-')) > new Date(filterOptions.firstDate.split('-'))
-                            )
-                                return false;
-                        }
-                    } else if (filterOptions.secondDate) {
-                        for (const booking of bookingsById) {
-                            if (
-                                new Date(booking.checkinDate.split('-')) < new Date(filterOptions.secondDate.split('-'))
-                            )
-                                return false;
-                        }
-                    }
-                } else {
-                    if (item.state !== filterState) return false;
-                }
-            } else if (filterState === 1) {
-                if (item.state !== filterState) return false;
-                if (filterOptions.firstDate) if (item.checkinDate !== filterOptions.firstDate) return false;
-            } else if (filterState === 2) {
-                if (item.state !== filterState) return false;
-                if (filterOptions.firstDate) if (item.checkoutDate !== filterOptions.firstDate) return false;
-            }
-        }
-        return true;
-    });
-    return res;
-};
+// var bookings = [];
 
 function RoomList() {
-    console.log('RoomList re-rendered!');
+    const getFilteredRooms = (filterOptions) => {
+        var res = [];
+        var filterState;
+        res = roomsWithEarliestDate.filter((item) => {
+            if (filterOptions.floor) if (item.floor !== Number(filterOptions.floor)) return false;
+            if (filterOptions.roomTypeId) if (item.roomTypeId !== Number(filterOptions.roomTypeId)) return false;
+            if (filterOptions.bedDetailId) if (item.bedDetailId !== Number(filterOptions.bedDetailId)) return false;
+            if (filterOptions.state) {
+                filterState = Number(filterOptions.state);
+                if (filterState === 0) {
+                    if (filterOptions.firstDate || filterOptions.secondDate) {
+                        const bookingsById = getBookingsByRoomId(item.roomId || item.id);
+                        if (filterOptions.firstDate && filterOptions.secondDate) {
+                            for (const booking of bookingsById) {
+                                const checkinDate = new Date(booking.checkinDate.split('-'));
+                                const checkoutDate = new Date(booking.checkoutDate.split('-'));
+                                const firstDate = new Date(filterOptions.firstDate.split('-'));
+                                const secondDate = new Date(filterOptions.secondDate.split('-'));
+                                if (!(secondDate <= checkinDate || firstDate >= checkoutDate)) return false;
+                            }
+                        } else if (filterOptions.firstDate) {
+                            for (const booking of bookingsById) {
+                                if (
+                                    new Date(booking.checkoutDate.split('-')) >
+                                    new Date(filterOptions.firstDate.split('-'))
+                                )
+                                    return false;
+                            }
+                        } else if (filterOptions.secondDate) {
+                            for (const booking of bookingsById) {
+                                if (
+                                    new Date(booking.checkinDate.split('-')) <
+                                    new Date(filterOptions.secondDate.split('-'))
+                                )
+                                    return false;
+                            }
+                        }
+                    } else {
+                        if (item.state !== filterState) return false;
+                    }
+                } else if (filterState === 1) {
+                    if (item.state !== filterState) return false;
+                    if (filterOptions.firstDate) if (item.checkinDate !== filterOptions.firstDate) return false;
+                } else if (filterState === 2) {
+                    if (item.state !== filterState) return false;
+                    if (filterOptions.firstDate) if (item.checkoutDate !== filterOptions.firstDate) return false;
+                }
+            }
+            return true;
+        });
+        console.log(res);
+        return res;
+    };
+
+    const [roomsWithEarliestDate, setRoomsWithEarliestDate] = useState([]);
+    const [filteredRooms, setFilteredRooms] = useState([]);
+    const [filterOptions, setFilterOptions] = useState({ state: -1 });
+    var viewAllRoomState = useLocation().state;
+    if (viewAllRoomState === null) viewAllRoomState = -1;
+    const [rooms, setRooms] = useState([]);
+    const [bookings, setBookings] = useState([]);
+    const inputRef = useRef();
+
+    const getBookingsByRoomId = (id) => {
+        var res = [];
+        bookings.forEach((item) => {
+            if (item.roomId === id) res.push(item);
+        });
+        return res;
+    };
+
+    const getRoomsWithEarliestDate = () => {
+        var res = [];
+        rooms.forEach((room) => {
+            if (room.state === 0) res.push(room);
+            else {
+                var theBooking = undefined;
+                bookings.forEach((booking) => {
+                    if (!booking.isPaid && Number(room.id) === booking.roomId) {
+                        if (!theBooking) {
+                            theBooking = booking;
+                        } else {
+                            if (new Date(booking.checkinDate.split('-')) < new Date(theBooking.checkinDate.split('-')))
+                                theBooking = booking;
+                        }
+                    }
+                });
+                res.push(theBooking);
+            }
+        });
+        return res;
+    };
 
     const handleFilterClick = (e) => {
         e.stopPropagation();
@@ -111,10 +142,11 @@ function RoomList() {
 
     const handleRemoveFilter = () => {
         setFilterOptions({ state: -1 });
+        inputRef.current.value = '';
+        inputRef.current.focus();
     };
 
     // FILTER OPTIONS:
-    const [filterOptions, setFilterOptions] = useState({ state: -1 });
     const handleFilterOptionClick = (e) => {
         e.stopPropagation();
         e.target.parentElement.classList.remove(cx('show'));
@@ -133,12 +165,10 @@ function RoomList() {
         firstDateMaxDate = secondDatePreviousDay.toISOString().split('T')[0];
     }
 
-    const [filteredRooms, setFilteredRooms] = useState([]);
-
     const handleSearchInput = (e) => {
         const value = e.target.value.toLowerCase();
-        const searchingRooms = rooms.filter((item) => {
-            if (item.roomNumber.includes(value)) return true;
+        const searchingRooms = filteredRooms.filter((item) => {
+            if (item.roomNumber.toLowerCase().includes(value)) return true;
             if (removeVietnameseTones(item.roomTypeText).toLowerCase().includes(value)) return true;
             if (String(item.price).includes(value)) return true;
             if (String(item.size).includes(value)) return true;
@@ -149,10 +179,6 @@ function RoomList() {
         setFilteredRooms(searchingRooms);
     };
 
-    // Get state from HOME PAGE:
-    var viewAllRoomState = useLocation().state;
-    if (viewAllRoomState === null) viewAllRoomState = -1;
-
     // Get rooms
     useEffect(() => {
         sCurrentPage.set('/danh-sach-phong');
@@ -160,9 +186,11 @@ function RoomList() {
         get(
             'rooms/',
             (data) => {
-                rooms = data;
-                if (viewAllRoomState === -1) setFilteredRooms(data);
+                setRooms(data);
+                if (viewAllRoomState === -1) setFilteredRooms(getRoomsWithEarliestDate());
                 else setFilteredRooms(getFilteredRooms({ state: viewAllRoomState }));
+
+                // if (viewAllRoomState !== -1) filterOptions.state = viewAllRoomState;
             },
             () => {
                 alert('Rooms not found!');
@@ -192,7 +220,7 @@ function RoomList() {
         get(
             'bookings/',
             (data) => {
-                bookings = data;
+                setBookings(data);
             },
             () => {
                 alert('Bookings not found!');
@@ -203,6 +231,12 @@ function RoomList() {
     }, []);
 
     useEffect(() => {
+        const roomsWithEarliestDate = getRoomsWithEarliestDate();
+        setRoomsWithEarliestDate(roomsWithEarliestDate);
+        setFilteredRooms(roomsWithEarliestDate);
+    }, [rooms, bookings]);
+
+    useEffect(() => {
         setFilteredRooms(getFilteredRooms(filterOptions));
     }, [filterOptions]);
 
@@ -211,7 +245,13 @@ function RoomList() {
             <div className={cx('header')}>
                 <div className={cx('search-wrapper')}>
                     <SearchIcon />
-                    <input className="search-input" type="text" placeholder="Tìm kiếm..." onInput={handleSearchInput} />
+                    <input
+                        ref={inputRef}
+                        className="search-input"
+                        type="text"
+                        placeholder="Tìm kiếm..."
+                        onInput={handleSearchInput}
+                    />
                 </div>
                 <button
                     className={cx('remove-filter-btn')}
@@ -220,7 +260,8 @@ function RoomList() {
                             filterOptions.floor ||
                             filterOptions.roomTypeId ||
                             filterOptions.bedDetailId ||
-                            filterOptions.state !== -1
+                            filterOptions.state !== -1 ||
+                            inputRef?.current?.value !== ''
                                 ? 'flex'
                                 : 'none',
                     }}
@@ -306,19 +347,22 @@ function RoomList() {
                         </li>
                     </ul>
                 </div>
-                <input
-                    type="date"
-                    max={firstDateMaxDate}
-                    name="firstDate"
-                    className={cx('date-input', filterOptions.firstDate ? 'filtered' : '')}
-                    value={filterOptions.firstDate ? filterOptions.firstDate : ''}
-                    onInput={(e) =>
-                        setFilterOptions((prev) => ({ ...prev, [e.target.getAttribute('name')]: e.target.value }))
-                    }
-                    style={{
-                        display: filterOptions.state ? 'flex' : 'none',
-                    }}
-                />
+
+                {Number(filterOptions.state) !== -1 && (
+                    <input
+                        type="date"
+                        max={firstDateMaxDate}
+                        name="firstDate"
+                        className={cx('date-input', filterOptions.firstDate ? 'filtered' : '')}
+                        value={filterOptions.firstDate ? filterOptions.firstDate : ''}
+                        onInput={(e) =>
+                            setFilterOptions((prev) => ({ ...prev, [e.target.getAttribute('name')]: e.target.value }))
+                        }
+                        style={{
+                            display: filterOptions.state ? 'flex' : 'none',
+                        }}
+                    />
+                )}
                 {Number(filterOptions.state) === 0 && (
                     <>
                         <span className={cx('divider')}>-</span>

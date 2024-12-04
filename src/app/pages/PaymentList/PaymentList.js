@@ -19,23 +19,29 @@ const sShowModal = signify({
 
 var payments = [];
 
+const stateText = (data) => {
+    var stateText;
+    if (data.isPaid === true) stateText = 'Đã thanh toán';
+    else if (Number(data.state) === 1) stateText = 'Chờ check-in';
+    else if (Number(data.state) === 2) stateText = 'Chờ check-out';
+    return stateText;
+};
+
 function PaymentList() {
     const [filteredPayment, setFilteredPayment] = useState([]);
 
     const handleSearchInput = (e) => {
-        // const value = e.target.value.toLowerCase();
-        // const searchingPayments = payments.filter((item) => {
-        //     if (removeVietnameseTones(item.name).toLowerCase().includes(value)) return true;
-        //     if (item.phone.includes(value)) return true;
-        //     if (item.email.toLowerCase().includes(value)) return true;
-        //     if (removeVietnameseTones(item.staffTypeText).toLowerCase().includes(value)) return true;
-        //     var gender;
-        //     if (item.gender === 'male') gender = 'nam';
-        //     else if (item.gender === 'female') gender = 'nữ';
-        //     if (gender.includes(value)) return true;
-        //     return false;
-        // });
-        // setFilteredPayment(searchingPayments);
+        const value = e.target.value.toLowerCase();
+        const searchingPayments = payments.filter((item) => {
+            if (removeVietnameseTones(item.guestName).toLowerCase().includes(value)) return true;
+            if (new Date(item.checkinDate.split('-')).toLocaleDateString().includes(value)) return true;
+            if (new Date(item.checkoutDate.split('-')).toLocaleDateString().includes(value)) return true;
+            if (removeVietnameseTones(item.staffName).toLowerCase().includes(value)) return true;
+            if (String(item.totalPrice).includes(value)) return true;
+            if (removeVietnameseTones(stateText(item)).toLowerCase().includes(value)) return true;
+            return false;
+        });
+        setFilteredPayment(searchingPayments);
     };
 
     useEffect(() => {
