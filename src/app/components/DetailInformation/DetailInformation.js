@@ -3,7 +3,7 @@ import styles from '../GuestModal/GuestModal.module.scss';
 
 const cx = classNames.bind(styles);
 
-function GuestInformation({ className, data = undefined, isGuestInformationEditing = false, setSubmitData }) {
+function DetailInformation({ className, data = undefined, isEditing = false, submitData, setSubmitData }) {
     const handleChange = (e) => {
         setSubmitData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
@@ -18,6 +18,7 @@ function GuestInformation({ className, data = undefined, isGuestInformationEditi
                                 name="citizenId"
                                 placeholder="Vui lòng nhập trường này"
                                 type="text"
+                                value={submitData.citizenId ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -27,6 +28,7 @@ function GuestInformation({ className, data = undefined, isGuestInformationEditi
                                 name="guestName"
                                 placeholder="Vui lòng nhập trường này"
                                 type="text"
+                                value={submitData.guestName ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -38,23 +40,25 @@ function GuestInformation({ className, data = undefined, isGuestInformationEditi
                                 name="phone"
                                 placeholder="Vui lòng nhập trường này"
                                 type="tel"
+                                value={submitData.phone ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
                         <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
                             <span>Email: </span>
-                            <input name="email" type="email" onChange={handleChange} />
+
+                            <input name="email" type="email" value={submitData.email ?? ''} onChange={handleChange} />
                         </div>
                     </div>
                     <div className="row">
                         <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
                             <span>Ngày sinh: </span>
-                            <input name="dob" type="date" onChange={handleChange} />
+                            <input name="dob" type="date" value={submitData.dob ?? ''} onChange={handleChange} />
                         </div>
                         <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
                             <span>Giới tính: </span>
-                            <select name="gender" required="" onChange={handleChange}>
-                                <option value="" disabled="" defaultValue="">
+                            <select name="gender" required="" value={submitData.gender ?? -1} onChange={handleChange}>
+                                <option value="-1" disabled="" defaultValue="">
                                     Chọn giới tính
                                 </option>
                                 <option value="male">Nam</option>
@@ -65,12 +69,17 @@ function GuestInformation({ className, data = undefined, isGuestInformationEditi
                     <div className="row">
                         <div className={cx('input-with-label') + ' col c-12 m-12 l-12'}>
                             <span>Địa chỉ: </span>
-                            <input name="address" type="text" onChange={handleChange} />
+                            <input
+                                name="address"
+                                type="text"
+                                value={submitData.address ?? ''}
+                                onChange={handleChange}
+                            />
                         </div>
                     </div>
                 </>
             )}
-            {data !== undefined && !isGuestInformationEditing && (
+            {data !== undefined && !isEditing && (
                 <>
                     <div className="row">
                         <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
@@ -89,7 +98,7 @@ function GuestInformation({ className, data = undefined, isGuestInformationEditi
                                 name="guestName"
                                 onChange={handleChange}
                                 type="text"
-                                value={data.name}
+                                value={data.guestName}
                                 disabled={true}
                             />
                         </div>
@@ -143,7 +152,7 @@ function GuestInformation({ className, data = undefined, isGuestInformationEditi
                     </div>
                 </>
             )}
-            {data !== undefined && isGuestInformationEditing && (
+            {data !== undefined && isEditing && (
                 <>
                     <div className="row">
                         <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
@@ -163,7 +172,7 @@ function GuestInformation({ className, data = undefined, isGuestInformationEditi
                                 name="guestName"
                                 onChange={handleChange}
                                 type="text"
-                                defaultValue={data.name}
+                                defaultValue={data.guestName}
                             />
                         </div>
                     </div>
@@ -213,4 +222,4 @@ function GuestInformation({ className, data = undefined, isGuestInformationEditi
     );
 }
 
-export default GuestInformation;
+export default DetailInformation;

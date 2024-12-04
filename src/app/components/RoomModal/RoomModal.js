@@ -1,5 +1,4 @@
 import classNames from 'classnames/bind';
-import { signify } from 'react-signify';
 import { TYPE_CHECKIN, TYPE_CHECKOUT, TYPE_ROOM_TYPE } from '../../pages/Home/partials/Room';
 import '../../styles/grid.scss';
 import Button from '../Button';
@@ -58,10 +57,22 @@ function RoomModal({ className, type, data }) {
         });
     };
 
-    const getRoomById = (id) => {
-        return rooms.find((item) => {
-            return Number(item.id) === id;
-        });
+    const getCheckoutMaxDateString = () => {
+        var res;
+        bookings
+            .filter((item) => item.id !== data.id)
+            .forEach((booking) => {
+                console.log(booking.roomId, data.roomId);
+                if (booking.roomId === data.roomId) {
+                    if (!res) res = booking.checkinDate;
+                    else {
+                        if (new Date(booking.checkinDate.split('-')) < new Date(res.split('-')))
+                            res = booking.checkinDate;
+                    }
+                }
+            });
+        console.log(res);
+        return res;
     };
 
     useEffect(() => {
@@ -119,10 +130,9 @@ function RoomModal({ className, type, data }) {
 
     const today = new Date();
     const todayString = today.toISOString().split('T')[0];
-    const tomorrow = new Date(new Date().getTime() + dayTimeInMills);
 
     const checkinNextDay = new Date(new Date(submitData.checkinDate).getTime() + dayTimeInMills);
-    const checkoutMinDate = checkinNextDay > tomorrow ? checkinNextDay : tomorrow;
+    const checkoutMinDate = checkinNextDay > today ? checkinNextDay : today;
     const checkoutMinDateString = checkoutMinDate.toISOString().split('T')[0];
 
     var checkinMaxDateString = '';
@@ -345,6 +355,7 @@ function RoomModal({ className, type, data }) {
                                 }
                                 type="date"
                                 min={checkoutMinDateString}
+                                max={getCheckoutMaxDateString()}
                                 name="checkoutDate"
                                 onChange={handleChange}
                             />
@@ -359,7 +370,15 @@ function RoomModal({ className, type, data }) {
                             </select>
                         )}
                         {roomSelectType === 1 && (
-                            <select name="roomId" required defaultValue={data.roomId} onChange={handleChange}>
+                            <select
+                                name="roomId"
+                                required
+                                defaultValue={type === TYPE_ROOM_TYPE ? -1 : data.roomId}
+                                onChange={handleChange}
+                            >
+                                <option value="-1" disabled>
+                                    Chọn phòng
+                                </option>
                                 {filteredRooms.map((item, index) => (
                                     <option key={index} value={item.id}>
                                         Phòng {item.roomNumber}
@@ -381,7 +400,11 @@ function RoomModal({ className, type, data }) {
             {type === TYPE_ROOM_TYPE && (
                 <>
                     <h3 className={cx('heading')}>Thông tin người đặt</h3>
-                    <DetailInformation className={cx('guest-information')} setSubmitData={setSubmitData} />
+                    <DetailInformation
+                        className={cx('guest-information')}
+                        setSubmitData={setSubmitData}
+                        submitData={submitData}
+                    />
                 </>
             )}
 
@@ -422,7 +445,7 @@ function RoomModal({ className, type, data }) {
                     <DetailInformation
                         className={cx('guest-information')}
                         data={data}
-                        isGuestInformationEditing={isGuestInformationEditing}
+                        isEditing={isGuestInformationEditing}
                         setSubmitData={setSubmitData}
                     />
                 </>
@@ -431,6 +454,14 @@ function RoomModal({ className, type, data }) {
 
             {/* BUTTONS: BEGIN */}
             <div className={cx('btn-wrapper')}>
+                {console.log(
+                    submitData.checkinDate,
+                    submitData.checkoutDate,
+                    submitData.roomId,
+                    submitData.citizenId,
+                    submitData.guestName,
+                    submitData.phone,
+                )}
                 {type === TYPE_ROOM_TYPE && (
                     <Button
                         onClick={handleBookingSubmit}
