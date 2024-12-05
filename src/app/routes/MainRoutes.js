@@ -17,9 +17,9 @@ export default function MainRoutes() {
                     path="/"
                     element={
                         <DefaultLayout>
-                            {/* <UserProtect> */}
-                            <Home />
-                            {/* </UserProtect> */}
+                            <UserProtect>
+                                <Home />
+                            </UserProtect>
                         </DefaultLayout>
                     }
                 />

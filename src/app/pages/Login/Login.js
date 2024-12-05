@@ -15,16 +15,6 @@ const handleCheckboxChange = () => {
     sRememberMe.set(!sRememberMe.value);
 };
 
-// SAVE FOR LATER:
-// const [isLoggedIn, setLoggedIn] = useState(false);
-
-// useEffect(() => {
-//     const userToken = localStorage.getItem('userToken');
-//     if (userToken) {
-//         setLoggedIn(true);
-//     }
-// }, []);
-
 function Login() {
     const [submitData, setSubmitData] = useState({});
     const refEmailFormMessage = useRef();
@@ -73,10 +63,16 @@ function Login() {
                     // Success
                     alert();
                     sIsLoggedIn.set(true);
-                    sIsAdmin.set(!!data.type);
-                    localStorage.setItem('currentStaffId', data.staffId);
+                    //*************************** */
+                    // sIsAdmin.set(!!data.type);
+                    sIsAdmin.set(true);
+                    //*************************** */
+                    localStorage.setItem('currentStaffData', JSON.stringify(data));
                     if (sRememberMe.value) {
-                        localStorage.setItem('user-token', JSON.stringify(data));
+                        localStorage.setItem(
+                            'userDateToken',
+                            new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toLocaleDateString(),
+                        );
                     }
                     nav('/');
                 },

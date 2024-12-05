@@ -95,6 +95,7 @@ function Header() {
                         className={cx('menu-item')}
                         onClick={() => {
                             sIsLoggedIn.set(false);
+                            localStorage.removeItem('userDateToken');
                             nav('/login');
                         }}
                     >
