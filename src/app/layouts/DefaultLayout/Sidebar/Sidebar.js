@@ -1,10 +1,11 @@
 import classNames from 'classnames/bind';
-import { CustomerIcon, HomeIcon, PaymentIcon, RoomIcon, StaffsIcon } from '../../../components/Icons';
+import { CustomerIcon, HomeIcon, PaymentIcon, PremiumIcon, RoomIcon, StaffsIcon } from '../../../components/Icons';
 import Image from '../../../components/Image';
 import styles from './Sidebar.module.scss';
 import { Link } from 'react-router-dom';
 import '../../../styles/grid.scss';
 import { sCurrentPage } from './sidebarStore';
+import { sIsAdmin } from '../../../../settings/globalStore';
 
 const cx = classNames.bind(styles);
 
@@ -67,11 +68,28 @@ function Sidebar() {
                         </Link>
                         <Link
                             to="/lich-su-dat-phong"
-                            className={cx('sidebar-item', value === '/thanh-toan' ? 'focus' : '')}
+                            className={cx('sidebar-item', value === '/lich-su-dat-phong' ? 'focus' : '')}
                         >
                             <PaymentIcon className={cx('icon')} />
                             Lịch sử đặt phòng
                         </Link>
+                        <sIsAdmin.Wrap>
+                            {(value) => {
+                                if (value) {
+                                    return (
+                                        <>
+                                            <Link
+                                                to="/chi-tiet-giuong"
+                                                className={cx('sidebar-item', value === '/thanh-toan' ? 'focus' : '')}
+                                            >
+                                                <PremiumIcon className={cx('icon')} />
+                                                Chi tiết giường
+                                            </Link>
+                                        </>
+                                    );
+                                }
+                            }}
+                        </sIsAdmin.Wrap>
                     </>
                 )}
             </sCurrentPage.Wrap>

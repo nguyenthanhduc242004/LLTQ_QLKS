@@ -17,21 +17,21 @@
   ],
   "bed-details": [
     {
-      "id": 1,
+      "id": "1",
       "bedDetailText": "1 giường sofa đơn, 1 giường king size"
     },
     {
-      "id": 2,
+      "id": "2",
       "bedDetailText": "1 giường đôi"
     },
     {
-      "id": 3,
+      "id": "3",
       "bedDetailText": "1 giường king size"
     }
   ],
   "rooms": [
     {
-      "id": 1,
+      "id": "1",
       "roomNumber": "P1.01",
       "floor": 1,
       "roomTypeId": 1,
@@ -43,7 +43,7 @@
       "state": 0
     },
     {
-      "id": 2,
+      "id": "2",
       "roomNumber": "P1.02",
       "floor": 1,
       "roomTypeId": 2,
@@ -55,7 +55,7 @@
       "state": 1
     },
     {
-      "id": 3,
+      "id": "3",
       "roomNumber": "P2.01",
       "floor": 2,
       "roomTypeId": 3,
@@ -69,7 +69,7 @@
   ],
   "guests": [
     {
-      "id": 1,
+      "id": "1",
       "citizenId": "035236534765",
       "name": "Phan Thanh Đăng",
       "phone": "0395349283",
@@ -79,7 +79,7 @@
       "address": ""
     },
     {
-      "id": 2,
+      "id": "2",
       "citizenId": "058374837235",
       "name": "Nguyễn Văn A",
       "phone": "0395837465",
@@ -91,7 +91,7 @@
   ],
   "staffs": [
     {
-      "id": 1,
+      "id": "1",
       "citizenId": "035236534765",
       "name": "Phan Thanh Đăng S1",
       "phone": "0395349283",
@@ -103,7 +103,7 @@
       "createdDate": "2024-04-20"
     },
     {
-      "id": 2,
+      "id": "2",
       "citizenId": "035236534765",
       "name": "Phan Thanh Đăng S2",
       "phone": "0395349283",
@@ -117,7 +117,7 @@
   ],
   "bookings": [
     {
-      "id": 1,
+      "id": "1",
       "roomId": 2,
       "guestId": 1,
       "guestName": "Phan Thanh Đăng",
@@ -145,7 +145,7 @@
       "address": ""
     },
     {
-      "id": 2,
+      "id": "2",
       "roomNumber": "P2.01",
       "floor": 2,
       "roomTypeId": 3,
@@ -172,7 +172,7 @@
       "address": ""
     },
     {
-      "id": 2,
+      "id": "2",
       "roomId": 3,
       "roomNumber": "P2.01",
       "state": 2,
@@ -201,7 +201,7 @@
   ],
   "accounts": [
     {
-      "id": 1,
+      "id": "1",
       "email": "admin@gmail.com",
       "password": "123",
       "staffId": 1
@@ -240,6 +240,181 @@
       "id": "be8d",
       "email": "asdssdsadasd@gmail.com",
       "password": "sdsassdasasd"
+    },
+    {
+      "id": "81e8",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "8898",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "ce08",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "cfbb",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "b006",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "4489",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "3595",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "7b55",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "e26f",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "ae2d",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "998f",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "7ea5",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "1374",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "1e32",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "4dd9",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "f748",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "7247",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "7c65",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "df23",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "13f8",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "d60f",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "2171",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "f120",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "b091",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "06aa",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "cd5f",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "2b17",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "b368",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "6c84",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "cc7c",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "4902",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "8e68",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "da60",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "7bc8",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "1dd8",
+      "email": "admin@gmail.com",
+      "password": "12345678"
     }
   ]
 }

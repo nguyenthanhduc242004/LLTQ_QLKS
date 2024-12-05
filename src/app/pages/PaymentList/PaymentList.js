@@ -45,7 +45,7 @@ function PaymentList() {
     };
 
     useEffect(() => {
-        sCurrentPage.set('/danh-sach-thanh-toán');
+        sCurrentPage.set('/lich-su-dat-phong');
 
         get(
             'bookings/',

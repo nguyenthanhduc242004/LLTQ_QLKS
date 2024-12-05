@@ -1,10 +1,11 @@
 import classNames from 'classnames/bind';
-import styles from './login.module.scss';
-import images from '../../assets/imgs';
-import { signify } from 'react-signify';
-import { post } from '../../modules/lib/httpHandle';
-import { sIsLoggedIn } from '../../../settings/globalStore';
 import { useRef, useState } from 'react';
+import { signify } from 'react-signify';
+import { sIsAdmin, sIsLoggedIn } from '../../../settings/globalStore';
+import images from '../../assets/imgs';
+import { post } from '../../modules/lib/httpHandle';
+import styles from './login.module.scss';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -30,6 +31,8 @@ function Login() {
     const refPasswordFormMessage = useRef();
     const refEmailFormMessage2 = useRef();
     const refPasswordFormMessage2 = useRef();
+
+    const nav = useNavigate();
 
     const handleEmailChange = (e) => {
         setSubmitData((prev) => ({ ...prev, email: e.target.value }));
@@ -68,10 +71,14 @@ function Login() {
                 submitData,
                 (data) => {
                     // Success
+                    alert();
                     sIsLoggedIn.set(true);
+                    sIsAdmin.set(!!data.type);
+                    localStorage.setItem('currentStaffId', data.staffId);
                     if (sRememberMe.value) {
                         localStorage.setItem('user-token', JSON.stringify(data));
                     }
+                    nav('/');
                 },
                 () => {
                     // Fail

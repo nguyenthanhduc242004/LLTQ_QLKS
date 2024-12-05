@@ -14,7 +14,6 @@ const cx = classNames.bind(styles);
 
 const sShowModal = signify({
     isShowing: false,
-    data: undefined,
 });
 
 var guests = [];

@@ -16,11 +16,12 @@ function StaffModal({ className, data }) {
                 alt="staff-avt"
                 fallback="https://fullstack.edu.vn/assets/f8-icon-lV2rGpF0.png"
             />
-            <DetailInformation data={data} />
+            {console.log({ ...data, guestName: data.staffName })}
+            <DetailInformation data={{ ...data, guestName: data.name }} />
             <div className="row">
                 <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
                     <span>Loại nhân viên: </span>
-                    <input type="text" disabled defaultValue={data.staffType} />
+                    <input type="text" disabled defaultValue={data.staffTypeText} />
                 </div>
                 <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
                     <span>Ngày vào làm: </span>
