@@ -8,6 +8,9 @@ import RoomList from '../pages/RoomList';
 import StaffList from '../pages/StaffList';
 import UserProtect from './UserProtect';
 import BedDetailList from '../pages/BedDetailList';
+import { sIsAdmin } from '../../settings/globalStore';
+import RoomTypeList from '../pages/RoomTypeList/RoomTypeList';
+import StaffTypeList from '../pages/StaffTypeList/StaffTypeList';
 
 export default function MainRoutes() {
     return (
@@ -64,16 +67,40 @@ export default function MainRoutes() {
                         </DefaultLayout>
                     }
                 />
-                <Route
-                    path="/chi-tiet-giuong"
-                    element={
-                        <DefaultLayout>
-                            <UserProtect>
-                                <BedDetailList />
-                            </UserProtect>
-                        </DefaultLayout>
-                    }
-                />
+                {sIsAdmin && (
+                    <>
+                        <Route
+                            path="/chi-tiet-giuong"
+                            element={
+                                <DefaultLayout>
+                                    <UserProtect>
+                                        <BedDetailList />
+                                    </UserProtect>
+                                </DefaultLayout>
+                            }
+                        />
+                        <Route
+                            path="/hang-phong"
+                            element={
+                                <DefaultLayout>
+                                    <UserProtect>
+                                        <RoomTypeList />
+                                    </UserProtect>
+                                </DefaultLayout>
+                            }
+                        />
+                        <Route
+                            path="/loai-nhan-vien"
+                            element={
+                                <DefaultLayout>
+                                    <UserProtect>
+                                        <StaffTypeList />
+                                    </UserProtect>
+                                </DefaultLayout>
+                            }
+                        />
+                    </>
+                )}
             </Routes>
         </BrowserRouter>
     );

@@ -76,16 +76,36 @@ function Sidebar() {
                             Lịch sử đặt phòng
                         </Link>
                         <sIsAdmin.Wrap>
-                            {(value) => {
-                                if (value) {
+                            {(isAdmin) => {
+                                if (isAdmin) {
                                     return (
                                         <>
                                             <Link
                                                 to="/chi-tiet-giuong"
-                                                className={cx('sidebar-item', value === '/thanh-toan' ? 'focus' : '')}
+                                                className={cx(
+                                                    'sidebar-item',
+                                                    value === '/chi-tiet-giuong' ? 'focus' : '',
+                                                )}
                                             >
                                                 <PremiumIcon className={cx('icon')} />
                                                 Chi tiết giường
+                                            </Link>
+                                            <Link
+                                                to="/hang-phong"
+                                                className={cx('sidebar-item', value === '/hang-phong' ? 'focus' : '')}
+                                            >
+                                                <PremiumIcon className={cx('icon')} />
+                                                Hạng phòng
+                                            </Link>
+                                            <Link
+                                                to="/loai-nhan-vien"
+                                                className={cx(
+                                                    'sidebar-item',
+                                                    value === '/loai-nhan-vien' ? 'focus' : '',
+                                                )}
+                                            >
+                                                <PremiumIcon className={cx('icon')} />
+                                                Loại nhân viên
                                             </Link>
                                         </>
                                     );
