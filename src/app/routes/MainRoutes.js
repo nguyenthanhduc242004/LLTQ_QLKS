@@ -6,11 +6,13 @@ import RoomList from '../pages/RoomList';
 import StaffList from '../pages/StaffList';
 import PaymentList from '../pages/PaymentList/PaymentList';
 import UserProtect from './UserProtect';
+import Login from '../pages/Login/Login';
 
 export default function MainRoutes() {
     return (
         <BrowserRouter>
             <Routes>
+                <Route path="/login" element={<Login />} />
                 <Route
                     path="/"
                     element={
