@@ -107,6 +107,16 @@ function Sidebar() {
                                                 <PremiumIcon className={cx('icon')} />
                                                 Loại nhân viên
                                             </Link>
+                                            <Link
+                                                to="/quan-ly-phong"
+                                                className={cx(
+                                                    'sidebar-item',
+                                                    value === '/quan-ly-phong' ? 'focus' : '',
+                                                )}
+                                            >
+                                                <PremiumIcon className={cx('icon')} />
+                                                Quản lý phòng
+                                            </Link>
                                         </>
                                     );
                                 }

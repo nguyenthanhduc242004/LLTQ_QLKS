@@ -19,8 +19,8 @@ function Home() {
     const navigate = useNavigate();
     const handleViewAllClick = (e) => {
         const state = e.target.closest('.' + cx('heading')).getAttribute('state');
-        // localStorage.setItem('showAllRoomState', state);
-        navigate('/danh-sach-phong', { state });
+        localStorage.setItem('viewAllRoomState', state);
+        navigate('/danh-sach-phong');
     };
 
     useEffect(() => {
@@ -77,7 +77,7 @@ function Home() {
                 ))}
             </div>
 
-            <Heading label="Phòng chờ check-in" state="1" className={cx('heading')} onClick={handleViewAllClick} />
+            <Heading label="Phòng chờ check-in" state={1} className={cx('heading')} onClick={handleViewAllClick} />
             <div className="row">
                 {checkinRooms.map((item, index) => (
                     <div key={index} className="col c-4 l-4 m-4">
@@ -96,7 +96,7 @@ function Home() {
                 ))}
             </div>
 
-            <Heading label="Phòng Tới Hạn" state="2" className={cx('heading')} onClick={handleViewAllClick} />
+            <Heading label="Phòng Tới Hạn" state={2} className={cx('heading')} onClick={handleViewAllClick} />
             <div className="row">
                 {checkoutRooms.map((item, index) => (
                     <div key={index} className="col c-4 l-4 m-4">

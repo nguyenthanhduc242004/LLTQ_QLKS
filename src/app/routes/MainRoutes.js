@@ -11,6 +11,7 @@ import BedDetailList from '../pages/BedDetailList';
 import { sIsAdmin } from '../../settings/globalStore';
 import RoomTypeList from '../pages/RoomTypeList/RoomTypeList';
 import StaffTypeList from '../pages/StaffTypeList/StaffTypeList';
+import RoomListManagement from '../pages/RoomListManagement';
 
 export default function MainRoutes() {
     return (
@@ -95,6 +96,16 @@ export default function MainRoutes() {
                                 <DefaultLayout>
                                     <UserProtect>
                                         <StaffTypeList />
+                                    </UserProtect>
+                                </DefaultLayout>
+                            }
+                        />
+                        <Route
+                            path="/quan-ly-phong"
+                            element={
+                                <DefaultLayout>
+                                    <UserProtect>
+                                        <RoomListManagement />
                                     </UserProtect>
                                 </DefaultLayout>
                             }
