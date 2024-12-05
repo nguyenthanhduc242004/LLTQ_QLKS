@@ -110,6 +110,7 @@
     display: flex;
     position: relative;
     cursor: pointer;
+    min-width: 140px;
 
     &:hover .user-name {
         color: var(--primary);
@@ -147,11 +148,22 @@
     display: none;
     position: absolute;
     top: calc(100% + 4px);
-    left: -12px;
-    right: -12px;
+    right: 4px;
+    width: 150px;
     background-color: var(--white);
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    border-radius: 4px;
+    border-radius: 8px;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: -8px;
+        right: 40px;
+        border: 8px solid var(--white);
+        border-top: none;
+        border-left-color: transparent;
+        border-right-color: transparent;
+    }
 }
 
 .menu-item {
@@ -168,5 +180,15 @@
 
     & + .menu-item {
         border-top: 1px solid #dedede;
+    }
+
+    &:first-child {
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+
+    &:last-child {
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
     }
 }

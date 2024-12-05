@@ -14,6 +14,7 @@ import {
 } from '../../../components/Icons';
 import Image from '../../../components/Image';
 import styles from './Header.module.scss';
+import { useEffect } from 'react';
 
 const cx = classNames.bind(styles);
 
@@ -22,8 +23,14 @@ const sShowModal = signify({
     data: undefined,
 });
 
+var currentStaffData = {};
+
 function Header() {
     const nav = useNavigate();
+
+    useEffect(() => {
+        currentStaffData = JSON.parse(localStorage.getItem('currentStaffData'));
+    }, []);
 
     return (
         <div className={cx('wrapper')}>
@@ -76,7 +83,7 @@ function Header() {
                     alt="user-avt"
                     fallback="https://fullstack.edu.vn/assets/f8-icon-lV2rGpF0.png"
                 />
-                <p className={cx('user-name')}>Michelle</p>
+                <p className={cx('user-name')}>{currentStaffData.staff?.name ?? 'username'}</p>
                 <ul className={cx('menu')}>
                     <li className={cx('menu-item')}>Thông tin cá nhân</li>
                     <a

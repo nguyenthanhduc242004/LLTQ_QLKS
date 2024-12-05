@@ -2,11 +2,12 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import DefaultLayout from '../layouts/DefaultLayout';
 import GuestList from '../pages/GuestList';
 import Home from '../pages/Home';
+import Login from '../pages/Login/Login';
+import PaymentList from '../pages/PaymentList/PaymentList';
 import RoomList from '../pages/RoomList';
 import StaffList from '../pages/StaffList';
-import PaymentList from '../pages/PaymentList/PaymentList';
 import UserProtect from './UserProtect';
-import Login from '../pages/Login/Login';
+import BedDetailList from '../pages/BedDetailList';
 
 export default function MainRoutes() {
     return (
@@ -59,6 +60,16 @@ export default function MainRoutes() {
                         <DefaultLayout>
                             <UserProtect>
                                 <PaymentList />
+                            </UserProtect>
+                        </DefaultLayout>
+                    }
+                />
+                <Route
+                    path="/chi-tiet-giuong"
+                    element={
+                        <DefaultLayout>
+                            <UserProtect>
+                                <BedDetailList />
                             </UserProtect>
                         </DefaultLayout>
                     }

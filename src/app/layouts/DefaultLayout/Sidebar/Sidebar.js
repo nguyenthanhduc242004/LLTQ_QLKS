@@ -9,6 +9,8 @@ import { sIsAdmin } from '../../../../settings/globalStore';
 
 const cx = classNames.bind(styles);
 
+var currentStaffData = {};
+
 function Sidebar() {
     return (
         <aside className={cx('wrapper')}>
@@ -19,8 +21,8 @@ function Sidebar() {
                     alt="user-avt"
                 />
                 <div className={cx('user-description')}>
-                    <h4 className={cx('user-name')}>Username</h4>
-                    <p>Super admin</p>
+                    <h4 className={cx('user-name')}>{currentStaffData.staff?.name ?? 'username'}</h4>
+                    <p>{!!currentStaffData.type ? 'Admin' : 'Lễ tân'}</p>
                 </div>
             </div>
 
