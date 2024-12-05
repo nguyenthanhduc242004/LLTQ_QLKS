@@ -15,7 +15,8 @@ import {
 } from '../Icons';
 import styles from './roomModal.module.scss';
 import { useEffect, useRef, useState } from 'react';
-import { get } from '../../modules/lib/httpHandle';
+import { get, post } from '../../modules/lib/httpHandle';
+import { BE_ENDPOINT } from '../../../settings/localVar';
 
 const cx = classNames.bind(styles);
 
@@ -204,8 +205,20 @@ function RoomModal({ className, type, data }) {
     const handleChange = (e) => {
         setSubmitData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
-    const handleBookingSubmit = () => {
+    const handleBookingSubmit = () => { 
+        async function addBooking() {
         console.log(submitData);
+        const response = await fetch(BE_ENDPOINT+"bookings/",{
+            method:'POST',
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:submitData
+        });
+        const responseData = await response.json();
+        return responseData;
+    }
+    return addBooking();
     };
 
     // UPDATE:
