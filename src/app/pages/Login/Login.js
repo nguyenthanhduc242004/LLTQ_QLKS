@@ -1,10 +1,11 @@
 import classNames from 'classnames/bind';
-import styles from './login.module.scss';
-import images from '../../assets/imgs';
-import { signify } from 'react-signify';
-import { post } from '../../modules/lib/httpHandle';
-import { sIsLoggedIn } from '../../../settings/globalStore';
 import { useRef, useState } from 'react';
+import { signify } from 'react-signify';
+import { sIsAdmin, sIsLoggedIn } from '../../../settings/globalStore';
+import images from '../../assets/imgs';
+import { post } from '../../modules/lib/httpHandle';
+import styles from './login.module.scss';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -14,22 +15,14 @@ const handleCheckboxChange = () => {
     sRememberMe.set(!sRememberMe.value);
 };
 
-// SAVE FOR LATER:
-// const [isLoggedIn, setLoggedIn] = useState(false);
-
-// useEffect(() => {
-//     const userToken = localStorage.getItem('userToken');
-//     if (userToken) {
-//         setLoggedIn(true);
-//     }
-// }, []);
-
 function Login() {
     const [submitData, setSubmitData] = useState({});
     const refEmailFormMessage = useRef();
     const refPasswordFormMessage = useRef();
     const refEmailFormMessage2 = useRef();
     const refPasswordFormMessage2 = useRef();
+
+    const nav = useNavigate();
 
     const handleEmailChange = (e) => {
         setSubmitData((prev) => ({ ...prev, email: e.target.value }));
@@ -68,10 +61,20 @@ function Login() {
                 submitData,
                 (data) => {
                     // Success
+                    alert();
                     sIsLoggedIn.set(true);
+                    //*************************** */
+                    // sIsAdmin.set(!!data.type);
+                    sIsAdmin.set(true);
+                    //*************************** */
+                    localStorage.setItem('currentStaffData', JSON.stringify(data));
                     if (sRememberMe.value) {
-                        localStorage.setItem('user-token', JSON.stringify(data));
+                        localStorage.setItem(
+                            'userDateToken',
+                            new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toLocaleDateString(),
+                        );
                     }
+                    nav('/');
                 },
                 () => {
                     // Fail

@@ -1,3 +1,7 @@
 import { signify } from 'react-signify';
 
-export const sIsLoggedIn = signify(!!localStorage.getItem('userToken'));
+export const sIsLoggedIn = signify(
+    new Date(localStorage.getItem('userDateToken')?.split('-')).getTime() > new Date().getTime(),
+);
+// export const sIsAdmin = signify(!!JSON.parse(localStorage.getItem('userToken'))?.type);
+export const sIsAdmin = signify(true);

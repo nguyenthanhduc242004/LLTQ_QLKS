@@ -43,6 +43,7 @@ function RoomList() {
     const getFilteredRooms = (filterOptions) => {
         var res = [];
         var filterState;
+        console.log(roomsWithEarliestDate);
         res = roomsWithEarliestDate.filter((item) => {
             if (filterOptions.floor) if (item.floor !== Number(filterOptions.floor)) return false;
             if (filterOptions.roomTypeId) if (item.roomTypeId !== Number(filterOptions.roomTypeId)) return false;
@@ -90,15 +91,12 @@ function RoomList() {
             }
             return true;
         });
-        console.log(res);
         return res;
     };
 
     const [roomsWithEarliestDate, setRoomsWithEarliestDate] = useState([]);
     const [filteredRooms, setFilteredRooms] = useState([]);
     const [filterOptions, setFilterOptions] = useState({ state: -1 });
-    var viewAllRoomState = useLocation().state;
-    if (viewAllRoomState === null) viewAllRoomState = -1;
     const [rooms, setRooms] = useState([]);
     const [bookings, setBookings] = useState([]);
     const inputRef = useRef();
@@ -187,10 +185,6 @@ function RoomList() {
             'rooms/',
             (data) => {
                 setRooms(data);
-                if (viewAllRoomState === -1) setFilteredRooms(getRoomsWithEarliestDate());
-                else setFilteredRooms(getFilteredRooms({ state: viewAllRoomState }));
-
-                // if (viewAllRoomState !== -1) filterOptions.state = viewAllRoomState;
             },
             () => {
                 alert('Rooms not found!');
@@ -226,19 +220,18 @@ function RoomList() {
                 alert('Bookings not found!');
             },
         );
-
-        setFilterOptions({ state: viewAllRoomState });
+        setFilterOptions({ state: localStorage.getItem('viewAllRoomState') });
+        localStorage.setItem('viewAllRoomState', JSON.parse(-1));
     }, []);
 
     useEffect(() => {
         const roomsWithEarliestDate = getRoomsWithEarliestDate();
         setRoomsWithEarliestDate(roomsWithEarliestDate);
-        setFilteredRooms(roomsWithEarliestDate);
     }, [rooms, bookings]);
 
     useEffect(() => {
         setFilteredRooms(getFilteredRooms(filterOptions));
-    }, [filterOptions]);
+    }, [filterOptions, roomsWithEarliestDate]);
 
     return (
         <div className={cx('wrapper') + ' grid'}>
@@ -257,13 +250,13 @@ function RoomList() {
                     className={cx('remove-filter-btn')}
                     style={{
                         display:
-                            filterOptions.floor ||
-                            filterOptions.roomTypeId ||
-                            filterOptions.bedDetailId ||
-                            filterOptions.state !== -1 ||
-                            inputRef?.current?.value !== ''
-                                ? 'flex'
-                                : 'none',
+                            Number(filterOptions.state) === -1 &&
+                            !filterOptions.floor &&
+                            !filterOptions.roomTypeId &&
+                            !filterOptions.bedDetailId &&
+                            !inputRef?.current?.value !== ''
+                                ? 'none'
+                                : 'flex',
                     }}
                     onClick={handleRemoveFilter}
                 >
@@ -328,12 +321,12 @@ function RoomList() {
                     className={cx(
                         'filter-item',
                         'filter-item__room-state',
-                        filterOptions.state !== -1 ? 'filtered' : '',
+                        Number(filterOptions.state) !== -1 ? 'filtered' : '',
                     )}
                     onClick={handleFilterClick}
                     style={{ minWidth: '120px' }}
                 >
-                    {filterOptions.state === -1 ? 'Tình trạng' : roomStateToString(filterOptions.state)}
+                    {Number(filterOptions.state) === -1 ? 'Tình trạng' : roomStateToString(filterOptions.state)}
                     <CaretDownIcon className={cx('caret-down-icon')} />
                     <ul className={cx('room-state-dropdown')}>
                         <li name="state" value="0" onClick={handleFilterOptionClick}>

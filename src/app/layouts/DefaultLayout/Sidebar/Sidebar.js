@@ -1,12 +1,15 @@
 import classNames from 'classnames/bind';
-import { CustomerIcon, HomeIcon, PaymentIcon, RoomIcon, StaffsIcon } from '../../../components/Icons';
+import { CustomerIcon, HomeIcon, PaymentIcon, PremiumIcon, RoomIcon, StaffsIcon } from '../../../components/Icons';
 import Image from '../../../components/Image';
 import styles from './Sidebar.module.scss';
 import { Link } from 'react-router-dom';
 import '../../../styles/grid.scss';
 import { sCurrentPage } from './sidebarStore';
+import { sIsAdmin } from '../../../../settings/globalStore';
 
 const cx = classNames.bind(styles);
+
+var currentStaffData = {};
 
 function Sidebar() {
     return (
@@ -18,8 +21,8 @@ function Sidebar() {
                     alt="user-avt"
                 />
                 <div className={cx('user-description')}>
-                    <h4 className={cx('user-name')}>Username</h4>
-                    <p>Super admin</p>
+                    <h4 className={cx('user-name')}>{currentStaffData.staff?.name ?? 'username'}</h4>
+                    <p>{!!currentStaffData.type ? 'Admin' : 'Lễ tân'}</p>
                 </div>
             </div>
 
@@ -67,11 +70,58 @@ function Sidebar() {
                         </Link>
                         <Link
                             to="/lich-su-dat-phong"
-                            className={cx('sidebar-item', value === '/thanh-toan' ? 'focus' : '')}
+                            className={cx('sidebar-item', value === '/lich-su-dat-phong' ? 'focus' : '')}
                         >
                             <PaymentIcon className={cx('icon')} />
                             Lịch sử đặt phòng
                         </Link>
+                        <sIsAdmin.Wrap>
+                            {(isAdmin) => {
+                                if (isAdmin) {
+                                    return (
+                                        <>
+                                            <Link
+                                                to="/chi-tiet-giuong"
+                                                className={cx(
+                                                    'sidebar-item',
+                                                    value === '/chi-tiet-giuong' ? 'focus' : '',
+                                                )}
+                                            >
+                                                <PremiumIcon className={cx('icon')} />
+                                                Chi tiết giường
+                                            </Link>
+                                            <Link
+                                                to="/hang-phong"
+                                                className={cx('sidebar-item', value === '/hang-phong' ? 'focus' : '')}
+                                            >
+                                                <PremiumIcon className={cx('icon')} />
+                                                Hạng phòng
+                                            </Link>
+                                            <Link
+                                                to="/loai-nhan-vien"
+                                                className={cx(
+                                                    'sidebar-item',
+                                                    value === '/loai-nhan-vien' ? 'focus' : '',
+                                                )}
+                                            >
+                                                <PremiumIcon className={cx('icon')} />
+                                                Loại nhân viên
+                                            </Link>
+                                            <Link
+                                                to="/quan-ly-phong"
+                                                className={cx(
+                                                    'sidebar-item',
+                                                    value === '/quan-ly-phong' ? 'focus' : '',
+                                                )}
+                                            >
+                                                <PremiumIcon className={cx('icon')} />
+                                                Quản lý phòng
+                                            </Link>
+                                        </>
+                                    );
+                                }
+                            }}
+                        </sIsAdmin.Wrap>
                     </>
                 )}
             </sCurrentPage.Wrap>

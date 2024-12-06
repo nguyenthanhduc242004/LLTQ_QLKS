@@ -1,5 +1,9 @@
 import classNames from 'classnames/bind';
-import styles from './Header.module.scss';
+import { useNavigate } from 'react-router-dom';
+import { signify } from 'react-signify';
+import { sIsLoggedIn } from '../../../../settings/globalStore';
+import images from '../../../assets/imgs';
+import ChangePasswordModal from '../../../components/ChangePasswordModal';
 import {
     CircleHalfIcon,
     HideSideBarIcon,
@@ -9,11 +13,25 @@ import {
     SunIcon,
 } from '../../../components/Icons';
 import Image from '../../../components/Image';
-import images from '../../../assets/imgs';
+import styles from './Header.module.scss';
+import { useEffect } from 'react';
 
 const cx = classNames.bind(styles);
 
+const sShowModal = signify({
+    isShowing: false,
+    data: undefined,
+});
+
+var currentStaffData = {};
+
 function Header() {
+    const nav = useNavigate();
+
+    useEffect(() => {
+        currentStaffData = JSON.parse(localStorage.getItem('currentStaffData'));
+    }, []);
+
     return (
         <div className={cx('wrapper')}>
             <button className={cx('hide-side-bar-btn')}>
@@ -65,8 +83,47 @@ function Header() {
                     alt="user-avt"
                     fallback="https://fullstack.edu.vn/assets/f8-icon-lV2rGpF0.png"
                 />
-                <p className={cx('user-name')}>Michelle</p>
+                <p className={cx('user-name')}>{currentStaffData.staff?.name ?? 'username'}</p>
+                <ul className={cx('menu')}>
+                    <li className={cx('menu-item')}>Thông tin cá nhân</li>
+                    <a
+                        href="#doi-mat-khau"
+                        className={cx('menu-item')}
+                        onClick={() => {
+                            sShowModal.set({
+                                isShowing: true,
+                                data: JSON.parse(localStorage.getItem('userToken')),
+                            });
+                        }}
+                    >
+                        Đổi mật khẩu
+                    </a>
+                    <li
+                        className={cx('menu-item')}
+                        onClick={() => {
+                            sIsLoggedIn.set(false);
+                            localStorage.removeItem('userDateToken');
+                            nav('/login');
+                        }}
+                    >
+                        Đăng xuất
+                    </li>
+                </ul>
             </div>
+            <sShowModal.HardWrap>
+                {(value) => {
+                    if (value.isShowing) {
+                        return (
+                            <div id="doi-mat-khau" className="modal">
+                                <a href="#" className="modal-overlay">
+                                    {' '}
+                                </a>
+                                <ChangePasswordModal className="modal-body" data={value.data} />
+                            </div>
+                        );
+                    }
+                }}
+            </sShowModal.HardWrap>
         </div>
     );
 }

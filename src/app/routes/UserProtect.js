@@ -4,8 +4,10 @@ import { sIsLoggedIn } from '../../settings/globalStore';
 
 // Higher Order Component : HOC
 // Magic Number
+
 export default function UserProtect({ children }) {
-    if (!sIsLoggedIn.value) {
+    const isLoggedIn = sIsLoggedIn.use();
+    if (!isLoggedIn) {
         return (
             <>
                 <Navigate to={'/login'} />

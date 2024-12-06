@@ -6,7 +6,7 @@ const cx = classNames.bind(styles);
 
 function Heading({ label, className, state, onClick }) {
     return (
-        <div className={className + ' ' + cx('wrapper')} state={state} onClick={onClick}>
+        <div className={className + ' ' + cx('wrapper')} state={state}>
             <div className={cx('container')}>
                 <h2 className={cx('label')}>{label}</h2>
                 <span className={cx('icon-wrapper')}>
@@ -14,7 +14,7 @@ function Heading({ label, className, state, onClick }) {
                 </span>
             </div>
 
-            <button className={cx('btn')}>
+            <button className={cx('btn')} onClick={onClick}>
                 Xem tất cả
                 <ChevronRightIcon className={cx('btn-icon')} />
             </button>

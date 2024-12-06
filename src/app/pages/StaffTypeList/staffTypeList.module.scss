@@ -1,0 +1,22 @@
+.wrapper {
+    text-align: center;
+}
+
+.heading {
+    margin-bottom: 12px;
+}
+
+.input-wrapper {
+    margin-bottom: 4px;
+}
+
+.btn {
+    background-color: #ccc;
+    border: 1px solid #333;
+    padding: 4px;
+    min-width: 30px;
+
+    & + .btn {
+        margin-left: 4px;
+    }
+}

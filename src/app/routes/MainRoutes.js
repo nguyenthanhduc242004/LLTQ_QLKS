@@ -2,11 +2,16 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import DefaultLayout from '../layouts/DefaultLayout';
 import GuestList from '../pages/GuestList';
 import Home from '../pages/Home';
+import Login from '../pages/Login/Login';
+import PaymentList from '../pages/PaymentList/PaymentList';
 import RoomList from '../pages/RoomList';
 import StaffList from '../pages/StaffList';
-import PaymentList from '../pages/PaymentList/PaymentList';
 import UserProtect from './UserProtect';
-import Login from '../pages/Login/Login';
+import BedDetailList from '../pages/BedDetailList';
+import { sIsAdmin } from '../../settings/globalStore';
+import RoomTypeList from '../pages/RoomTypeList/RoomTypeList';
+import StaffTypeList from '../pages/StaffTypeList/StaffTypeList';
+import RoomListManagement from '../pages/RoomListManagement';
 
 export default function MainRoutes() {
     return (
@@ -17,9 +22,9 @@ export default function MainRoutes() {
                     path="/"
                     element={
                         <DefaultLayout>
-                            {/* <UserProtect> */}
-                            <Home />
-                            {/* </UserProtect> */}
+                            <UserProtect>
+                                <Home />
+                            </UserProtect>
                         </DefaultLayout>
                     }
                 />
@@ -63,6 +68,50 @@ export default function MainRoutes() {
                         </DefaultLayout>
                     }
                 />
+                {sIsAdmin && (
+                    <>
+                        <Route
+                            path="/chi-tiet-giuong"
+                            element={
+                                <DefaultLayout>
+                                    <UserProtect>
+                                        <BedDetailList />
+                                    </UserProtect>
+                                </DefaultLayout>
+                            }
+                        />
+                        <Route
+                            path="/hang-phong"
+                            element={
+                                <DefaultLayout>
+                                    <UserProtect>
+                                        <RoomTypeList />
+                                    </UserProtect>
+                                </DefaultLayout>
+                            }
+                        />
+                        <Route
+                            path="/loai-nhan-vien"
+                            element={
+                                <DefaultLayout>
+                                    <UserProtect>
+                                        <StaffTypeList />
+                                    </UserProtect>
+                                </DefaultLayout>
+                            }
+                        />
+                        <Route
+                            path="/quan-ly-phong"
+                            element={
+                                <DefaultLayout>
+                                    <UserProtect>
+                                        <RoomListManagement />
+                                    </UserProtect>
+                                </DefaultLayout>
+                            }
+                        />
+                    </>
+                )}
             </Routes>
         </BrowserRouter>
     );
