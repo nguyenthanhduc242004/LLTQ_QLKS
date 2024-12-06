@@ -6,12 +6,14 @@ import { Link } from 'react-router-dom';
 import '../../../styles/grid.scss';
 import { sCurrentPage } from './sidebarStore';
 import { sIsAdmin } from '../../../../settings/globalStore';
+import { useState } from 'react';
 
 const cx = classNames.bind(styles);
 
 var currentStaffData = {};
 
 function Sidebar() {
+    const [currentTab, setCurrentTab] = useState(true);
     return (
         <aside className={cx('wrapper')}>
             <div className={cx('user')}>
@@ -28,56 +30,77 @@ function Sidebar() {
 
             {/* Sidebar nav */}
             <div className="grid">
-                <nav className={cx('nav') + ' row no-gutters'}>
-                    <a href="/" className={cx('nav-item', 'focus') + ' col l-6 m-6 c-6'}>
-                        Khách sạn
-                    </a>
-                    {/* <li className={cx('nav-item', 'focus') + ' col l-6 m-6 c-6'}>NV</li> */}
-                    <a href="/" className={cx('nav-item') + ' col l-6 m-6 c-6'}>
-                        Thống kê
-                    </a>
-                </nav>
+                <sIsAdmin.Wrap>
+                    {(value) => {
+                        if (value) {
+                            return (
+                                <nav className={cx('nav') + ' row no-gutters'}>
+                                    <button
+                                        className={cx('nav-item', currentTab ? 'focus' : '') + ' col l-6 m-6 c-6'}
+                                        onClick={() => {
+                                            setCurrentTab(true);
+                                        }}
+                                    >
+                                        Khách sạn
+                                    </button>
+                                    <button
+                                        className={cx('nav-item', !currentTab ? 'focus' : '') + ' col l-6 m-6 c-6'}
+                                        onClick={() => {
+                                            setCurrentTab(false);
+                                        }}
+                                    >
+                                        Quản lý
+                                    </button>
+                                </nav>
+                            );
+                        }
+                    }}
+                </sIsAdmin.Wrap>
             </div>
 
             {/* Sidebar Items */}
             <sCurrentPage.Wrap>
                 {(value) => (
                     <>
-                        <Link to="/" className={cx('sidebar-item', value === '/' ? 'focus' : '')}>
-                            <HomeIcon className={cx('icon')} />
-                            Trang chủ
-                        </Link>
-                        <Link
-                            to="/danh-sach-phong"
-                            className={cx('sidebar-item', value === '/danh-sach-phong' ? 'focus' : '')}
-                        >
-                            <RoomIcon className={cx('icon')} />
-                            Danh sách phòng
-                        </Link>
-                        <Link
-                            to="/danh-sach-khach-hang"
-                            className={cx('sidebar-item', value === '/danh-sach-khach-hang' ? 'focus' : '')}
-                        >
-                            <CustomerIcon className={cx('icon')} />
-                            Danh sách khách hàng
-                        </Link>
-                        <Link
-                            to="/danh-sach-nhan-vien"
-                            className={cx('sidebar-item', value === '/danh-sach-nhan-vien' ? 'focus' : '')}
-                        >
-                            <StaffsIcon className={cx('icon')} />
-                            Danh sách nhân viên
-                        </Link>
-                        <Link
-                            to="/lich-su-dat-phong"
-                            className={cx('sidebar-item', value === '/lich-su-dat-phong' ? 'focus' : '')}
-                        >
-                            <PaymentIcon className={cx('icon')} />
-                            Lịch sử đặt phòng
-                        </Link>
+                        {currentTab && (
+                            <>
+                                <Link to="/" className={cx('sidebar-item', value === '/' ? 'focus' : '')}>
+                                    <HomeIcon className={cx('icon')} />
+                                    Trang chủ
+                                </Link>
+                                <Link
+                                    to="/danh-sach-phong"
+                                    className={cx('sidebar-item', value === '/danh-sach-phong' ? 'focus' : '')}
+                                >
+                                    <RoomIcon className={cx('icon')} />
+                                    Danh sách phòng
+                                </Link>
+                                <Link
+                                    to="/danh-sach-khach-hang"
+                                    className={cx('sidebar-item', value === '/danh-sach-khach-hang' ? 'focus' : '')}
+                                >
+                                    <CustomerIcon className={cx('icon')} />
+                                    Danh sách khách hàng
+                                </Link>
+                                <Link
+                                    to="/danh-sach-nhan-vien"
+                                    className={cx('sidebar-item', value === '/danh-sach-nhan-vien' ? 'focus' : '')}
+                                >
+                                    <StaffsIcon className={cx('icon')} />
+                                    Danh sách nhân viên
+                                </Link>
+                                <Link
+                                    to="/lich-su-dat-phong"
+                                    className={cx('sidebar-item', value === '/lich-su-dat-phong' ? 'focus' : '')}
+                                >
+                                    <PaymentIcon className={cx('icon')} />
+                                    Lịch sử đặt phòng
+                                </Link>
+                            </>
+                        )}
                         <sIsAdmin.Wrap>
                             {(isAdmin) => {
-                                if (isAdmin) {
+                                if (isAdmin && !currentTab) {
                                     return (
                                         <>
                                             <Link
@@ -116,6 +139,13 @@ function Sidebar() {
                                             >
                                                 <PremiumIcon className={cx('icon')} />
                                                 Quản lý phòng
+                                            </Link>
+                                            <Link
+                                                to="/thong-ke"
+                                                className={cx('sidebar-item', value === '/thong-ke' ? 'focus' : '')}
+                                            >
+                                                <PremiumIcon className={cx('icon')} />
+                                                Thống kê
                                             </Link>
                                         </>
                                     );

@@ -17,6 +17,7 @@ import styles from './roomModal.module.scss';
 import { useEffect, useRef, useState } from 'react';
 import { get, post } from '../../modules/lib/httpHandle';
 import { BE_ENDPOINT } from '../../../settings/localVar';
+import Swal from 'sweetalert2';
 
 const cx = classNames.bind(styles);
 
@@ -62,7 +63,6 @@ function RoomModal({ className, type, data }) {
         bookings
             .filter((item) => item.id !== data.id)
             .forEach((booking) => {
-                console.log(booking.roomId, data.roomId);
                 if (booking.roomId === data.roomId) {
                     if (!res) res = booking.checkinDate;
                     else {
@@ -71,7 +71,6 @@ function RoomModal({ className, type, data }) {
                     }
                 }
             });
-        console.log(res);
         return res;
     };
 
@@ -205,21 +204,21 @@ function RoomModal({ className, type, data }) {
     const handleChange = (e) => {
         setSubmitData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
-    const handleBookingSubmit = () => { 
+    const handleBookingSubmit = () => {
         async function addBooking() {
-        console.log(submitData);
-        const response = await fetch(BE_ENDPOINT+"bookings/",{
-            method:'POST',
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify(submitData)
-        });
-        console.log(response);
-        const responseData = await response.json();
-        return responseData;
-    }
-    return addBooking();
+            console.log(submitData);
+            const response = await fetch(BE_ENDPOINT + 'bookings/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(submitData),
+            });
+            console.log(response);
+            const responseData = await response.json();
+            return responseData;
+        }
+        return addBooking();
     };
 
     // UPDATE:
@@ -255,6 +254,139 @@ function RoomModal({ className, type, data }) {
                 alert('Bạn chưa thay đổi thông tin người đặt!');
             }
         }
+    };
+
+    const handleCheckinConfirm = (e) => {
+        e.stopPropagation();
+        Swal.fire({
+            title: 'Xác nhận check-in?',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: `Thoát`,
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                alert('UPDATING A BOOKING AND A ROOM STATE!');
+                // Thay đổi room state, thay dổi ngày checkin là ngày hôm nay
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = today.getMonth() + 1;
+                const day = today.getDate();
+                console.log(data.id, data.roomId, `${year}/${month}/${day}`);
+
+                Swal.fire('Check-in thành công!', '', 'success').then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.reload();
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.fire('Check-in thất bại!', '', 'error');
+            }
+        });
+    };
+
+    const handleExtendCheckoutDate = (e) => {
+        e.stopPropagation();
+        Swal.fire({
+            title: 'Vui lòng nhập ngày trả phòng mới',
+            input: 'date',
+            inputAttributes: {
+                autocapitalize: 'off',
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Kiểm tra',
+            cancelButtonText: 'Thoát',
+            showLoaderOnConfirm: true,
+            preConfirm: async (date) => {
+                try {
+                    const body = {
+                        id: data.id,
+                        checkoutDate: date,
+                        roomId: data.roomId,
+                    };
+                    console.log(body);
+                    await post(
+                        'someURI/',
+                        body,
+                        (data) => {
+                            // UPDATING A BOOKING'S CHECKOUTDATE
+                        },
+                        () => {
+                            // UPDATE FAILED
+                            return Swal.showValidationMessage('Ngày trả phòng không hợp lệ!');
+                        },
+                    );
+                } catch (error) {
+                    Swal.showValidationMessage(`
+                  Yêu cầu thất bại: ${error}!
+                `);
+                }
+            },
+            allowOutsideClick: () => !Swal.isLoading(),
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: `Gia hạn thành công`,
+                    icon: 'success',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.reload();
+                    }
+                });
+            }
+        });
+    };
+
+    const handlePay = (e) => {
+        e.stopPropagation();
+        Swal.fire({
+            title: 'Xác nhận thanh toán?',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: `Thoát`,
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                alert('UPDATING A BOOKING!');
+                console.log(data.id, data.roomId);
+                Swal.fire('Thanh toán thành công!', '', 'success').then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.reload();
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.fire('Thanh toán thất bại!', '', 'error');
+            }
+        });
+    };
+
+    // DELETES:
+    const handleDeleteBooking = (e) => {
+        e.stopPropagation();
+        Swal.fire({
+            title: 'Xác nhận hủy đặt phòng?',
+            text: 'Lưu ý không thể hoàn tất sau khi thực hiện thao tác này!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: 'Thoát',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                alert('DELETING A BOOKING!');
+                console.log(data.id);
+                Swal.fire({
+                    title: 'Đã hủy!',
+                    text: 'Bạn vừa hủy đặt phòng thành công.',
+                    icon: 'success',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.reload();
+                    }
+                });
+            }
+        });
     };
 
     return (
@@ -455,14 +587,6 @@ function RoomModal({ className, type, data }) {
 
             {/* BUTTONS: BEGIN */}
             <div className={cx('btn-wrapper')}>
-                {console.log(
-                    submitData.checkinDate,
-                    submitData.checkoutDate,
-                    submitData.roomId,
-                    submitData.citizenId,
-                    submitData.guestName,
-                    submitData.phone,
-                )}
                 {type === TYPE_ROOM_TYPE && (
                     <Button
                         onClick={handleBookingSubmit}
@@ -516,25 +640,32 @@ function RoomModal({ className, type, data }) {
                 )}
                 {!isReservationInformationEditing && !isGuestInformationEditing && type === TYPE_CHECKIN && (
                     <>
-                        <Button className={cx('btn')} label="Hủy đặt phòng" />
+                        <Button className={cx('btn')} label="Hủy đặt phòng" onClick={handleDeleteBooking} />
                         <Button
                             className={cx('btn')}
                             label="Check-in"
                             type={TYPE_CHECKIN}
                             primary
                             icon={<CheckinIcon />}
+                            onClick={handleCheckinConfirm}
                         />
                     </>
                 )}
                 {!isReservationInformationEditing && !isGuestInformationEditing && type === TYPE_CHECKOUT && (
                     <>
-                        <Button className={cx('btn')} label="Gia hạn" type={TYPE_CHECKIN} />
+                        <Button
+                            className={cx('btn')}
+                            label="Gia hạn"
+                            type={TYPE_CHECKIN}
+                            onClick={handleExtendCheckoutDate}
+                        />
                         <Button
                             className={cx('btn')}
                             label="Thanh toán"
                             type={TYPE_CHECKOUT}
                             primary
                             icon={<HomePaymentIcon />}
+                            onClick={handlePay}
                         />
                     </>
                 )}

@@ -1,17 +1,18 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { sIsAdmin } from '../../settings/globalStore';
 import DefaultLayout from '../layouts/DefaultLayout';
+import BedDetailList from '../pages/BedDetailList';
 import GuestList from '../pages/GuestList';
 import Home from '../pages/Home';
 import Login from '../pages/Login/Login';
 import PaymentList from '../pages/PaymentList/PaymentList';
 import RoomList from '../pages/RoomList';
-import StaffList from '../pages/StaffList';
-import UserProtect from './UserProtect';
-import BedDetailList from '../pages/BedDetailList';
-import { sIsAdmin } from '../../settings/globalStore';
-import RoomTypeList from '../pages/RoomTypeList/RoomTypeList';
-import StaffTypeList from '../pages/StaffTypeList/StaffTypeList';
 import RoomListManagement from '../pages/RoomListManagement';
+import RoomTypeList from '../pages/RoomTypeList/RoomTypeList';
+import StaffList from '../pages/StaffList';
+import StaffTypeList from '../pages/StaffTypeList/StaffTypeList';
+import UserProtect from './UserProtect';
+import RevenueChart from '../pages/RevenueChart/RevenueChart';
 
 export default function MainRoutes() {
     return (
@@ -106,6 +107,16 @@ export default function MainRoutes() {
                                 <DefaultLayout>
                                     <UserProtect>
                                         <RoomListManagement />
+                                    </UserProtect>
+                                </DefaultLayout>
+                            }
+                        />
+                        <Route
+                            path="/thong-ke"
+                            element={
+                                <DefaultLayout>
+                                    <UserProtect>
+                                        <RevenueChart />
                                     </UserProtect>
                                 </DefaultLayout>
                             }
