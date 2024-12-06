@@ -213,8 +213,9 @@ function RoomModal({ className, type, data }) {
             headers:{
                 "Content-Type":"application/json"
             },
-            body:submitData
+            body:JSON.stringify(submitData)
         });
+        console.log(response);
         const responseData = await response.json();
         return responseData;
     }
