@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import { sCurrentPage } from '../../layouts/DefaultLayout/Sidebar/sidebarStore';
 import { get } from '../../modules/lib/httpHandle';
 import styles from './bedDetailList.module.scss';
+import { BE_ENDPOINT } from '../../../settings/localVar';
 
 const cx = classNames.bind(styles);
 
@@ -50,8 +51,29 @@ function BedDetailList() {
                 confirmButtonText: 'Có',
                 cancelButtonText: 'Không',
                 icon: 'info',
-            }).then((result) => {
-                if (result.isConfirmed) {
+            }).then(async function(result)  {
+                
+                
+                if (result.isConfirmed) { 
+                    const data= {
+                        bedDetailText:refInput.current.value
+                    }
+                    const response = await fetch(BE_ENDPOINT+"add/bed-detail/",
+                        {
+                            method:'POST',
+                            headers:{
+                                "Content-Type":"Application/json"
+                            },
+                            body: JSON.stringify(data)
+                        }
+                    );
+                    if(!response.ok)
+                    {
+                        alert("Fail");
+                        return;
+                    } 
+                    const responseData= await response.json();
+                    console.log(responseData);
                     alert('ADDING A BED DETAIL!');
                     console.log(refInput.current.value);
                     Swal.fire('Thêm chi tiết giường thành công!', '', 'success');
@@ -68,7 +90,9 @@ function BedDetailList() {
                     );
                 } else {
                 }
-            });
+            }
+        
+        );
         } else {
             Swal.fire({
                 title: 'Vui lòng nhập đầy đủ thông tin!',
@@ -84,7 +108,28 @@ function BedDetailList() {
             confirmButtonText: 'Có',
             cancelButtonText: 'Không',
             icon: 'info',
-        }).then((result) => {
+        }).then(async function (result)  { 
+            const data = {
+                bedDetailText:refInput.current.value
+            };
+            const updateURL= BE_ENDPOINT+"update/bed-detail/"+refCurrentBedDetailId.current;
+           
+            const response = await fetch(updateURL,
+                {
+                    method:'PUT',
+                    headers:{
+                        "Content-Type":"Application/json"
+                    },
+                    body: JSON.stringify(data)
+                }
+            );
+            if(!response.ok)
+            {
+                alert("Fail");
+                return;
+            } 
+            const responseData= await response.json();
+            console.log(responseData);
             if (result.isConfirmed) {
                 alert('UPDATING A BED DETAIL!');
                 Swal.fire('Sửa chi tiết giường thành công!', '', 'success');
@@ -111,8 +156,23 @@ function BedDetailList() {
             confirmButtonText: 'Có',
             cancelButtonText: 'Không',
             icon: 'info',
-        }).then((result) => {
+        }).then(async function (result)  {
             if (result.isConfirmed) {
+                const deleteURL= BE_ENDPOINT+"delete/bed-detail/"+e.target.closest('tr').getAttribute('data-id');
+                console.log(deleteURL)
+                const response = await fetch(deleteURL, {
+                    method:'DELETE',
+                    headers:{
+                        "Content-type":"Text/plain"
+                    }
+                });
+                if(!response.ok)
+                {
+                    alert("Fail");
+                    return;
+                }
+                const responseData= await response.text();
+                console.log(responseData);
                 alert('DELETING A BED DETAIL!');
                 Swal.fire('Xóa chi tiết giường thành công!', '', 'success');
                 console.log(e.target.closest('tr').getAttribute('data-id'));
