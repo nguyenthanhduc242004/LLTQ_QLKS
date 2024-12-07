@@ -9,28 +9,28 @@ function ChangePasswordModal({ className }) {
     const refPasswordFormMessage = useRef();
     const refPasswordFormMessage2 = useRef();
     const refPasswordFormMessage3 = useRef();
-    const refPasswordFormMessageRequired = refPasswordFormMessage.current.parentElement.querySelector(
+    const refPasswordFormMessageRequired = refPasswordFormMessage.current?.parentElement.querySelector(
         '.' + cx('form-message__required'),
     );
-    const refPasswordFormMessageRequired2 = refPasswordFormMessage2.current.parentElement.querySelector(
+    const refPasswordFormMessageRequired2 = refPasswordFormMessage2.current?.parentElement.querySelector(
         '.' + cx('form-message__required'),
     );
-    const refPasswordFormMessageRequired3 = refPasswordFormMessage3.current.parentElement.querySelector(
+    const refPasswordFormMessageRequired3 = refPasswordFormMessage3.current?.parentElement.querySelector(
         '.' + cx('form-message__required'),
     );
-    const refPasswordFormMessageMin = refPasswordFormMessage.current.parentElement.querySelector(
+    const refPasswordFormMessageMin = refPasswordFormMessage.current?.parentElement.querySelector(
         '.' + cx('form-message__min'),
     );
-    const refPasswordFormMessageMin2 = refPasswordFormMessage2.current.parentElement.querySelector(
+    const refPasswordFormMessageMin2 = refPasswordFormMessage2.current?.parentElement.querySelector(
         '.' + cx('form-message__min'),
     );
-    const refPasswordFormMessageMin3 = refPasswordFormMessage3.current.parentElement.querySelector(
+    const refPasswordFormMessageMin3 = refPasswordFormMessage3.current?.parentElement.querySelector(
         '.' + cx('form-message__min'),
     );
-    const refPasswordFormMessageMatch2 = refPasswordFormMessage2.current.parentElement.querySelector(
+    const refPasswordFormMessageMatch2 = refPasswordFormMessage2.current?.parentElement.querySelector(
         '.' + cx('form-message__match'),
     );
-    const refPasswordFormMessageMatch3 = refPasswordFormMessage3.current.parentElement.querySelector(
+    const refPasswordFormMessageMatch3 = refPasswordFormMessage3.current?.parentElement.querySelector(
         '.' + cx('form-message__match'),
     );
 
@@ -95,14 +95,14 @@ function ChangePasswordModal({ className }) {
         refPasswordFormMessage.current.value = '';
         refPasswordFormMessage2.current.value = '';
         refPasswordFormMessage3.current.value = '';
-        refPasswordFormMessageRequired.classList.remove(cx('active'));
-        refPasswordFormMessageRequired2.classList.remove(cx('active'));
-        refPasswordFormMessageRequired3.classList.remove(cx('active'));
-        refPasswordFormMessageMin.classList.remove(cx('active'));
-        refPasswordFormMessageMin2.classList.remove(cx('active'));
-        refPasswordFormMessageMin3.classList.remove(cx('active'));
-        refPasswordFormMessageMatch2.classList.remove(cx('active'));
-        refPasswordFormMessageMatch3.classList.remove(cx('active'));
+        refPasswordFormMessageRequired?.classList.remove(cx('active'));
+        refPasswordFormMessageRequired2?.classList.remove(cx('active'));
+        refPasswordFormMessageRequired3?.classList.remove(cx('active'));
+        refPasswordFormMessageMin?.classList.remove(cx('active'));
+        refPasswordFormMessageMin2?.classList.remove(cx('active'));
+        refPasswordFormMessageMin3?.classList.remove(cx('active'));
+        refPasswordFormMessageMatch2?.classList.remove(cx('active'));
+        refPasswordFormMessageMatch3?.classList.remove(cx('active'));
     };
 
     useEffect(() => {
@@ -123,12 +123,12 @@ function ChangePasswordModal({ className }) {
             <form action="" method="" className={cx('form')}>
                 <div className={cx('form-group')}>
                     <div>
-                        <label for="password" className={cx('form-label')}>
+                        <label htmlFor="old-password" className={cx('form-label')}>
                             Mật khẩu cũ
                         </label>
                     </div>
                     <input
-                        id="password"
+                        id="old-password"
                         name="password"
                         type="password"
                         placeholder="••••••••••••"
@@ -141,12 +141,12 @@ function ChangePasswordModal({ className }) {
                 </div>
                 <div className={cx('form-group')}>
                     <div>
-                        <label for="password" className={cx('form-label')}>
+                        <label htmlFor="new-password" className={cx('form-label')}>
                             Mật khẩu mới
                         </label>
                     </div>
                     <input
-                        id="password"
+                        id="new-passwod"
                         name="password"
                         type="password"
                         placeholder="••••••••••••"
@@ -162,12 +162,12 @@ function ChangePasswordModal({ className }) {
                 </div>
                 <div className={cx('form-group')}>
                     <div>
-                        <label for="password" className={cx('form-label')}>
+                        <label htmlFor="confirm-password" className={cx('form-label')}>
                             Nhập lại mật khẩu
                         </label>
                     </div>
                     <input
-                        id="password"
+                        id="confirm-password"
                         name="password"
                         type="password"
                         placeholder="••••••••••••"
