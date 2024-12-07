@@ -6,6 +6,7 @@ import { sCurrentPage } from '../../layouts/DefaultLayout/Sidebar/sidebarStore';
 import Swal from 'sweetalert2';
 import { logRoles } from '@testing-library/react';
 import { signify } from 'react-signify';
+import { BE_ENDPOINT } from '../../../settings/localVar';
 
 const cx = classNames.bind(styles);
 
@@ -80,8 +81,23 @@ function RoomTypeList() {
                 confirmButtonText: 'Có',
                 cancelButtonText: 'Không',
                 icon: 'info',
-            }).then((result) => {
-                if (result.isConfirmed) {
+            }).then(async function (result)  {
+                if (result.isConfirmed) { 
+                    const response= await fetch(BE_ENDPOINT+"room-types/create",
+                        {
+                            method:"POST",
+                            headers:{
+                                "Content-Type":"Application/json"
+                            },
+                            body:JSON.stringify(sSubmitData.value)
+                        }
+                    );
+                    if(!response.ok)
+                    {
+                        alert("Fail");
+                        return;
+                    }
+
                     alert('ADDING A ROOM TYPE!');
                     console.log(sSubmitData.value);
                     Swal.fire('Thêm hạng phòng thành công!', '', 'success');
@@ -113,7 +129,23 @@ function RoomTypeList() {
             confirmButtonText: 'Có',
             cancelButtonText: 'Không',
             icon: 'info',
-        }).then((result) => {
+        }).then(async function (result) {
+            const updateURL=BE_ENDPOINT+"room-types/update/"+refCurrentRoomTypeId.current;
+            
+            const response=await fetch(updateURL,{
+                method:"PUT",
+                headers:{
+                    "Content-Type":"Application/json"
+                },
+                body:JSON.stringify(sSubmitData.value)
+            });
+            if(!response.ok)
+            {
+                alert("Fail");
+                return;
+            }
+            const responseData = await response.json();
+            console.log(responseData);
             if (result.isConfirmed) {
                 alert('UPDATING A ROOM TYPE!');
                 console.log(refCurrentRoomTypeId.current, sSubmitData.value);
@@ -140,7 +172,21 @@ function RoomTypeList() {
             confirmButtonText: 'Có',
             cancelButtonText: 'Không',
             icon: 'info',
-        }).then((result) => {
+        }).then(async function (result)  {
+            const deleteURL=BE_ENDPOINT+"room-types/delete/"+e.target.closest('tr').getAttribute('data-id');
+            const response = await fetch(deleteURL, {
+                method:"DELETE",
+                header:{
+                    "Content-Type":"Plain/text"
+                }
+            });
+            if(!response.ok)
+            {
+                alert("Fail");
+                return;
+            } 
+            const responseData= await response.text();
+            console.log(responseData);
             if (result.isConfirmed) {
                 alert('DELETING A ROOM TYPE!');
                 Swal.fire('Xóa hạng phòng thành công!', '', 'success');
@@ -244,7 +290,7 @@ function RoomTypeList() {
                                     </button>
                                 </td>
                                 <td name="roomTypeText">{item.roomTypeText}</td>
-                                <td name="size">{item.size}m2</td>
+                                <td name="size">{item.size}</td>
                                 <td name="bedDetailText" data-id={item.bedDetailId}>
                                     {item.bedDetailText}
                                 </td>

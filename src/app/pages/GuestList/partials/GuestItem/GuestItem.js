@@ -7,7 +7,7 @@ function GuestItem({ className, onClick, data }) {
     var gender;
     if (data.gender === 'male') gender = 'Nam';
     else if (data.gender === 'female') gender = 'Nữ';
-    const dob = new Date(data.dob.split('-')).toLocaleDateString();
+    const dob = new Date(data.dob).toLocaleDateString();
 
     return (
         <a href={'#khach-hang'} className={className + ' ' + cx('wrapper') + ' row'} onClick={onClick}>

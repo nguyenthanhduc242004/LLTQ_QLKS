@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import { sCurrentPage } from '../../layouts/DefaultLayout/Sidebar/sidebarStore';
 import { get } from '../../modules/lib/httpHandle';
 import styles from './staffTypeList.module.scss';
+import { BE_ENDPOINT } from '../../../settings/localVar';
 
 const cx = classNames.bind(styles);
 
@@ -41,7 +42,24 @@ function StaffTypeList() {
                 confirmButtonText: 'Có',
                 cancelButtonText: 'Không',
                 icon: 'info',
-            }).then((result) => {
+            }).then(async function (result)  { 
+                const data = {
+                    staffTypeText:refInput.current.value
+                } 
+                const response= await fetch(BE_ENDPOINT+"staff-types/create",{
+                    method:"POST",
+                    headers:{
+                        "Content-Type":"Application/json",
+                    },
+                    body:JSON.stringify(data)
+                });
+                if(!response.ok)
+                {
+                    alert("Fail");
+                    return;
+                } 
+                const responseData= await response.json();
+                console.log(responseData);
                 if (result.isConfirmed) {
                     alert('ADDING A STAFF TYPE!');
                     console.log(refInput.current.value);
@@ -75,7 +93,25 @@ function StaffTypeList() {
             confirmButtonText: 'Có',
             cancelButtonText: 'Không',
             icon: 'info',
-        }).then((result) => {
+        }).then(async function (result)  { 
+            const data={
+                staffTypeText:refInput.current.value
+            };
+            const updateURL=BE_ENDPOINT+"staff-types/update/"+refCurrentStaffTypeId.current;
+            const response = await fetch(updateURL, {
+                method:"PUT",
+                headers:{
+                    "Content-Type":"Application/json"
+                },
+                body:JSON.stringify(data)
+            })
+            if(!response.ok) 
+            {
+                alert("Fail");
+                return;
+            } 
+            const responseData= await response.json();
+            console.log(responseData);
             if (result.isConfirmed) {
                 alert('UPDATING A STAFF TYPE!');
                 Swal.fire('Sửa loại nhân viên thành công!', '', 'success');
@@ -102,7 +138,21 @@ function StaffTypeList() {
             confirmButtonText: 'Có',
             cancelButtonText: 'Không',
             icon: 'info',
-        }).then((result) => {
+        }).then(async function(result)  {
+            const deleteURL= BE_ENDPOINT+"staff-types/delete/"+e.target.closest('tr').getAttribute('data-id');
+            const response= await fetch(deleteURL, {
+                method:"DELETE",
+                header:{
+                    "Content-Type":"Plain/text"
+                }
+            });
+            if(!response.ok)
+            {
+                alert("Fail");
+                return;
+            } 
+            const responseData= await response.text();
+            console.log(responseData);
             if (result.isConfirmed) {
                 alert('DELETING A STAFF TYPE!');
                 Swal.fire('Xóa loại nhân viên thành công!', '', 'success');
