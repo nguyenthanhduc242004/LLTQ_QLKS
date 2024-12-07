@@ -2,49 +2,50 @@ import classNames from 'classnames/bind';
 import styles from './changePasswordModal.module.scss';
 import { useEffect, useRef } from 'react';
 import Button from '../Button';
+import { BE_ENDPOINT } from '../../../settings/localVar';
 
 const cx = classNames.bind(styles);
 
 function ChangePasswordModal({ className }) {
     const refPasswordFormMessage = useRef();
     const refPasswordFormMessage2 = useRef();
-    const refPasswordFormMessage3 = useRef();
-    const refPasswordFormMessageRequired = refPasswordFormMessage.current.parentElement.querySelector(
+    const refPasswordFormMessage3 = useRef(); 
+    const refPasswordFormMessageRequired = refPasswordFormMessage.current?.parentElement.querySelector(
         '.' + cx('form-message__required'),
     );
-    const refPasswordFormMessageRequired2 = refPasswordFormMessage2.current.parentElement.querySelector(
+    const refPasswordFormMessageRequired2 = refPasswordFormMessage2.current?.parentElement.querySelector(
         '.' + cx('form-message__required'),
     );
-    const refPasswordFormMessageRequired3 = refPasswordFormMessage3.current.parentElement.querySelector(
+    const refPasswordFormMessageRequired3 = refPasswordFormMessage3.current?.parentElement.querySelector(
         '.' + cx('form-message__required'),
     );
-    const refPasswordFormMessageMin = refPasswordFormMessage.current.parentElement.querySelector(
+    const refPasswordFormMessageMin = refPasswordFormMessage.current?.parentElement.querySelector(
         '.' + cx('form-message__min'),
     );
-    const refPasswordFormMessageMin2 = refPasswordFormMessage2.current.parentElement.querySelector(
+    const refPasswordFormMessageMin2 = refPasswordFormMessage2.current?.parentElement.querySelector(
         '.' + cx('form-message__min'),
     );
-    const refPasswordFormMessageMin3 = refPasswordFormMessage3.current.parentElement.querySelector(
+    const refPasswordFormMessageMin3 = refPasswordFormMessage3.current?.parentElement.querySelector(
         '.' + cx('form-message__min'),
     );
-    const refPasswordFormMessageMatch2 = refPasswordFormMessage2.current.parentElement.querySelector(
+    const refPasswordFormMessageMatch2 = refPasswordFormMessage2.current?.parentElement.querySelector(
         '.' + cx('form-message__match'),
     );
-    const refPasswordFormMessageMatch3 = refPasswordFormMessage3.current.parentElement.querySelector(
+    const refPasswordFormMessageMatch3 = refPasswordFormMessage3.current?.parentElement.querySelector(
         '.' + cx('form-message__match'),
     );
 
     const handlePasswordChange = (e) => {};
 
-    const handleSubmit = () => {
-        refPasswordFormMessageRequired.classList.remove(cx('active'));
-        refPasswordFormMessageRequired2.classList.remove(cx('active'));
-        refPasswordFormMessageRequired3.classList.remove(cx('active'));
-        refPasswordFormMessageMin.classList.remove(cx('active'));
-        refPasswordFormMessageMin2.classList.remove(cx('active'));
-        refPasswordFormMessageMin3.classList.remove(cx('active'));
-        refPasswordFormMessageMatch2.classList.remove(cx('active'));
-        refPasswordFormMessageMatch3.classList.remove(cx('active'));
+    const handleSubmit =async function ()  {
+        refPasswordFormMessageRequired?.classList.remove(cx('active'));
+        refPasswordFormMessageRequired2?.classList.remove(cx('active'));
+        refPasswordFormMessageRequired3?.classList.remove(cx('active'));
+        refPasswordFormMessageMin?.classList.remove(cx('active'));
+        refPasswordFormMessageMin2?.classList.remove(cx('active'));
+        refPasswordFormMessageMin3?.classList.remove(cx('active'));
+        refPasswordFormMessageMatch2?.classList.remove(cx('active'));
+        refPasswordFormMessageMatch3?.classList.remove(cx('active'));
         var condition = true;
         if (!refPasswordFormMessage.current.value) {
             refPasswordFormMessageRequired.classList.add(cx('active'));
@@ -80,12 +81,31 @@ function ChangePasswordModal({ className }) {
             condition = false;
         }
 
-        if (condition) {
-            alert('CHANGING PASSWORD!');
-            console.log({
+        if (condition) { 
+
+            const data={
                 oldPassword: refPasswordFormMessage.current.value,
                 newPassword: refPasswordFormMessage2.current.value,
+            }
+            console.log(data); 
+            const accountInfo=JSON.parse(localStorage.getItem('currentStaffData'));
+            const changePasswordURL=BE_ENDPOINT+"account/changePassword/"+accountInfo.id;
+            const response = await fetch(changePasswordURL,{
+                method:"POST",
+                headers:{
+                    "Content-Type":"Application/json"
+                },
+                body:JSON.stringify(data)
             });
+            if(!response.ok)    
+            {
+                alert("Đổi mật khẩu thất bại, mật khẩu cũ không đúng");
+                return;
+            }
+            const responseData= await response.json();
+            console.log(responseData);
+            console.log(JSON.parse(localStorage.getItem('currentStaffData')));
+            alert("Đổi mật khẩu thành công");
 
             handleWindowClick();
         }
@@ -95,14 +115,14 @@ function ChangePasswordModal({ className }) {
         refPasswordFormMessage.current.value = '';
         refPasswordFormMessage2.current.value = '';
         refPasswordFormMessage3.current.value = '';
-        refPasswordFormMessageRequired.classList.remove(cx('active'));
-        refPasswordFormMessageRequired2.classList.remove(cx('active'));
-        refPasswordFormMessageRequired3.classList.remove(cx('active'));
-        refPasswordFormMessageMin.classList.remove(cx('active'));
-        refPasswordFormMessageMin2.classList.remove(cx('active'));
-        refPasswordFormMessageMin3.classList.remove(cx('active'));
-        refPasswordFormMessageMatch2.classList.remove(cx('active'));
-        refPasswordFormMessageMatch3.classList.remove(cx('active'));
+        refPasswordFormMessageRequired?.classList.remove(cx('active'));
+        refPasswordFormMessageRequired2?.classList.remove(cx('active'));
+        refPasswordFormMessageRequired3?.classList.remove(cx('active'));
+        refPasswordFormMessageMin?.classList.remove(cx('active'));
+        refPasswordFormMessageMin2?.classList.remove(cx('active'));
+        refPasswordFormMessageMin3?.classList.remove(cx('active'));
+        refPasswordFormMessageMatch2?.classList.remove(cx('active'));
+        refPasswordFormMessageMatch3?.classList.remove(cx('active'));
     };
 
     useEffect(() => {
@@ -123,12 +143,12 @@ function ChangePasswordModal({ className }) {
             <form action="" method="" className={cx('form')}>
                 <div className={cx('form-group')}>
                     <div>
-                        <label for="password" className={cx('form-label')}>
+                        <label for="old-password" className={cx('form-label')}>
                             Mật khẩu cũ
                         </label>
                     </div>
                     <input
-                        id="password"
+                        id="old-password"
                         name="password"
                         type="password"
                         placeholder="••••••••••••"
@@ -141,12 +161,12 @@ function ChangePasswordModal({ className }) {
                 </div>
                 <div className={cx('form-group')}>
                     <div>
-                        <label for="password" className={cx('form-label')}>
+                        <label for="new-password" className={cx('form-label')}>
                             Mật khẩu mới
                         </label>
                     </div>
                     <input
-                        id="password"
+                        id="new-password"
                         name="password"
                         type="password"
                         placeholder="••••••••••••"
@@ -162,12 +182,12 @@ function ChangePasswordModal({ className }) {
                 </div>
                 <div className={cx('form-group')}>
                     <div>
-                        <label for="password" className={cx('form-label')}>
+                        <label for="confirm-password" className={cx('form-label')}>
                             Nhập lại mật khẩu
                         </label>
                     </div>
                     <input
-                        id="password"
+                        id="confirm-password"
                         name="password"
                         type="password"
                         placeholder="••••••••••••"

@@ -173,7 +173,7 @@ function StaffTypeList() {
         });
     };
 
-    return (
+    /*return (
         <div className={cx('wrapper') + ' grid'}>
             <h2 className={cx('heading')}>Quản Lý Loại Nhân Viên</h2>
             <div className={cx('input-wrapper')}>
@@ -230,6 +230,148 @@ function StaffTypeList() {
                                     </button>
                                 </td>
                                 <td name="staffTypeText">{item.staffTypeText}</td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
+        </div>
+    );*/
+    return (
+        <div
+            className={cx('wrapper') + ' grid'}
+            style={{ backgroundColor: '#f9f9f9', padding: '20px', borderRadius: '10px' }}
+        >
+            <h2
+                className={cx('heading')}
+                style={{
+                    color: 'rgb(255,99,107)',
+                    textAlign: 'center',
+                    fontSize: '24px',
+                    marginBottom: '20px',
+                }}
+            >
+                Quản Lý Loại Nhân Viên
+            </h2>
+            <div className={cx('input-wrapper')} style={{ marginBottom: '20px', textAlign: 'center' }}>
+                <label style={{ fontWeight: 'bold', marginRight: '10px' }}>Loại nhân viên: </label>
+                <input
+                    ref={refInput}
+                    name="id"
+                    style={{
+                        padding: '5px',
+                        border: '1px solid #ccc',
+                        borderRadius: '5px',
+                    }}
+                />
+            </div>
+            {!isUpdating && (
+                <button
+                    className={cx('btn')}
+                    onClick={handleAdd}
+                    style={{
+                        backgroundColor: 'rgb(255,99,107)',
+                        color: 'white',
+                        border: 'none',
+                        padding: '10px 20px',
+                        borderRadius: '5px',
+                        cursor: 'pointer',
+                    }}
+                >
+                    Thêm
+                </button>
+            )}
+            {isUpdating && (
+                <>
+                    <button
+                        className={cx('btn')}
+                        onClick={handleUpdateSubmit}
+                        style={{
+                            backgroundColor: '#007BFF',
+                            color: 'white',
+                            border: 'none',
+                            padding: '10px 20px',
+                            borderRadius: '5px',
+                            cursor: 'pointer',
+                            marginRight: '10px',
+                        }}
+                    >
+                        Xác nhận
+                    </button>
+                    <button
+                        className={cx('btn')}
+                        onClick={() => {
+                            setUpdating(false);
+                            refInput.current.value = '';
+                        }}
+                        style={{
+                            backgroundColor: '#FF4136',
+                            color: 'white',
+                            border: 'none',
+                            padding: '10px 20px',
+                            borderRadius: '5px',
+                            cursor: 'pointer',
+                        }}
+                    >
+                        Hủy
+                    </button>
+                </>
+            )}
+            <table
+                border={1}
+                style={{
+                    margin: 'auto',
+                    marginTop: '12px',
+                    borderCollapse: 'collapse',
+                    width: '80%',
+                }}
+            >
+                <thead>
+                    <tr style={{ backgroundColor: 'rgb(255,99,107)', textAlign: 'center', color: 'white' }}>
+    <td style={{ padding: '10px' }}> </td>
+                        <td style={{ padding: '10px' }}> </td>
+                        <th style={{ padding: '10px' }}>Loại nhân viên</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {staffTypes.map((item) => {
+                        return (
+                            <tr key={item.id} data-id={item.id} style={{ textAlign: 'center' }}>
+                                <td style={{ padding: '10px' }}>
+                                    <button
+                                        className={cx('btn')}
+                                        onClick={handleDelete}
+                                        style={{
+                                            backgroundColor: '#FF4136',
+                                            color: 'white',
+                                            border: 'none',
+                                            padding: '5px 10px',
+                                            borderRadius: '5px',
+                                            cursor: 'pointer',
+                                        }}
+                                    >
+                                        Xóa
+                                    </button>
+                                </td>
+                                <td style={{ padding: '10px' }}>
+                                    <button
+                                        className={cx('btn')}
+                                        onClick={handleUpdate}
+                                        style={{
+                                            backgroundColor: '#007BFF',
+                                            color: 'white',
+                                            border: 'none',
+                                            padding: '5px 10px',
+                                            borderRadius: '5px',
+                                            cursor: 'pointer',
+                                        }}
+                                    >
+                                        Sửa
+                                    </button>
+                                </td>
+                                <td name="staffTypeText" style={{ padding: '10px' }}>
+                                    {item.staffTypeText}
+                                </td>
                             </tr>
                         );
                     })}

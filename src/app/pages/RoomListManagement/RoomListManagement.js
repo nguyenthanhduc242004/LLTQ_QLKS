@@ -189,7 +189,7 @@ function RoomTypeList() {
         });
     };
 
-    return (
+   /*return (
         <div className={cx('wrapper') + ' grid'}>
             <h2 className={cx('heading')}>Quản Lý Hạng Phòng</h2>
             <sSubmitData.Wrap>
@@ -278,7 +278,199 @@ function RoomTypeList() {
                 </tbody>
             </table>
         </div>
+    );*/
+    return (
+        <div
+            className={cx('wrapper') + ' grid'}
+            style={{ backgroundColor: '#f9f9f9', padding: '20px', borderRadius: '10px' }}
+        >
+            <h2
+                className={cx('heading')}
+                style={{ color: "rgb(255,77,109)", textAlign: 'center', fontSize: '24px', marginBottom: '20px' }}
+            >
+                Quản Lý Phòng
+            </h2>
+            <sSubmitData.Wrap>
+                {(value) => (
+                    <div className={cx('input-wrapper')} style={{ marginBottom: '20px' }}>
+                        <label style={{ fontWeight: 'bold', marginRight: '10px' }}>Số phòng: </label>
+                        <input
+                            value={value.roomNumber ?? ''}
+                            name="roomNumber"
+                            onChange={handleChange}
+                            style={{
+                                padding: '5px',
+                                border: '1px solid #ccc',
+                                borderRadius: '5px',
+                                marginBottom: '10px',
+                            }}
+                        />
+                        <br />
+                        <label style={{ fontWeight: 'bold', marginRight: '10px' }}>Tầng: </label>
+                        <input
+                            value={value.floor ?? ''}
+                            name="floor"
+                            onChange={handleChange}
+                            style={{
+                                padding: '5px',
+                                border: '1px solid #ccc',
+                                borderRadius: '5px',
+                                marginBottom: '10px',
+                            }}
+                        />
+                        <br />
+                        <label style={{ fontWeight: 'bold', marginRight: '10px' }}>Hạng phòng: </label>
+                        <select
+                            value={value.roomTypeId ?? '-1'}
+                            name="roomTypeId"
+                            onChange={handleChange}
+                            style={{
+                                padding: '5px',
+                                border: '1px solid #ccc',
+                                borderRadius: '5px',
+                            }}
+                        >
+                            <option value={-1}>Chọn hạng phòng</option>
+                            {roomTypes.map((item) => (
+                                <option key={item.id} value={item.id}>
+                                    {item.roomTypeText}
+                                </option>
+                            ))}
+                        </select>
+                        <br />
+                    </div>
+                )}
+            </sSubmitData.Wrap>
+            <div className={cx('btn-wrapper')} style={{ textAlign: 'center', marginTop: '20px' }}>
+                {!isUpdating && (
+                    <button
+                        className={cx('btn')}
+                        onClick={handleAdd}
+                        style={{
+                            backgroundColor: 'rgb(255,77,109)',
+   color: 'white',
+                            border: 'none',
+                            padding: '10px 20px',
+                            borderRadius: '5px',
+                            cursor: 'pointer',
+                        }}
+                    >
+                        Thêm
+                    </button>
+                )}
+                {isUpdating && (
+                    <>
+                        <button
+                            className={cx('btn')}
+                            onClick={handleUpdateSubmit}
+                            style={{
+                                backgroundColor: 'rgb(255,77,109)',
+                                color: 'white',
+                                border: 'none',
+                                padding: '10px 20px',
+                                borderRadius: '5px',
+                                cursor: 'pointer',
+                                marginRight: '10px',
+                            }}
+                        >
+                            Xác nhận
+                        </button>
+                        <button
+                            className={cx('btn')}
+                            onClick={() => {
+                                setUpdating(false);
+                                sSubmitData.set({});
+                            }}
+                            style={{
+                                backgroundColor: '#FF4136',
+                                color: 'white',
+                                border: 'none',
+                                padding: '10px 20px',
+                                borderRadius: '5px',
+                                cursor: 'pointer',
+                            }}
+                        >
+                            Hủy
+                        </button>
+                    </>
+                )}
+            </div>
+            <table
+                border={1}
+                style={{
+                    margin: 'auto',
+                    marginTop: '12px',
+                    borderCollapse: 'collapse',
+                    width: '80%',
+                }}
+            >
+                <thead>
+                    <tr style={{ backgroundColor: 'rgb(255,77,109)', textAlign: 'center' }}>
+                        <td style={{ padding: '10px' }}> </td>
+                        <td style={{ padding: '10px' }}> </td>
+                        <th style={{ padding: '10px' }}>Số phòng</th>
+                        <th style={{ padding: '10px' }}>Tầng</th>
+                        <th style={{ padding: '10px' }}>Hạng phòng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {rooms.map((item) => {
+                        return (
+                            <tr key={item.id} data-id={item.id} style={{ textAlign: 'center' }}>
+                                <td style={{ padding: '10px' }}>
+                                    <button
+                                        className={cx('btn')}
+                                        onClick={handleDelete}
+                                        style={{
+                                            backgroundColor: '#FF4136',
+   color: 'white',
+                                            border: 'none',
+                                            padding: '5px 10px',
+                                            borderRadius: '5px',
+                                            cursor: 'pointer',
+                                        }}
+                                    >
+                                        Xóa
+                                    </button>
+                                </td>
+                                <td style={{ padding: '10px' }}>
+                                    <button
+                                        className={cx('btn')}
+                                        onClick={handleUpdate}
+                                        style={{
+                                            backgroundColor: '#007BFF',
+                                            color: 'white',
+                                            border: 'none',
+                                            padding: '5px 10px',
+                                            borderRadius: '5px',
+                                            cursor: 'pointer',
+                                        }}
+                                    >
+                                        Sửa
+                                    </button>
+                                </td>
+                                <td name="roomNumber" style={{ padding: '10px' }}>
+                                    {item.roomNumber}
+                                </td>
+                                <td name="floor" style={{ padding: '10px' }}>
+                                    {item.floor}
+                                </td>
+                                <td
+                                    name="roomTypeText"
+                                    data-id={item.roomTypeId}
+                                    style={{ padding: '10px' }}
+                                >
+                                    {item.roomTypeText}
+                                </td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
+        </div>
     );
+    
+    
 }
 
 export default RoomTypeList;

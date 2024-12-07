@@ -1,9 +1,9 @@
 import classNames from 'classnames/bind';
 import styles from './DetailInformation.module.scss';
-
+import { useEffect } from 'react';
 const cx = classNames.bind(styles);
 
-function DetailInformation({ className, data = undefined, isEditing = false, submitData, setSubmitData }) {
+function DetailInformation({ className, data = undefined, isEditing = false, submitData, setSubmitData, nameProperty='guestName'}) {
     const handleChange = (e) => {
         setSubmitData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
@@ -25,10 +25,10 @@ function DetailInformation({ className, data = undefined, isEditing = false, sub
                         <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
                             <span>Họ tên: </span>
                             <input
-                                name="guestName"
+                                name={nameProperty}
                                 placeholder="Vui lòng nhập trường này"
                                 type="text"
-                                value={submitData.guestName ?? ''}
+                                value={submitData[nameProperty]?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -79,12 +79,78 @@ function DetailInformation({ className, data = undefined, isEditing = false, sub
                     </div>
                 </>
             )}
+            {data !== undefined && isEditing && (
+                <>
+                    <div className="row">
+                        <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
+                            <span>CCCD: </span>
+                            <input
+                                name="citizenId"
+                                onChange={handleChange}
+                                type="text"
+                                value={submitData.citizenId}
+                                disabled={true}
+                            />
+                        </div>
+                        <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
+                            <span>Họ tên: </span>
+                            <input
+                                placeholder="Vui lòng nhập trường này"
+                                name={nameProperty}
+                                onChange={handleChange}
+                                type="text"
+                                /*value={data.guestName}
+                                disabled={true}*/
+                                value={submitData[nameProperty]}
+                            />
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
+                            <span>Điện thoại: </span>
+                           
+                            <input
+                                placeholder="Vui lòng nhập trường này"
+                                name="phone"
+                                onChange={handleChange}
+                                type="tel"
+                                value={submitData.phone}
+                                
+                            />
+                        </div>
+                    </div>
+                    <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
+                            <span>Email: </span>
+                            <input name="email" onChange={handleChange} type="email" value={submitData.email} />
+                        </div>
+                    <div className="row">
+                        <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
+                            <span>Ngày sinh: </span>
+                            <input name="dob" onChange={handleChange} type="date" value={data.dob}  />
+                        </div>
+                        <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
+                            <span>Giới tính: </span>
+                            <select name="gender" onChange={handleChange} required="" value={submitData.guestGender}>
+                                <option value="male">Nam</option>
+                                <option value="female">Nữ</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className={cx('input-with-label') + ' col c-12 m-12 l-12'}>
+                            <span>Địa chỉ: </span>
+                            <input name="address" onChange={handleChange} type="text" value={submitData.guestAddress} />
+                        </div>
+                    </div>
+                </>
+            )}
             {data !== undefined && !isEditing && (
                 <>
                     <div className="row">
                         <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
                             <span>CCCD: </span>
                             <input
+                                
                                 name="citizenId"
                                 onChange={handleChange}
                                 type="text"
@@ -95,10 +161,10 @@ function DetailInformation({ className, data = undefined, isEditing = false, sub
                         <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
                             <span>Họ tên: </span>
                             <input
-                                name="guestName"
+                               name={nameProperty}
                                 onChange={handleChange}
                                 type="text"
-                                value={data.guestName}
+                                value={data[nameProperty]}
                                 disabled={true}
                             />
                         </div>
@@ -130,7 +196,7 @@ function DetailInformation({ className, data = undefined, isEditing = false, sub
                                 name="gender"
                                 onChange={handleChange}
                                 required=""
-                                defaultValue={data.guestGender}
+                                value={data.guestGender}
                                 disabled={true}
                             >
                                 <option value="male">Nam</option>
@@ -147,72 +213,6 @@ function DetailInformation({ className, data = undefined, isEditing = false, sub
                                 type="text"
                                 value={data.guestAddress}
                                 disabled={true}
-                            />
-                        </div>
-                    </div>
-                </>
-            )}
-            {data !== undefined && isEditing && (
-                <>
-                    <div className="row">
-                        <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
-                            <span>CCCD: </span>
-                            <input
-                                placeholder="Vui lòng nhập trường này!"
-                                name="citizenId"
-                                onChange={handleChange}
-                                type="text"
-                                defaultValue={data.citizenId}
-                            />
-                        </div>
-                        <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
-                            <span>Họ tên: </span>
-                            <input
-                                placeholder="Vui lòng nhập trường này!"
-                                name="guestName"
-                                onChange={handleChange}
-                                type="text"
-                                defaultValue={data.guestName}
-                            />
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
-                            <span>Điện thoại: </span>
-                            <input
-                                placeholder="Vui lòng nhập trường này!"
-                                name="phone"
-                                onChange={handleChange}
-                                type="tel"
-                                defaultValue={data.phone}
-                            />
-                        </div>
-                        <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
-                            <span>Email: </span>
-                            <input name="email" onChange={handleChange} type="email" defaultValue={data.email} />
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
-                            <span>Ngày sinh: </span>
-                            <input name="dob" onChange={handleChange} type="date" defaultValue={data.dob} />
-                        </div>
-                        <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
-                            <span>Giới tính: </span>
-                            <select name="gender" onChange={handleChange} required="" defaultValue={data.guestGender}>
-                                <option value="male">Nam</option>
-                                <option value="female">Nữ</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className={cx('input-with-label') + ' col c-12 m-12 l-12'}>
-                            <span>Địa chỉ: </span>
-                            <input
-                                name="address"
-                                onChange={handleChange}
-                                type="text"
-                                defaultValue={data.guestAddress}
                             />
                         </div>
                     </div>

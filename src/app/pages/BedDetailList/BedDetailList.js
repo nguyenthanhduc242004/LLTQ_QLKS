@@ -192,7 +192,7 @@ function BedDetailList() {
         });
     };
 
-    return (
+   /* return (
         <div className={cx('wrapper') + ' grid'}>
             <h2 className={cx('heading')}>Quản Lý Chi Tiết Giường</h2>
             <div className={cx('input-wrapper')}>
@@ -249,6 +249,75 @@ function BedDetailList() {
                                     </button>
                                 </td>
                                 <td name="bedDetailText">{item.bedDetailText}</td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
+        </div>
+    );*/ 
+    return (
+        <div className={cx('wrapper') + ' grid'} style={{ padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+            <h2 className={cx('heading')} style={{ textAlign: 'center', color: 'rgb(255,77,109)', fontSize: '24px', marginBottom: '20px' }}>Quản Lý Chi Tiết Giường</h2>
+            <div className={cx('input-wrapper')} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                <label style={{ marginRight: '10px', fontWeight: 'bold', color: '#555' }}>Chi tiết giường: </label>
+                <input ref={refInput} name="id" style={{ padding: '8px', width: '300px', borderRadius: '4px', border: '1px solid #ccc' }} />
+            </div>
+            {!isUpdating && (
+                <button className={cx('btn')} onClick={handleAdd} style={{ padding: '10px 20px', backgroundColor: '#ff4d6d', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>
+                    Thêm
+                </button>
+            )}
+            {isUpdating && (
+                <>
+                    <button className={cx('btn')} onClick={handleUpdateSubmit} style={{ padding: '10px 20px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', marginRight: '10px' }}>
+                        Xác nhận
+                    </button>
+                    <button
+                        className={cx('btn')}
+                        onClick={() => {
+                            setUpdating(false);
+                            refInput.current.value = '';
+                        }}
+                        style={{ padding: '10px 20px', backgroundColor: '#dc3545', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+                    >
+                        Hủy
+                    </button>
+                </>
+            )}
+            <table
+                border={1}
+                style={{
+                    width: '80%',
+                    margin: 'auto',
+                    marginTop: '12px',
+                    borderCollapse: 'collapse',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                    backgroundColor: '#fff',
+                }}
+            >
+                <thead style={{ backgroundColor: '#ff4d6d', color: '#fff' }}>
+                    <tr>
+                        <td style={{ padding: '10px' }}></td>
+                        <td style={{ padding: '10px' }}></td>
+                        <th style={{ padding: '10px', textAlign: 'left' }}>Chi tiết giường</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {bedDetails.map((item) => {
+                        return (
+                            <tr key={item.id} data-id={item.id} style={{ borderBottom: '1px solid #ddd' }}>
+                                <td style={{ padding: '10px' }}>
+    <button className={cx('btn')} onClick={handleDelete} style={{ padding: '5px 10px', backgroundColor: '#dc3545', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+                                        Xóa
+                                    </button>
+                                </td>
+                                <td style={{ padding: '10px' }}>
+                                    <button className={cx('btn')} onClick={handleUpdate} style={{ padding: '5px 10px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+                                        Sửa
+                                    </button>
+                                </td>
+                                <td name="bedDetailText" style={{ padding: '10px', textAlign: 'left', color: '#555' }}>{item.bedDetailText}</td>
                             </tr>
                         );
                     })}

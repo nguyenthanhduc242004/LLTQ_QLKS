@@ -64,8 +64,8 @@ function Login() {
                     alert();
                     sIsLoggedIn.set(true);
                     //*************************** */
-                    // sIsAdmin.set(!!data.type);
-                    sIsAdmin.set(true);
+                    sIsAdmin.set(!!data.type);
+                    //sIsAdmin.set(true);
                     //*************************** */
                     localStorage.setItem('currentStaffData', JSON.stringify(data));
                     if (sRememberMe.value) {

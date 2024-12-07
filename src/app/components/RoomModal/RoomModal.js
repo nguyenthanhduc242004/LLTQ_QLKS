@@ -210,9 +210,9 @@ function RoomModal({ className, type, data }) {
             const response = await fetch(BE_ENDPOINT + 'bookings/', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(submitData),
+                body: JSON.stringify(submitData)
             });
             console.log(response);
             const responseData = await response.json();
@@ -263,11 +263,27 @@ function RoomModal({ className, type, data }) {
             showCancelButton: true,
             confirmButtonText: 'Xác nhận',
             cancelButtonText: `Thoát`,
-        }).then((result) => {
+        }).then(async function(result)  {
             /* Read more about isConfirmed, isDenied below */
+             
+            
             if (result.isConfirmed) {
-                alert('UPDATING A BOOKING AND A ROOM STATE!');
+                //alert('UPDATING A BOOKING AND A ROOM STATE!');
                 // Thay đổi room state, thay dổi ngày checkin là ngày hôm nay
+                const checkinURL= BE_ENDPOINT+"checkin/"+data.id;
+            const response= await fetch(checkinURL,{
+                method:"GET",
+                headers:{
+                    "Content-Type":"Application/json"
+                }
+            });
+            if(!response.ok)
+            {
+                alert("Fail");
+                return;
+            }
+            const responseData= await response.json();
+            console.log(responseData);
                 const today = new Date();
                 const year = today.getFullYear();
                 const month = today.getMonth() + 1;
@@ -287,6 +303,7 @@ function RoomModal({ className, type, data }) {
 
     const handleExtendCheckoutDate = (e) => {
         e.stopPropagation();
+        let requestBody={};
         Swal.fire({
             title: 'Vui lòng nhập ngày trả phòng mới',
             input: 'date',
@@ -305,17 +322,36 @@ function RoomModal({ className, type, data }) {
                         roomId: data.roomId,
                     };
                     console.log(body);
-                    await post(
+                    requestBody={
+                        newCheckoutDate:date
+                    
+                    }
+                    const response = await fetch(BE_ENDPOINT+"renewal/check/"+body.id,{
+                        method:"POST",
+                        headers:{
+                            "Content-Type":"Application/json"
+                        },
+                        body:JSON.stringify(requestBody)
+                    });
+                    if(!response.ok)
+                    {
+                        return Swal.showValidationMessage('Ngày trả phòng không hợp lệ!');
+                    }
+
+
+                    /*await post(
                         'someURI/',
                         body,
                         (data) => {
                             // UPDATING A BOOKING'S CHECKOUTDATE
+                           
                         },
                         () => {
+                            
                             // UPDATE FAILED
                             return Swal.showValidationMessage('Ngày trả phòng không hợp lệ!');
                         },
-                    );
+                    );*/
                 } catch (error) {
                     Swal.showValidationMessage(`
                   Yêu cầu thất bại: ${error}!
@@ -323,8 +359,9 @@ function RoomModal({ className, type, data }) {
                 }
             },
             allowOutsideClick: () => !Swal.isLoading(),
-        }).then((result) => {
-            if (result.isConfirmed) {
+        }).then(async function(result)  {
+            if (result.isConfirmed) { 
+               console.log(requestBody);
                 Swal.fire({
                     title: `Gia hạn thành công`,
                     icon: 'success',
@@ -344,10 +381,24 @@ function RoomModal({ className, type, data }) {
             showCancelButton: true,
             confirmButtonText: 'Xác nhận',
             cancelButtonText: `Thoát`,
-        }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
+        }).then(async function (result)  {
+            
             if (result.isConfirmed) {
-                alert('UPDATING A BOOKING!');
+                //alert('UPDATING A BOOKING!');
+                const payURL= BE_ENDPOINT+"checkout/"+data.id;
+            const response= await fetch(payURL, {
+                method:"GET",
+                headers:{
+                    "Content-Type":"Application/json"
+                }
+            });
+            if(!response.ok)
+            {
+                alert("Fail");
+                return;
+            } 
+            const responseData= await response.json();
+            console.log(responseData);
                 console.log(data.id, data.roomId);
                 Swal.fire('Thanh toán thành công!', '', 'success').then((result) => {
                     if (result.isConfirmed) {
@@ -372,9 +423,22 @@ function RoomModal({ className, type, data }) {
             cancelButtonColor: '#d33',
             confirmButtonText: 'Xác nhận',
             cancelButtonText: 'Thoát',
-        }).then((result) => {
+        }).then(async function (result)  {
+
             if (result.isConfirmed) {
-                alert('DELETING A BOOKING!');
+                //alert('DELETING A BOOKING!');
+                const response= await fetch(BE_ENDPOINT+"booking/delete/"+data.id,{
+                    method:"DELETE",
+                    header:{
+                        "Content-Type":"Plain/text"
+                    }
+                });
+                if(!response.ok)
+                {
+                    alert("Hủy đặt phòng thất bại");
+                    return;
+                }
+                
                 console.log(data.id);
                 Swal.fire({
                     title: 'Đã hủy!',
