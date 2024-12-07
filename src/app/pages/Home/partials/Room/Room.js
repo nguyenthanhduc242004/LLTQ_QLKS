@@ -57,6 +57,7 @@ function Room({ classNames, type, data, onClick }) {
             showCancelButton: true,
             confirmButtonText: 'Xác nhận',
             cancelButtonText: `Thoát`,
+            icon: 'info',
         }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
@@ -138,6 +139,7 @@ function Room({ classNames, type, data, onClick }) {
             showCancelButton: true,
             confirmButtonText: 'Xác nhận',
             cancelButtonText: `Thoát`,
+            icon: 'info',
         }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {

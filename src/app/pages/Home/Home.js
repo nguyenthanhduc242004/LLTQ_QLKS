@@ -57,7 +57,6 @@ function Home() {
 
     return (
         <div className={cx('wrapper') + ' grid'}>
-            {console.log('re-rendered!')}
             <h2 className={cx('heading')}>Các hạng phòng</h2>
             <div className="row">
                 {roomTypes.map((item, index) => (
@@ -117,7 +116,6 @@ function Home() {
 
             <sShowModal.HardWrap>
                 {(value) => {
-                    console.log('sShowModal re-rendered!');
                     if (value.type === TYPE_ROOM_TYPE) {
                         return (
                             <div id={value.type} className="modal">

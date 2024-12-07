@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import Button from '../Button';
-import { CancelIcon, CheckIcon, EditIcon } from '../Icons';
+import { CancelIcon, CheckIcon, EditIcon, HideSideBarIcon } from '../Icons';
 import styles from './GuestModal.module.scss';
 import DetailInformation from '../DetailInformation';
 
@@ -16,19 +16,24 @@ function GuestModal({ className, data }) {
     };
 
     const handleUpdateConfirm = () => {
-        if (
-            submitData.citizenId !== data.citizenId ||
-            submitData.guestName !== data.guestName ||
-            submitData.phone !== data.phone ||
-            submitData.email !== data.email ||
-            submitData.dob !== data.dob ||
-            submitData.gender !== data.gender ||
-            submitData.address !== data.address
+        if (!submitData.citizenId || !submitData.name || !submitData.phone) {
+            alert('Bạn chưa điền đủ thông tin yêu cầu!');
+        } else if (
+            !(
+                submitData.citizenId !== data.citizenId ||
+                submitData.name !== data.name ||
+                submitData.phone !== data.phone ||
+                submitData.email !== data.email ||
+                submitData.dob !== data.dob ||
+                submitData.gender !== data.gender ||
+                submitData.address !== data.address
+            )
         ) {
-            alert('UPDATING A GUEST');
-            setIsEditing(false);
-        } else {
             alert('Bạn chưa thay đổi thông tin khách hàng!');
+        } else {
+            alert('UPDATING A GUEST');
+            console.log(submitData);
+            setIsEditing(false);
         }
     };
 
@@ -70,7 +75,13 @@ function GuestModal({ className, data }) {
                     <CancelIcon className={cx('icon')} />
                 </button>
             )}
-            <DetailInformation data={data} isEditing={isEditing} setSubmitData={setSubmitData} />
+            <DetailInformation
+                data={data}
+                isEditing={isEditing}
+                submitData={submitData}
+                setSubmitData={setSubmitData}
+                nameProperty="name"
+            />
             {isEditing && (
                 <div className={cx('btn-wrapper')}>
                     <Button

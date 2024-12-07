@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import { get } from '../../modules/lib/httpHandle';
 import { sCurrentPage } from '../../layouts/DefaultLayout/Sidebar/sidebarStore';
 import Swal from 'sweetalert2';
-import { logRoles } from '@testing-library/react';
 import { signify } from 'react-signify';
 import { BE_ENDPOINT } from '../../../settings/localVar';
 
@@ -81,20 +80,17 @@ function RoomTypeList() {
                 confirmButtonText: 'Có',
                 cancelButtonText: 'Không',
                 icon: 'info',
-            }).then(async function (result)  {
-                if (result.isConfirmed) { 
-                    const response= await fetch(BE_ENDPOINT+"room-types/create",
-                        {
-                            method:"POST",
-                            headers:{
-                                "Content-Type":"Application/json"
-                            },
-                            body:JSON.stringify(sSubmitData.value)
-                        }
-                    );
-                    if(!response.ok)
-                    {
-                        alert("Fail");
+            }).then(async function (result) {
+                if (result.isConfirmed) {
+                    const response = await fetch(BE_ENDPOINT + 'room-types/create', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'Application/json',
+                        },
+                        body: JSON.stringify(sSubmitData.value),
+                    });
+                    if (!response.ok) {
+                        alert('Fail');
                         return;
                     }
 
@@ -130,18 +126,17 @@ function RoomTypeList() {
             cancelButtonText: 'Không',
             icon: 'info',
         }).then(async function (result) {
-            const updateURL=BE_ENDPOINT+"room-types/update/"+refCurrentRoomTypeId.current;
-            
-            const response=await fetch(updateURL,{
-                method:"PUT",
-                headers:{
-                    "Content-Type":"Application/json"
+            const updateURL = BE_ENDPOINT + 'room-types/update/' + refCurrentRoomTypeId.current;
+
+            const response = await fetch(updateURL, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'Application/json',
                 },
-                body:JSON.stringify(sSubmitData.value)
+                body: JSON.stringify(sSubmitData.value),
             });
-            if(!response.ok)
-            {
-                alert("Fail");
+            if (!response.ok) {
+                alert('Fail');
                 return;
             }
             const responseData = await response.json();
@@ -172,20 +167,19 @@ function RoomTypeList() {
             confirmButtonText: 'Có',
             cancelButtonText: 'Không',
             icon: 'info',
-        }).then(async function (result)  {
-            const deleteURL=BE_ENDPOINT+"room-types/delete/"+e.target.closest('tr').getAttribute('data-id');
+        }).then(async function (result) {
+            const deleteURL = BE_ENDPOINT + 'room-types/delete/' + e.target.closest('tr').getAttribute('data-id');
             const response = await fetch(deleteURL, {
-                method:"DELETE",
-                header:{
-                    "Content-Type":"Plain/text"
-                }
+                method: 'DELETE',
+                header: {
+                    'Content-Type': 'Plain/text',
+                },
             });
-            if(!response.ok)
-            {
-                alert("Fail");
+            if (!response.ok) {
+                alert('Fail');
                 return;
-            } 
-            const responseData= await response.text();
+            }
+            const responseData = await response.text();
             console.log(responseData);
             if (result.isConfirmed) {
                 alert('DELETING A ROOM TYPE!');

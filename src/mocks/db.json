@@ -139,7 +139,6 @@
       "bedDetailText": "1 giường đôi",
       "state": 1,
       "citizenId": "035236534765",
-      "name": "Phan Thanh Đăng",
       "phone": "0395349283",
       "email": "DangPT@gmail.com",
       "dob": "2004-01-01",
@@ -199,6 +198,26 @@
       "checkoutDate": "2024-11-29",
       "isPaid": true,
       "totalPrice": 4000000
+    },
+    {
+      "id": "bceb",
+      "checkinDate": "2024-12-07",
+      "checkoutDate": "2024-12-08",
+      "roomId": "1",
+      "citizenId": "1",
+      "guestName": "1",
+      "phone": "1"
+    },
+    {
+      "id": "962e",
+      "citizenId": "035236534765",
+      "guestName": "Phan Thanh Đăngád",
+      "phone": "0395349283",
+      "email": "DangPT@gmail.com",
+      "dob": "2004-01-01",
+      "gender": "male",
+      "address": "",
+      "guestId": 1
     }
   ],
   "accounts": [
@@ -230,6 +249,11 @@
     },
     {
       "id": "cb1e",
+      "email": "admin@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "7688",
       "email": "admin@gmail.com",
       "password": "12345678"
     }
