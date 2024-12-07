@@ -306,7 +306,7 @@ function RoomModal({ className, type, data }) {
             confirmButtonText: 'Xác nhận',
             cancelButtonText: `Thoát`,
             icon: 'info',
-        }).then((result) => {
+        }).then(async (result) => {
             /* Read more about isConfirmed, isDenied below */
              
             
