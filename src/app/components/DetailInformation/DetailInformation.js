@@ -1,12 +1,21 @@
 import classNames from 'classnames/bind';
 import styles from './DetailInformation.module.scss';
 import { useEffect } from 'react';
+
 const cx = classNames.bind(styles);
 
-function DetailInformation({ className, data = undefined, isEditing = false, submitData, setSubmitData, nameProperty='guestName'}) {
+function DetailInformation({
+    className,
+    data = undefined,
+    isEditing = false,
+    submitData,
+    setSubmitData,
+    nameProperty = 'guestName',
+}) {
     const handleChange = (e) => {
         setSubmitData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
+
     return (
         <div className={cx('wrapper') + ' ' + className}>
             {data === undefined && (
@@ -28,7 +37,7 @@ function DetailInformation({ className, data = undefined, isEditing = false, sub
                                 name={nameProperty}
                                 placeholder="Vui lòng nhập trường này"
                                 type="text"
-                                value={submitData[nameProperty]?? ''}
+                                value={submitData[nameProperty] ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -80,6 +89,67 @@ function DetailInformation({ className, data = undefined, isEditing = false, sub
                 </>
             )}
             {data !== undefined && isEditing && (
+                <>
+                    <div className="row">
+                        <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
+                            <span>CCCD: </span>
+                            <input
+                                placeholder="Vui lòng nhập trường này"
+                                name="citizenId"
+                                onChange={handleChange}
+                                type="text"
+                                value={submitData.citizenId}
+                            />
+                        </div>
+                        <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
+                            <span>Họ tên: </span>
+                            <input
+                                placeholder="Vui lòng nhập trường này"
+                                name={nameProperty}
+                                onChange={handleChange}
+                                type="text"
+                                value={submitData[nameProperty]}
+                            />
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
+                            <span>Điện thoại: </span>
+                            <input
+                                placeholder="Vui lòng nhập trường này"
+                                name="phone"
+                                onChange={handleChange}
+                                type="tel"
+                                value={submitData.phone}
+                            />
+                        </div>
+                        <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
+                            <span>Email: </span>
+                            <input name="email" onChange={handleChange} type="email" value={submitData.email} />
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
+                            <span>Ngày sinh: </span>
+                            <input name="dob" onChange={handleChange} type="date" value={submitData.dob} />
+                        </div>
+                        <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
+                            <span>Giới tính: </span>
+                            <select name="gender" onChange={handleChange} required="" value={submitData.guestGender}>
+                                <option value="male">Nam</option>
+                                <option value="female">Nữ</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className={cx('input-with-label') + ' col c-12 m-12 l-12'}>
+                            <span>Địa chỉ: </span>
+                            <input name="address" onChange={handleChange} type="text" value={submitData.guestAddress} />
+                        </div>
+                    </div>
+                </>
+            )}
+            {data !== undefined && !isEditing && (
                 <>
                     <div className="row">
                         <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
@@ -161,7 +231,7 @@ function DetailInformation({ className, data = undefined, isEditing = false, sub
                         <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
                             <span>Họ tên: </span>
                             <input
-                               name={nameProperty}
+                                name={nameProperty}
                                 onChange={handleChange}
                                 type="text"
                                 value={data[nameProperty]}

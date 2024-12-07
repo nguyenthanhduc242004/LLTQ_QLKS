@@ -205,55 +205,97 @@ function RoomModal({ className, type, data }) {
         setSubmitData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
     const handleBookingSubmit = () => {
-        async function addBooking() {
-            console.log(submitData);
-            const response = await fetch(BE_ENDPOINT + 'bookings/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(submitData)
-            });
-            console.log(response);
-            const responseData = await response.json();
-            return responseData;
-        }
-        return addBooking();
+        // async function addBooking() {
+        //     console.log(submitData);
+        //     const response = await fetch(BE_ENDPOINT + 'bookings/', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },
+        //         body: JSON.stringify(submitData),
+        //     });
+        //     console.log(response);
+        //     const responseData = await response.json();
+        //     return responseData;
+        // }
+        // return addBooking();
+        Swal.fire({
+            title: 'Xác nhận đặt phòng!',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: `Thoát`,
+            icon: 'info',
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                console.log(submitData);
+                post(
+                    'bookings/',
+                    submitData,
+                    (data) => {
+                        Swal.fire({
+                            title: 'Đặt phòng thành công!',
+                            icon: 'success',
+                            allowOutsideClick: false,
+                        });
+                        // window.location.reload();
+                    },
+                    () => {
+                        Swal.fire('Đặt phòng thất bại', '', 'error');
+                    },
+                );
+            }
+        });
     };
 
     // UPDATE:
     const handleUpdateConfirm = () => {
-        console.log(submitData);
         if (isReservationInformationEditing) {
             if (
-                submitData.checkinDate !== data.checkinDate ||
-                submitData.checkoutDate !== data.checkoutDate ||
-                submitData.roomId !== data.roomId
+                !(
+                    submitData.checkinDate !== data.checkinDate ||
+                    submitData.checkoutDate !== data.checkoutDate ||
+                    submitData.roomId !== data.roomId
+                )
             ) {
-                // Trả response về y như post, chỉnh giao diện sau khi post tui làm sau.
-                alert('UPDATING A BOOKING!');
-                setIsReservationInformationEditing(false);
-            } else {
-                alert('Bạn chưa thay đổi thông tin đặt phòng!');
+                Swal.fire({
+                    title: 'Bạn chưa thay đổi thông tin đặt phòng!',
+                    icon: 'warning',
+                });
+                return;
             }
         }
         if (isGuestInformationEditing) {
             if (
-                submitData.citizenId !== data.citizenId ||
-                submitData.guestName !== data.guestName ||
-                submitData.phone !== data.phone ||
-                submitData.email !== data.email ||
-                submitData.dob !== data.dob ||
-                submitData.gender !== data.gender ||
-                submitData.address !== data.address
+                !(
+                    submitData.citizenId !== data.citizenId ||
+                    submitData.guestName !== data.guestName ||
+                    submitData.phone !== data.phone ||
+                    submitData.email !== data.email ||
+                    submitData.dob !== data.dob ||
+                    submitData.gender !== data.gender ||
+                    submitData.address !== data.address
+                )
             ) {
-                // Trả response về y như post, chỉnh giao diện sau khi post tui làm sau.
-                alert('UPDATING A GUEST!');
-                setIsGuestInformationEditing(false);
-            } else {
-                alert('Bạn chưa thay đổi thông tin người đặt!');
+                Swal.fire({
+                    title: 'Bạn chưa thay đổi thông tin khách hàng!',
+                    icon: 'warning',
+                });
+                return;
             }
         }
+        Swal.fire({
+            title: 'Xác nhận sửa thông tin!',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: `Thoát`,
+            icon: 'info',
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                console.log(submitData);
+            }
+        });
     };
 
     const handleCheckinConfirm = (e) => {
@@ -263,7 +305,8 @@ function RoomModal({ className, type, data }) {
             showCancelButton: true,
             confirmButtonText: 'Xác nhận',
             cancelButtonText: `Thoát`,
-        }).then(async function(result)  {
+            icon: 'info',
+        }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
              
             
@@ -601,6 +644,7 @@ function RoomModal({ className, type, data }) {
                         className={cx('guest-information')}
                         setSubmitData={setSubmitData}
                         submitData={submitData}
+                        nameProperty="guestName"
                     />
                 </>
             )}
@@ -609,16 +653,6 @@ function RoomModal({ className, type, data }) {
                 <>
                     <div className={cx('heading-wrapper')}>
                         <h3 className={cx('heading')}>Thông tin người đặt</h3>
-                        {/* {type !== 'booking-detail' && (
-                            <button
-                                className={cx('edit-btn')}
-                                name="guest-information"
-                                onClick={handleGuestInformationEditBtnClick}
-                            >
-                                Sửa
-                                <EditIcon className={cx('edit-icon')} width="14px" height="14px" />
-                            </button>
-                        )} */}
                         {isGuestInformationEditing === true ? (
                             <button className={cx('cancel-btn')} onClick={handleGuestInformationEditBtnClick}>
                                 Hủy
@@ -643,6 +677,8 @@ function RoomModal({ className, type, data }) {
                         className={cx('guest-information')}
                         data={data}
                         isEditing={isGuestInformationEditing}
+                        nameProperty="guestName"
+                        submitData={submitData}
                         setSubmitData={setSubmitData}
                     />
                 </>
@@ -673,7 +709,14 @@ function RoomModal({ className, type, data }) {
                 )}
                 {(isReservationInformationEditing || isGuestInformationEditing) && (
                     <>
-                        <Button className={cx('btn')} label="Hủy" />
+                        <Button
+                            className={cx('btn')}
+                            label="Hủy"
+                            onClick={() => {
+                                setIsGuestInformationEditing(false);
+                                setIsReservationInformationEditing(false);
+                            }}
+                        />
                         <Button
                             className={cx('btn')}
                             label="Xác nhận"

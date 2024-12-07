@@ -1,4 +1,5 @@
 import classNames from 'classnames/bind';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signify } from 'react-signify';
 import { sIsLoggedIn } from '../../../../settings/globalStore';
@@ -14,7 +15,7 @@ import {
 } from '../../../components/Icons';
 import Image from '../../../components/Image';
 import styles from './Header.module.scss';
-import { useEffect } from 'react';
+import StaffModal from '../../../components/StaffModal/StaffModal';
 
 const cx = classNames.bind(styles);
 
@@ -85,14 +86,24 @@ function Header() {
                 />
                 <p className={cx('user-name')}>{currentStaffData.staff?.name ?? 'username'}</p>
                 <ul className={cx('menu')}>
-                    <li className={cx('menu-item')}>Thông tin cá nhân</li>
+                    <a
+                        href="#thong-tin-ca-nhan"
+                        className={cx('menu-item')}
+                        onClick={() => {
+                            sShowModal.set({
+                                isShowing: true,
+                                data: JSON.parse(localStorage.getItem('currentStaffData')),
+                            });
+                        }}
+                    >
+                        Thông tin cá nhân
+                    </a>
                     <a
                         href="#doi-mat-khau"
                         className={cx('menu-item')}
                         onClick={() => {
                             sShowModal.set({
                                 isShowing: true,
-                                data: JSON.parse(localStorage.getItem('userToken')),
                             });
                         }}
                     >
@@ -114,12 +125,20 @@ function Header() {
                 {(value) => {
                     if (value.isShowing) {
                         return (
-                            <div id="doi-mat-khau" className="modal">
-                                <a href="#" className="modal-overlay">
-                                    {' '}
-                                </a>
-                                <ChangePasswordModal className="modal-body" data={value.data} />
-                            </div>
+                            <>
+                                <div id="doi-mat-khau" className="modal">
+                                    <a href="#" className="modal-overlay">
+                                        {' '}
+                                    </a>
+                                    <ChangePasswordModal className="modal-body" data={value.data} />
+                                </div>
+                                <div id="thong-tin-ca-nhan" className="modal">
+                                    <a href="#" className="modal-overlay">
+                                        {' '}
+                                    </a>
+                                    <StaffModal className="modal-body" data={value.data} editable />
+                                </div>
+                            </>
                         );
                     }
                 }}

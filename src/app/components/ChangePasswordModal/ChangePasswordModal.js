@@ -9,7 +9,7 @@ const cx = classNames.bind(styles);
 function ChangePasswordModal({ className }) {
     const refPasswordFormMessage = useRef();
     const refPasswordFormMessage2 = useRef();
-    const refPasswordFormMessage3 = useRef(); 
+    const refPasswordFormMessage3 = useRef();
     const refPasswordFormMessageRequired = refPasswordFormMessage.current?.parentElement.querySelector(
         '.' + cx('form-message__required'),
     );
@@ -143,7 +143,7 @@ function ChangePasswordModal({ className }) {
             <form action="" method="" className={cx('form')}>
                 <div className={cx('form-group')}>
                     <div>
-                        <label for="old-password" className={cx('form-label')}>
+                        <label htmlFor="old-password" className={cx('form-label')}>
                             Mật khẩu cũ
                         </label>
                     </div>
@@ -161,7 +161,7 @@ function ChangePasswordModal({ className }) {
                 </div>
                 <div className={cx('form-group')}>
                     <div>
-                        <label for="new-password" className={cx('form-label')}>
+                        <label htmlFor="new-password" className={cx('form-label')}>
                             Mật khẩu mới
                         </label>
                     </div>
@@ -182,7 +182,7 @@ function ChangePasswordModal({ className }) {
                 </div>
                 <div className={cx('form-group')}>
                     <div>
-                        <label for="confirm-password" className={cx('form-label')}>
+                        <label htmlFor="confirm-password" className={cx('form-label')}>
                             Nhập lại mật khẩu
                         </label>
                     </div>
