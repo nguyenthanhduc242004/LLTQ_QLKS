@@ -44,7 +44,8 @@
 }
 
 .avt-wrapper {
-    margin: 0 auto;
+    display: flex;
+    justify-content: center;
 }
 
 .staff-avt {
@@ -57,4 +58,12 @@
     display: flex;
     justify-content: end;
     margin-top: 12px;
+}
+
+.input-with-label {
+    display: flex !important;
+
+    input {
+        flex: 1;
+    }
 }

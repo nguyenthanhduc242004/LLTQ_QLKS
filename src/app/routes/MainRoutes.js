@@ -13,6 +13,7 @@ import StaffList from '../pages/StaffList';
 import StaffTypeList from '../pages/StaffTypeList/StaffTypeList';
 import UserProtect from './UserProtect';
 import RevenueChart from '../pages/RevenueChart/RevenueChart';
+import StaffListManagement from '../pages/StaffListManagement/StaffListManagement';
 
 export default function MainRoutes() {
     return (
@@ -107,6 +108,16 @@ export default function MainRoutes() {
                                 <DefaultLayout>
                                     <UserProtect>
                                         <RoomListManagement />
+                                    </UserProtect>
+                                </DefaultLayout>
+                            }
+                        />
+                        <Route
+                            path="/quan-ly-nhan-vien"
+                            element={
+                                <DefaultLayout>
+                                    <UserProtect>
+                                        <StaffListManagement />
                                     </UserProtect>
                                 </DefaultLayout>
                             }

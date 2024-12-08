@@ -144,72 +144,7 @@ function DetailInformation({
                     <div className="row">
                         <div className={cx('input-with-label') + ' col c-12 m-12 l-12'}>
                             <span>Địa chỉ: </span>
-                            <input name="address" onChange={handleChange} type="text" value={submitData.guestAddress} />
-                        </div>
-                    </div>
-                </>
-            )}
-            {data !== undefined && !isEditing && (
-                <>
-                    <div className="row">
-                        <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
-                            <span>CCCD: </span>
-                            <input
-                                name="citizenId"
-                                onChange={handleChange}
-                                type="text"
-                                value={submitData.citizenId}
-                                disabled={true}
-                            />
-                        </div>
-                        <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
-                            <span>Họ tên: </span>
-                            <input
-                                placeholder="Vui lòng nhập trường này"
-                                name={nameProperty}
-                                onChange={handleChange}
-                                type="text"
-                                /*value={data.guestName}
-                                disabled={true}*/
-                                value={submitData[nameProperty]}
-                            />
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
-                            <span>Điện thoại: </span>
-                           
-                            <input
-                                placeholder="Vui lòng nhập trường này"
-                                name="phone"
-                                onChange={handleChange}
-                                type="tel"
-                                value={submitData.phone}
-                                
-                            />
-                        </div>
-                    </div>
-                    <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
-                            <span>Email: </span>
-                            <input name="email" onChange={handleChange} type="email" value={submitData.email} />
-                        </div>
-                    <div className="row">
-                        <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
-                            <span>Ngày sinh: </span>
-                            <input name="dob" onChange={handleChange} type="date" value={data.dob}  />
-                        </div>
-                        <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
-                            <span>Giới tính: </span>
-                            <select name="gender" onChange={handleChange} required="" value={submitData.guestGender}>
-                                <option value="male">Nam</option>
-                                <option value="female">Nữ</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className={cx('input-with-label') + ' col c-12 m-12 l-12'}>
-                            <span>Địa chỉ: </span>
-                            <input name="address" onChange={handleChange} type="text" value={submitData.guestAddress} />
+                            <input name="address" onChange={handleChange} type="text" value={submitData.address} />
                         </div>
                     </div>
                 </>
@@ -281,7 +216,7 @@ function DetailInformation({
                                 name="address"
                                 onChange={handleChange}
                                 type="text"
-                                value={data.guestAddress}
+                                value={data.address}
                                 disabled={true}
                             />
                         </div>

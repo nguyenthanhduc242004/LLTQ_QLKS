@@ -10,10 +10,9 @@ import { useState } from 'react';
 
 const cx = classNames.bind(styles);
 
-var currentStaffData = {};
-
 function Sidebar() {
     const [currentTab, setCurrentTab] = useState(true);
+    const [currentStaffData, setCurrentStaffData] = useState(JSON.parse(localStorage.getItem('currentStaffData')))
     return (
         <aside className={cx('wrapper')}>
             <div className={cx('user')}>
@@ -139,6 +138,13 @@ function Sidebar() {
                                             >
                                                 <PremiumIcon className={cx('icon')} />
                                                 Quản lý phòng
+                                            </Link>
+                                            <Link
+                                                to="/quan-ly-nhan-vien"
+                                                className={cx('sidebar-item', value === '/quan-ly-nhan-vien' ? 'focus' : '')}
+                                            >
+                                                <PremiumIcon className={cx('icon')} />
+                                                Quản lý nhân viên
                                             </Link>
                                             <Link
                                                 to="/thong-ke"

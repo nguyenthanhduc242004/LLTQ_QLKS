@@ -13,17 +13,21 @@ import { TYPE_ROOM_TYPE, TYPE_CHECKIN, TYPE_CHECKOUT } from './roomStore';
 import Button from '../../../../components/Button';
 import Swal from 'sweetalert2';
 import { post } from '../../../../modules/lib/httpHandle';
+import { BE_ENDPOINT } from '../../../../../settings/localVar';
 
 const cx = classNames.bind(styles);
 
 const reformatDate = (date) => {
-    const dateObject = new Date(date.split('-'));
-    return dateObject.toLocaleDateString();
+    if (date) {
+        return date.toLocaleDateString();
+    }
+    else return ''
 };
 
 function Room({ classNames, type, data, onClick }) {
     const handleDeleteBooking = (e) => {
         e.stopPropagation();
+        console.log(data.id)
         Swal.fire({
             title: 'Xác nhận hủy đặt phòng?',
             text: 'Lưu ý không thể hoàn tất sau khi thực hiện thao tác này!',
@@ -33,9 +37,22 @@ function Room({ classNames, type, data, onClick }) {
             cancelButtonColor: '#d33',
             confirmButtonText: 'Xác nhận',
             cancelButtonText: 'Thoát',
-        }).then((result) => {
+        }).then(async function (result)  {
+
             if (result.isConfirmed) {
-                alert('DELETING A BOOKING!');
+                //alert('DELETING A BOOKING!');
+                const response= await fetch(BE_ENDPOINT+"booking/delete/"+data.id,{
+                    method:"DELETE",
+                    header:{
+                        "Content-Type":"Plain/text"
+                    }
+                });
+                if(!response.ok)
+                {
+                    alert("Hủy đặt phòng thất bại");
+                    return;
+                }
+                
                 console.log(data.id);
                 Swal.fire({
                     title: 'Đã hủy!',
@@ -58,11 +75,27 @@ function Room({ classNames, type, data, onClick }) {
             confirmButtonText: 'Xác nhận',
             cancelButtonText: `Thoát`,
             icon: 'info',
-        }).then((result) => {
+        }).then(async (result) => {
             /* Read more about isConfirmed, isDenied below */
+             
+            
             if (result.isConfirmed) {
-                alert('UPDATING A BOOKING AND A ROOM STATE!');
+                //alert('UPDATING A BOOKING AND A ROOM STATE!');
                 // Thay đổi room state, thay dổi ngày checkin là ngày hôm nay
+                const checkinURL= BE_ENDPOINT+"checkin/"+data.id;
+            const response= await fetch(checkinURL,{
+                method:"GET",
+                headers:{
+                    "Content-Type":"Application/json"
+                }
+            });
+            if(!response.ok)
+            {
+                alert("Fail");
+                return;
+            }
+            const responseData= await response.json();
+            console.log(responseData);
                 const today = new Date();
                 const year = today.getFullYear();
                 const month = today.getMonth() + 1;
@@ -82,6 +115,7 @@ function Room({ classNames, type, data, onClick }) {
 
     const handleExtendCheckoutDate = (e) => {
         e.stopPropagation();
+        let requestBody={};
         Swal.fire({
             title: 'Vui lòng nhập ngày trả phòng mới',
             input: 'date',
@@ -100,17 +134,36 @@ function Room({ classNames, type, data, onClick }) {
                         roomId: data.roomId,
                     };
                     console.log(body);
-                    await post(
+                    requestBody={
+                        newCheckoutDate:date
+                    
+                    }
+                    const response = await fetch(BE_ENDPOINT+"renewal/check/"+body.id,{
+                        method:"POST",
+                        headers:{
+                            "Content-Type":"Application/json"
+                        },
+                        body:JSON.stringify(requestBody)
+                    });
+                    if(!response.ok)
+                    {
+                        return Swal.showValidationMessage('Ngày trả phòng không hợp lệ!');
+                    }
+
+
+                    /*await post(
                         'someURI/',
                         body,
                         (data) => {
                             // UPDATING A BOOKING'S CHECKOUTDATE
+                           
                         },
                         () => {
+                            
                             // UPDATE FAILED
                             return Swal.showValidationMessage('Ngày trả phòng không hợp lệ!');
                         },
-                    );
+                    );*/
                 } catch (error) {
                     Swal.showValidationMessage(`
                   Yêu cầu thất bại: ${error}!
@@ -118,8 +171,9 @@ function Room({ classNames, type, data, onClick }) {
                 }
             },
             allowOutsideClick: () => !Swal.isLoading(),
-        }).then((result) => {
-            if (result.isConfirmed) {
+        }).then(async function(result)  {
+            if (result.isConfirmed) { 
+               console.log(requestBody);
                 Swal.fire({
                     title: `Gia hạn thành công`,
                     icon: 'success',
@@ -139,11 +193,24 @@ function Room({ classNames, type, data, onClick }) {
             showCancelButton: true,
             confirmButtonText: 'Xác nhận',
             cancelButtonText: `Thoát`,
-            icon: 'info',
-        }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
+        }).then(async function (result)  {
+            
             if (result.isConfirmed) {
-                alert('UPDATING A BOOKING!');
+                //alert('UPDATING A BOOKING!');
+                const payURL= BE_ENDPOINT+"checkout/"+data.id;
+            const response= await fetch(payURL, {
+                method:"GET",
+                headers:{
+                    "Content-Type":"Application/json"
+                }
+            });
+            if(!response.ok)
+            {
+                alert("Fail");
+                return;
+            } 
+            const responseData= await response.json();
+            console.log(responseData);
                 console.log(data.id, data.roomId);
                 Swal.fire('Thanh toán thành công!', '', 'success').then((result) => {
                     if (result.isConfirmed) {
@@ -185,19 +252,19 @@ function Room({ classNames, type, data, onClick }) {
                 {(type === TYPE_CHECKIN || type === TYPE_CHECKOUT) && (
                     <>
                         <div className={cx('body-container')}>
-                            <p className={cx('room-name')}>{data.roomTypeText}</p>
-                            <p className={cx('room-number')}>{data.roomNumber}</p>
+                            <p className={cx('room-name')}>{data?.roomTypeText}</p>
+                            <p className={cx('room-number')}>{data?.roomNumber}</p>
                         </div>
                         {type === TYPE_CHECKIN && (
                             <>
                                 <div className={cx('body-container')}>
                                     <span className={cx('customer-name')}>
                                         <PersonIcon className={cx('icon')} />
-                                        {data.guestName}
+                                        {data?.guestName}
                                     </span>
                                     <span className={cx('bed-detail')}>
                                         <ClockIcon className={cx('icon')} />
-                                        {reformatDate(data.checkinDate)}
+                                        {new Date(data?.checkinDate.split('-')).toLocaleDateString()}
                                     </span>
                                 </div>
                                 <div className={cx('btn-wrapper')}>
@@ -217,11 +284,11 @@ function Room({ classNames, type, data, onClick }) {
                                 <div className={cx('body-container')}>
                                     <span className={cx('customer-name')}>
                                         <PersonIcon className={cx('icon')} />
-                                        {data.guestName}
+                                        {data?.guestName}
                                     </span>
                                     <span className={cx('bed-detail')}>
                                         <ClockIcon className={cx('icon')} />
-                                        {reformatDate(data.checkoutDate)}
+                                        {new Date(data?.checkoutDate.split('-')).toLocaleDateString()}
                                     </span>
                                 </div>
                                 <div className={cx('btn-wrapper')}>

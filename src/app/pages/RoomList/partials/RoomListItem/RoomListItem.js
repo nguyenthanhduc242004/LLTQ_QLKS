@@ -24,6 +24,8 @@ function RoomListItem({ className, data, onClick }) {
         }
     }
 
+    
+
     return (
         <a href={'#' + type} className={className + ' ' + cx('wrapper') + ' row'} onClick={onClick}>
             {data && (

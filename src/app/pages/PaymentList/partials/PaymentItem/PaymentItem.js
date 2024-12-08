@@ -5,9 +5,8 @@ const cx = classNames.bind(styles);
 
 function PaymentItem({ className, data, onClick }) {
     var stateText;
-    if (data?.isPaid === true) stateText = 'Đã thanh toán';
-    else if (Number(data.state) === 1) stateText = 'Chờ check-in';
-    else if (Number(data.state) === 2) stateText = 'Chờ check-out';
+    if (!!data.isPaid) stateText = 'Đã thanh toán';
+    else stateText = 'Chưa thanh toán'
 
     return (
         <a href="#chi-tiet-dat-phong" className={className + ' ' + cx('wrapper') + ' row'} onClick={onClick}>

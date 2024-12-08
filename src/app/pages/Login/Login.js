@@ -61,7 +61,7 @@ function Login() {
                 submitData,
                 (data) => {
                     // Success
-                    alert();
+                    console.log(data)
                     sIsLoggedIn.set(true);
                     //*************************** */
                     sIsAdmin.set(!!data.type);

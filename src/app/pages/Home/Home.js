@@ -15,6 +15,7 @@ const cx = classNames.bind(styles);
 function Home() {
     const [roomTypes, setRoomTypes] = useState([]);
     const [bookings, setBookings] = useState([]);
+    const [rooms, setRooms] = useState([])
 
     const navigate = useNavigate();
     const handleViewAllClick = (e) => {
@@ -45,14 +46,39 @@ function Home() {
                 alert('Bookings not found!');
             },
         );
+
+        get(
+            'rooms/',
+            (data) => {
+                setRooms(data);
+            },
+            () => {
+                alert('Rooms not found!');
+            },
+        );
     }, []);
 
     var checkinRooms = [];
     var checkoutRooms = [];
 
-    bookings.forEach((item) => {
-        if (item.state === 1) checkinRooms.push(item);
-        else if (item.state === 2) checkoutRooms.push(item);
+    const getBookingOfRoomWithMinCheckinDate = (roomId) => {
+        var selectedBooking;
+        bookings.forEach((booking) => {
+            if (!selectedBooking && booking.roomId === roomId && !booking.isPaid) selectedBooking = booking
+            else if (selectedBooking && !booking.isPaid) {
+                if (selectedBooking.checkinDate > booking.checkinDate) {
+                    selectedBooking = booking
+                }
+            }
+        })
+        return selectedBooking;
+    }
+
+    rooms.forEach((item) => {
+        // if (item.state === 1 && !item.isPaid) checkinRooms.push(item);
+        // else if (item.state === 2 && !item.isPaid) checkoutRooms.push(item);
+        if (item.state === 1) checkinRooms.push(getBookingOfRoomWithMinCheckinDate(item.id));
+        if (item.state === 2) checkoutRooms.push(getBookingOfRoomWithMinCheckinDate(item.id));
     });
 
     return (

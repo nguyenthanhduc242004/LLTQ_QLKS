@@ -3,9 +3,10 @@ import styles from './StaffModal.module.scss';
 import DetailInformation from '../DetailInformation';
 import Image from '../Image';
 import { CancelIcon, EditIcon } from '../Icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '../Button';
 import { CheckIcon } from '../Icons';
+import Swal from 'sweetalert2'
 
 const cx = classNames.bind(styles);
 
@@ -14,18 +15,38 @@ function StaffModal({ className, data, editable }) {
     const [submitData, setSubmitData] = useState({});
 
     const handleUpdateConfirm = () => {
-        // if (submitData.citizenId && )
+        Swal.fire({
+            title: 'Xác nhận sửa thông tin!',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: `Thoát`,
+            icon: 'info',
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                console.log(submitData);
+            }
+        });
     };
+    
+
+    // const handleWindowClick = () => {
+    //     alert()
+    //     setEditing(false);
+    // }
+    // useEffect(() => {
+    //     window.addEventListener('click', handleWindowClick)
+    // }, [])
 
     return (
-        <div className={cx('wrapper') + ' grid ' + className}>
+        <div className={cx('wrapper') + ' grid ' + className}> 
             <h2 className={cx('heading')}>THÔNG TIN NHÂN VIÊN</h2>
             {editable && !isEditing && (
                 <button
                     className={cx('edit-btn')}
                     onClick={() => {
                         setEditing(true);
-                        // setSubmitData(data);
+                        setSubmitData(data);
                     }}
                 >
                     Sửa
@@ -52,15 +73,16 @@ function StaffModal({ className, data, editable }) {
                 />
             </div>
             <DetailInformation
-                data={{ ...data, guestName: data.name || data.staffName || data.guestName }}
+                data={data}
                 isEditing={isEditing}
                 submitData={submitData}
                 setSubmitData={setSubmitData}
+                nameProperty='name'
             />
             <div className="row">
                 <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
                     <span>Loại nhân viên: </span>
-                    <input type="text" disabled defaultValue={data.staffTypeText} />
+                    <input type="text" disabled defaultValue={data.staffTypeText || data.staffType.staffTypeText} />
                 </div>
                 <div className={cx('input-with-label') + ' col c-6 m-6 l-6'}>
                     <span>Ngày vào làm: </span>

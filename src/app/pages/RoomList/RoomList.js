@@ -79,13 +79,13 @@ function RoomList() {
                             }
                         }
                     } else {
-                        if (item.state !== filterState) return false;
+                        if (item?.state !== filterState) return false;
                     }
                 } else if (filterState === 1) {
-                    if (item.state !== filterState) return false;
+                    if (item?.state !== filterState) return false;
                     if (filterOptions.firstDate) if (item.checkinDate !== filterOptions.firstDate) return false;
                 } else if (filterState === 2) {
-                    if (item.state !== filterState) return false;
+                    if (item?.state !== filterState) return false;
                     if (filterOptions.firstDate) if (item.checkoutDate !== filterOptions.firstDate) return false;
                 }
             }
@@ -176,6 +176,8 @@ function RoomList() {
         });
         setFilteredRooms(searchingRooms);
     };
+
+    
 
     // Get rooms
     useEffect(() => {

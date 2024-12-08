@@ -1,8 +1,8 @@
 import classNames from 'classnames/bind';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signify } from 'react-signify';
-import { sIsLoggedIn } from '../../../../settings/globalStore';
+import { sIsAdmin, sIsLoggedIn } from '../../../../settings/globalStore';
 import images from '../../../assets/imgs';
 import ChangePasswordModal from '../../../components/ChangePasswordModal';
 import {
@@ -16,25 +16,23 @@ import {
 import Image from '../../../components/Image';
 import styles from './Header.module.scss';
 import StaffModal from '../../../components/StaffModal/StaffModal';
+import CreateAccount from '../../../components/CreateAccount/CreateAccount';
 
 const cx = classNames.bind(styles);
 
 const sShowModal = signify({
-    isShowing: false,
-    data: undefined,
+    isShowing: false
 });
 
-var currentStaffData = {};
 
 function Header() {
     const nav = useNavigate();
-
-    useEffect(() => {
-        currentStaffData = JSON.parse(localStorage.getItem('currentStaffData'));
-    }, []);
+    const [currentStaffData, setCurrentStaffData] = useState(JSON.parse(localStorage.getItem('currentStaffData'))) ;
 
     return (
-        <div className={cx('wrapper')}>
+        <div className={cx('wrapper')} onClick={(e) => {
+            e.stopPropagation();
+        }}>
             <button className={cx('hide-side-bar-btn')}>
                 <HideSideBarIcon />
             </button>
@@ -86,6 +84,26 @@ function Header() {
                 />
                 <p className={cx('user-name')}>{currentStaffData.staff?.name ?? 'username'}</p>
                 <ul className={cx('menu')}>
+                    <sIsAdmin.Wrap>
+                        {isAdmin => {
+                            if (isAdmin) {
+                                return (
+                                    <a
+                                        href="#tao-tai-khoan"
+                                        className={cx('menu-item')}
+                                        onClick={() => {
+                                            sShowModal.set({
+                                                isShowing: true,
+                                                data: JSON.parse(localStorage.getItem('currentStaffData')),
+                                            });
+                                        }}
+                                    >
+                                        Tạo tài khoản
+                                    </a>
+                                )
+                            }
+                        }}
+                    </sIsAdmin.Wrap>
                     <a
                         href="#thong-tin-ca-nhan"
                         className={cx('menu-item')}
@@ -130,13 +148,19 @@ function Header() {
                                     <a href="#" className="modal-overlay">
                                         {' '}
                                     </a>
-                                    <ChangePasswordModal className="modal-body" data={value.data} />
+                                    <ChangePasswordModal className="modal-body" />
                                 </div>
                                 <div id="thong-tin-ca-nhan" className="modal">
                                     <a href="#" className="modal-overlay">
                                         {' '}
                                     </a>
-                                    <StaffModal className="modal-body" data={value.data} editable />
+                                    <StaffModal className="modal-body" data={{...currentStaffData.staff}} editable />
+                                </div>
+                                <div id="tao-tai-khoan" className="modal">
+                                    <a href="#" className="modal-overlay">
+                                        {' '}
+                                    </a>
+                                    <CreateAccount className="modal-body" />
                                 </div>
                             </>
                         );

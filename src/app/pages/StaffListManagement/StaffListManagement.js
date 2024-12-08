@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import styles from './roomListManagement.module.scss';
+import styles from './staffListManagement.module.scss';
 import { useEffect, useRef, useState } from 'react';
 import { get } from '../../modules/lib/httpHandle';
 import { sCurrentPage } from '../../layouts/DefaultLayout/Sidebar/sidebarStore';
@@ -9,35 +9,35 @@ import { BE_ENDPOINT } from '../../../settings/localVar';
 
 const cx = classNames.bind(styles);
 
-var roomTypes = [];
+var staffTypes = [];
 
 const sSubmitData = signify({});
 
-function RoomTypeList() {
-    const [rooms, setRooms] = useState([]);
+function StaffListManagement() {
+    const [staffs, setStaffs] = useState([]);
     const [isUpdating, setUpdating] = useState(false);
-    const refCurrentRoomId = useRef();
+    const refCurrentStaffId = useRef();
 
     useEffect(() => {
-        sCurrentPage.set('/quan-ly-phong');
+        sCurrentPage.set('/quan-ly-nhan-vien');
 
         get(
-            'rooms/',
+            'staffs/',
             (data) => {
-                setRooms(data);
+                setStaffs(data);
             },
             () => {
-                alert('Room not found!');
+                alert('Staffs not found!');
             },
         );
 
         get(
-            'room-types/',
+            'staff-types/',
             (data) => {
-                roomTypes = data;
+                staffTypes = data;
             },
             () => {
-                alert('Room types not found!');
+                alert('Staff types not found!');
             },
         );
     }, []);
@@ -47,18 +47,10 @@ function RoomTypeList() {
     };
 
     const handleUpdate = (e) => {
-        setUpdating(true);
-        const tableRow = e.target.closest('tr');
-        refCurrentRoomId.current = tableRow.getAttribute('data-id');
-        sSubmitData.set({
-            roomNumber: tableRow.querySelector('td[name="roomNumber"]').innerText,
-            floor: tableRow.querySelector('td[name="floor"]').innerText,
-            roomTypeId: tableRow.querySelector('td[name="roomTypeText"]').getAttribute('data-id'),
-        });
     };
 
     const handleAdd = () => {
-        if (sSubmitData.value.roomNumber && sSubmitData.value.floor && sSubmitData.value.roomTypeId) {
+        if (sSubmitData.value.citizenId && sSubmitData.value.name && sSubmitData.value.phone && sSubmitData.value.email && sSubmitData.value.dob && sSubmitData.value.gender && sSubmitData.value.address && sSubmitData.value.staffTypeId) {
             Swal.fire({
                 title: 'Bạn có chắc muốn thêm không?',
                 showDenyButton: true,
@@ -66,12 +58,12 @@ function RoomTypeList() {
                 cancelButtonText: 'Không',
                 icon: 'info',
             }).then(async function (result)  {
-                const response= await fetch(BE_ENDPOINT+"rooms/create",{
+                const response= await fetch(BE_ENDPOINT+"staffs/create",{
                     method:"POST",
                     headers:{
                         "Content-Type":"Application/json"
                     },
-                    body:JSON.stringify(sSubmitData.value)
+                    body:JSON.stringify({...sSubmitData.value, createdDate: new Date()})
                 });
                 if(!response.ok)
                 {
@@ -81,18 +73,17 @@ function RoomTypeList() {
                 const responseData= await response.json();
                 console.log(responseData);
                 if (result.isConfirmed) {
-                    alert('ADDING A ROOM!');
                     console.log(sSubmitData.value);
-                    Swal.fire('Thêm phòng thành công!', '', 'success');
+                    Swal.fire('Thêm nhân viên thành công!', '', 'success');
                     setUpdating(false);
                     sSubmitData.set({});
                     get(
-                        'rooms/',
+                        'staffs/',
                         (data) => {
-                            setRooms(data);
+                            setStaffs(data);
                         },
                         () => {
-                            alert('Room not found!');
+                            alert('Staffs not found!');
                         },
                     );
                 } else {
@@ -113,7 +104,7 @@ function RoomTypeList() {
             cancelButtonText: 'Không',
             icon: 'info',
         }).then(async function(result)  {
-            const updateURL= BE_ENDPOINT+"rooms/update/"+refCurrentRoomId.current;
+            const updateURL= BE_ENDPOINT+"staffs/update/"+refCurrentStaffId.current;
             const response= await fetch(updateURL, {
                 method:"PUT",
                 headers:{
@@ -129,18 +120,19 @@ function RoomTypeList() {
             const responseData= await response.json();
             console.log(responseData);
             if (result.isConfirmed) {
-                alert('UPDATING A ROOM!');
-                console.log(refCurrentRoomId.current, sSubmitData.value);
-                Swal.fire('Sửa phòng thành công!', '', 'success');
+                console.log(refCurrentStaffId.current, sSubmitData.value);
+                Swal.fire('Sửa nhân viên thành công!', '', 'success');
                 get(
-                    'rooms/',
+                    'staffs/',
                     (data) => {
-                        setRooms(data);
+                        setStaffs(data);
                     },
                     () => {
-                        alert('Room not found!');
+                        alert('Staffs not found!');
                     },
                 );
+                setUpdating(false)
+                sSubmitData.set({})
             } else {
                 setUpdating(true);
             }
@@ -155,7 +147,7 @@ function RoomTypeList() {
             cancelButtonText: 'Không',
             icon: 'info',
         }).then(async function(result)  {
-            const deleteURL= BE_ENDPOINT+"rooms/delete/"+e.target.closest('tr').getAttribute('data-id');
+            const deleteURL= BE_ENDPOINT+"staffs/delete/"+e.target.closest('tr').getAttribute('data-id');
             const response = await fetch(deleteURL, {
                 method:"DELETE",
                 header:{
@@ -170,25 +162,25 @@ function RoomTypeList() {
             const responseData= await response.text();
             console.log(responseData);
             if (result.isConfirmed) {
-                alert('DELETING A ROOM!');
-                Swal.fire('Xóa phòng thành công!', '', 'success');
+                Swal.fire('Xóa nhân viên thành công!', '', 'success');
                 console.log(e.target.closest('tr').getAttribute('data-id'));
                 setUpdating(false);
                 sSubmitData.set({});
                 get(
-                    'rooms/',
+                    'staffs/',
                     (data) => {
-                        setRooms(data);
+                        setStaffs(data);
                     },
                     () => {
-                        alert('Room not found!');
+                        alert('Staffs not found!');
                     },
                 );
             } else {
             }
         });
     };
-    
+
+
     return (
         <div
             className={cx('wrapper') + ' grid'}
@@ -198,15 +190,15 @@ function RoomTypeList() {
                 className={cx('heading')}
                 style={{ color: "rgb(255,77,109)", textAlign: 'center', fontSize: '24px', marginBottom: '20px' }}
             >
-                Quản Lý Phòng
+                Quản Lý Nhân Viên
             </h2>
             <sSubmitData.Wrap>
                 {(value) => (
                     <div className={cx('input-wrapper')} style={{ marginBottom: '20px' }}>
-                        <label style={{ fontWeight: 'bold', marginRight: '10px' }}>Số phòng: </label>
+                        <label style={{ fontWeight: 'bold', marginRight: '10px' }}>CCCD: </label>
                         <input
-                            value={value.roomNumber ?? ''}
-                            name="roomNumber"
+                            value={value.citizenId ?? ''}
+                            name="citizenId"
                             onChange={handleChange}
                             style={{
                                 padding: '5px',
@@ -216,10 +208,10 @@ function RoomTypeList() {
                             }}
                         />
                         <br />
-                        <label style={{ fontWeight: 'bold', marginRight: '10px' }}>Tầng: </label>
+                        <label style={{ fontWeight: 'bold', marginRight: '10px' }}>Họ tên: </label>
                         <input
-                            value={value.floor ?? ''}
-                            name="floor"
+                            value={value.name ?? ''}
+                            name="name"
                             onChange={handleChange}
                             style={{
                                 padding: '5px',
@@ -229,10 +221,80 @@ function RoomTypeList() {
                             }}
                         />
                         <br />
-                        <label style={{ fontWeight: 'bold', marginRight: '10px' }}>Hạng phòng: </label>
+                        <label style={{ fontWeight: 'bold', marginRight: '10px' }}>Điện thoại: </label>
+                        <input
+                            value={value.phone ?? ''}
+                            name="phone"
+                            onChange={handleChange}
+                            style={{
+                                padding: '5px',
+                                border: '1px solid #ccc',
+                                borderRadius: '5px',
+                                marginBottom: '10px',
+                            }}
+                        />
+                        <br />
+                        <label style={{ fontWeight: 'bold', marginRight: '10px' }}>Email: </label>
+                        <input
+                            value={value.email ?? ''}
+                            name="email"
+                            onChange={handleChange}
+                            style={{
+                                padding: '5px',
+                                border: '1px solid #ccc',
+                                borderRadius: '5px',
+                                marginBottom: '10px',
+                            }}
+                        />
+                        <br />
+                        <label style={{ fontWeight: 'bold', marginRight: '10px' }}>Ngày sinh: </label>
+                        <input
+                            value={value.dob ?? ''}
+                            name="dob"
+                            type="date"
+                            onChange={handleChange}
+                            style={{
+                                padding: '5px',
+                                border: '1px solid #ccc',
+                                borderRadius: '5px',
+                                marginBottom: '10px',
+                            }}
+                        />
+                        <br />
+                        <label style={{ fontWeight: 'bold', marginRight: '10px' }}>Giới tính: </label>
                         <select
-                            value={value.roomTypeId ?? '-1'}
-                            name="roomTypeId"
+                            value={value.gender ?? '-1'}
+                            name="gender"
+                            onChange={handleChange}
+                            style={{
+                                padding: '5px',
+                                marginBottom: '10px',
+                                border: '1px solid #ccc',
+                                borderRadius: '5px',
+                            }}
+                        >
+                            <option disabled value={-1}>Chọn giới tính</option>
+                            <option value="male">Nam</option>
+                            <option value="female">Nữ</option>
+                        </select>
+                        <br />
+                        <label style={{ fontWeight: 'bold', marginRight: '10px' }}>Địa chỉ: </label>
+                        <input
+                            value={value.address ?? ''}
+                            name="address"
+                            onChange={handleChange}
+                            style={{
+                                padding: '5px',
+                                border: '1px solid #ccc',
+                                borderRadius: '5px',
+                                marginBottom: '10px',
+                            }}
+                        />
+                        <br />
+                        <label style={{ fontWeight: 'bold', marginRight: '10px' }}>Loại nhân viên: </label>
+                        <select
+                            value={value.staffTypeId ?? '-1'}
+                            name="staffTypeId"
                             onChange={handleChange}
                             style={{
                                 padding: '5px',
@@ -240,10 +302,10 @@ function RoomTypeList() {
                                 borderRadius: '5px',
                             }}
                         >
-                            <option value={-1}>Chọn hạng phòng</option>
-                            {roomTypes.map((item) => (
+                            <option disabled value={-1}>Chọn loại nhân viên</option>
+                            {staffTypes.map((item) => (
                                 <option key={item.id} value={item.id}>
-                                    {item.roomTypeText}
+                                    {item.staffTypeText}
                                 </option>
                             ))}
                         </select>
@@ -258,7 +320,7 @@ function RoomTypeList() {
                         onClick={handleAdd}
                         style={{
                             backgroundColor: 'rgb(255,77,109)',
-   color: 'white',
+                            color: 'white',
                             border: 'none',
                             padding: '10px 20px',
                             borderRadius: '5px',
@@ -318,13 +380,15 @@ function RoomTypeList() {
                     <tr style={{ backgroundColor: 'rgb(255,77,109)', textAlign: 'center' }}>
                         <td style={{ padding: '10px' }}> </td>
                         <td style={{ padding: '10px' }}> </td>
-                        <th style={{ padding: '10px' }}>Số phòng</th>
-                        <th style={{ padding: '10px' }}>Tầng</th>
-                        <th style={{ padding: '10px' }}>Hạng phòng</th>
+                        <th style={{ padding: '10px' }}>Họ tên</th>
+                        <th style={{ padding: '10px' }}>Giới tính</th>
+                        <th style={{ padding: '10px' }}>Điện thoại</th>
+                        <th style={{ padding: '10px' }}>Email</th>
+                        <th style={{ padding: '10px' }}>Loại nhân viên</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {rooms.map((item) => {
+                    {staffs.map((item) => {
                         return (
                             <tr key={item.id} data-id={item.id} style={{ textAlign: 'center' }}>
                                 <td style={{ padding: '10px' }}>
@@ -333,7 +397,7 @@ function RoomTypeList() {
                                         onClick={handleDelete}
                                         style={{
                                             backgroundColor: '#FF4136',
-   color: 'white',
+                                            color: 'white',
                                             border: 'none',
                                             padding: '5px 10px',
                                             borderRadius: '5px',
@@ -346,7 +410,14 @@ function RoomTypeList() {
                                 <td style={{ padding: '10px' }}>
                                     <button
                                         className={cx('btn')}
-                                        onClick={handleUpdate}
+                                        onClick={(e) => {
+                                            
+                                            setUpdating(true);
+                                            sSubmitData.set(item)
+                                            console.log(item)
+                                            refCurrentStaffId.current = item.id;
+                                        }}
+                                        data={item}
                                         style={{
                                             backgroundColor: '#007BFF',
                                             color: 'white',
@@ -359,18 +430,20 @@ function RoomTypeList() {
                                         Sửa
                                     </button>
                                 </td>
-                                <td name="roomNumber" style={{ padding: '10px' }}>
-                                    {item.roomNumber}
+                                <td name="name" style={{ padding: '10px' }}>
+                                    {item.name}
                                 </td>
-                                <td name="floor" style={{ padding: '10px' }}>
-                                    {item.floor}
+                                <td name="gender" value={item.gender} style={{ padding: '10px' }}>
+                                    {item.gender === "male" ? "Nam" : "Nữ"}
                                 </td>
-                                <td
-                                    name="roomTypeText"
-                                    data-id={item.roomTypeId}
-                                    style={{ padding: '10px' }}
-                                >
-                                    {item.roomTypeText}
+                                <td name="phone" style={{ padding: '10px' }}>
+                                    {item.phone}
+                                </td>
+                                <td name="email" style={{ padding: '10px' }}>
+                                    {item.email}
+                                </td>
+                                <td name="staffTypeId" value={item.staffTypeId} style={{ padding: '10px' }}>
+                                    {item.staffTypeText}
                                 </td>
                             </tr>
                         );
@@ -383,4 +456,4 @@ function RoomTypeList() {
     
 }
 
-export default RoomTypeList;
+export default StaffListManagement;

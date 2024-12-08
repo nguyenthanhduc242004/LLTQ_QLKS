@@ -486,7 +486,8 @@ function RoomTypeList() {
                                         Sửa
                                     </button>
                                 </td>
-                                <td name="roomTypeText" style={{ padding: '10px' }}>
+                                {console.log(item)}
+                                <td name="roomTypeText" value={item.roomTypeId} style={{ padding: '10px' }}>
                                     {item.roomTypeText}
                                 </td>
                                 <td name="size" style={{ padding: '10px' }}>

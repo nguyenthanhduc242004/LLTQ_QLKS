@@ -36,47 +36,57 @@ function RoomModal({ className, type, data }) {
     const [isGuestInformationEditing, setIsGuestInformationEditing] = useState(false);
     const [filteredRooms, setFilteredRooms] = useState([]);
 
-    const getFilteredRooms = (id) => {
-        return rooms.filter((room) => {
+    const getFilteredRooms = (roomTypeId, bookingId) => {
+        console.log( roomTypeId, bookingId)
+        const selectedRooms = rooms.filter(room => room.roomTypeId === roomTypeId)
+        return selectedRooms.filter(room => {
             var condition = true;
-            var bookingsExceptTheOneThatIsEditing = bookings;
-            if (type === TYPE_CHECKIN) {
-                bookingsExceptTheOneThatIsEditing = bookings.filter((item) => item.id !== id);
+            var selectedBookings = bookings;
+            if (bookingId) {
+                selectedBookings = bookings.filter(booking => booking.id !== bookingId)
             }
-            bookingsExceptTheOneThatIsEditing.forEach((booking) => {
-                if (booking.roomId === Number(room.id)) {
-                    if (
-                        !(
-                            new Date(booking.checkoutDate.split('-')) <= new Date(submitData.checkinDate.split('-')) ||
-                            new Date(booking.checkinDate.split('-')) >= new Date(submitData.checkoutDate.split('-'))
-                        )
-                    )
-                        condition = false;
+            selectedBookings.forEach(booking => {
+                if (booking.roomId === room.id && !booking.isPaid) {
+                    if (!(
+                        new Date(booking.checkoutDate) <= new Date(submitData.checkinDate) ||
+                        new Date(booking.checkinDate) >= new Date(submitData.checkoutDate)
+                    )) 
+                    condition = false;
                 }
-            });
+            })
             return condition;
         });
+
+        
     };
 
     const getCheckoutMaxDateString = () => {
+        console.log('data', data)
         var res;
         bookings
             .filter((item) => item.id !== data.id)
             .forEach((booking) => {
-                if (booking.roomId === data.roomId) {
+                if (booking.roomId === data.roomId && !booking.isPaid) {
                     if (!res) res = booking.checkinDate;
                     else {
-                        if (new Date(booking.checkinDate.split('-')) < new Date(res.split('-')))
+                        if (new Date(booking.checkinDate) < new Date(res))
                             res = booking.checkinDate;
                     }
                 }
             });
+        console.log('res',res);
+        
         return res;
     };
 
     useEffect(() => {
         if (!!submitData.checkinDate && !!submitData.checkoutDate) {
-            setFilteredRooms(getFilteredRooms(data.id));
+            if (type === TYPE_ROOM_TYPE) {
+                setFilteredRooms(getFilteredRooms(data.id));
+            }
+            else {
+                setFilteredRooms(getFilteredRooms(data.roomTypeId, data.id));
+            }
         }
     }, [submitData]);
 
@@ -228,17 +238,21 @@ function RoomModal({ className, type, data }) {
         }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-                console.log(submitData);
+                console.log({...submitData, staffId: JSON.parse(localStorage.getItem('currentStaffData')).id});
                 post(
                     'bookings/',
-                    submitData,
+                    {...submitData, staffId: JSON.parse(localStorage.getItem('currentStaffData')).id},
                     (data) => {
                         Swal.fire({
                             title: 'Đặt phòng thành công!',
                             icon: 'success',
                             allowOutsideClick: false,
+                        }).then(response => {
+                            if (response.isConfirmed) {
+
+                                window.location.reload();
+                            }
                         });
-                        // window.location.reload();
                     },
                     () => {
                         Swal.fire('Đặt phòng thất bại', '', 'error');
@@ -548,6 +562,7 @@ function RoomModal({ className, type, data }) {
                 <div className="row">
                     <div className="col c-6 m-6 l-6">
                         <span>Ngày nhận phòng: </span>
+                        {console.log(submitData)}
                         {type === TYPE_ROOM_TYPE ? (
                             <input
                                 ref={checkinDateInput}

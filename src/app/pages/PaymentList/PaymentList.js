@@ -34,8 +34,8 @@ function PaymentList() {
         const value = e.target.value.toLowerCase();
         const searchingPayments = payments.filter((item) => {
             if (removeVietnameseTones(item.guestName).toLowerCase().includes(value)) return true;
-            if (new Date(item.checkinDate.split('-')).toLocaleDateString().includes(value)) return true;
-            if (new Date(item.checkoutDate.split('-')).toLocaleDateString().includes(value)) return true;
+            if (new Date(item.checkinDate).toLocaleDateString().includes(value)) return true;
+            if (new Date(item.checkoutDate).toLocaleDateString().includes(value)) return true;
             if (removeVietnameseTones(item.staffName).toLowerCase().includes(value)) return true;
             if (String(item.totalPrice).includes(value)) return true;
             if (removeVietnameseTones(stateText(item)).toLowerCase().includes(value)) return true;
