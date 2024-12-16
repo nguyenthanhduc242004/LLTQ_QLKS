@@ -14,6 +14,7 @@ import StaffTypeList from '../pages/StaffTypeList/StaffTypeList';
 import UserProtect from './UserProtect';
 import RevenueChart from '../pages/RevenueChart/RevenueChart';
 import StaffListManagement from '../pages/StaffListManagement/StaffListManagement';
+import RevenueChartList from '../pages/RevenueChartList/RevenueChartList';
 
 export default function MainRoutes() {
     return (
@@ -127,7 +128,7 @@ export default function MainRoutes() {
                             element={
                                 <DefaultLayout>
                                     <UserProtect>
-                                        <RevenueChart />
+                                        <RevenueChartList />
                                     </UserProtect>
                                 </DefaultLayout>
                             }

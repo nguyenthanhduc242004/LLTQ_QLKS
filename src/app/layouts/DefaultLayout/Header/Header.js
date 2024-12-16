@@ -33,9 +33,9 @@ function Header() {
         <div className={cx('wrapper')} onClick={(e) => {
             e.stopPropagation();
         }}>
-            <button className={cx('hide-side-bar-btn')}>
+            {/* <button className={cx('hide-side-bar-btn')}>
                 <HideSideBarIcon />
-            </button>
+            </button> */}
 
             {/* Logo and brand name*/}
             <div className={cx('logo-section')}>
@@ -45,7 +45,7 @@ function Header() {
                 </a>
             </div>
 
-            <div className={cx('action-wrapper')}>
+            {/* <div className={cx('action-wrapper')}>
                 <button className={cx('action')}>
                     <NotificationIcon />
                 </button>
@@ -71,9 +71,9 @@ function Header() {
                 <button className={cx('action')}>
                     <SettingIcon />
                 </button>
-            </div>
+            </div> */}
 
-            <span className={cx('divider')}></span>
+            {/* <span className={cx('divider')}></span> */}
 
             <div className={cx('user')}>
                 <Image

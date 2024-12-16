@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import Button from '../Button';
 import { CheckIcon } from '../Icons';
 import Swal from 'sweetalert2'
+import { BE_ENDPOINT } from '../../../settings/localVar';
 
 const cx = classNames.bind(styles);
 
@@ -21,10 +22,51 @@ function StaffModal({ className, data, editable }) {
             confirmButtonText: 'Xác nhận',
             cancelButtonText: `Thoát`,
             icon: 'info',
-        }).then((result) => {
+        }).then(async (result) => {
             /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
-                console.log(submitData);
+            if (result.isConfirmed) { 
+                const requestData= {
+                    citizenId:submitData.citizenId,
+                    name:submitData.name,
+                    phone:submitData.phone,
+                    email:submitData.email,
+                    dob:submitData.dob,
+                    gender:submitData.gender,
+                    address:submitData.address,
+                    createdData:submitData.createdData,
+                    staffTypeId:submitData.staffType.id
+                }
+                console.log(requestData)
+                const response= await fetch(BE_ENDPOINT+"staffs/update/"+submitData.id,{
+                    method:"PUT",
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+                    body:JSON.stringify(requestData)
+                });
+                if(response.ok) 
+                    {
+                        const currentStaffData = JSON.parse(localStorage.getItem('currentStaffData'))
+                        localStorage.setItem('currentStaffData', JSON.stringify({...currentStaffData, staff: submitData}))
+                        Swal.fire({
+                            title: "Sửa thông tin thành công!",
+                            confirmButtonText: 'Xác nhận',
+                            icon: 'success',
+                            allowOutsideClick: false
+                        })
+                        window.location.reload();
+                    }
+                    else {
+                        Swal.fire({
+                            title: "Sửa thông tin thất bại!",
+                            confirmButtonText: 'Xác nhận',
+                            icon: 'error'
+                        }).then(response => {
+                            if (response.isConfirmed) {
+                                setEditing(false)
+                            }
+                        })
+                    }
             }
         });
     };

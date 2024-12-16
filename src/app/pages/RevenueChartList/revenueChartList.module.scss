@@ -110,3 +110,16 @@
     font-weight: 500;
     margin-right: 12px;
 }
+
+.year-wrapper {
+    display: flex;
+    justify-content: center;
+    font-size: 1.8rem;
+}
+
+.year-select {
+    margin-left: 8px;
+    padding: 0 4px;
+    background-color: transparent;
+    border-radius: 4px;
+}

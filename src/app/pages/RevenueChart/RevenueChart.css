@@ -1,21 +1,27 @@
-.chart-wrapper {
-}
-
 .chart-container {
-    padding: 20px;
+    font-family: Arial, sans-serif;
     text-align: center;
+    padding: 20px;
+    /* background-color: #ffe6f0; */
+    /* color: #5a2d48; */
+    border-radius: 10px;
 }
 
-.chart-container + .chart-container {
-    margin-top: 40px;
+.details-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 20px;
 }
 
 .details-table {
-    margin-top: 20px;
-    border: 1px solid #ccc;
+    flex: 1;
+    margin-right: 20px;
+    /* background-color: #fff5fa; */
+    /* border: 1px solid #f582c2; */
+    border-radius: 8px;
     padding: 10px;
-    display: inline-block;
-    width: 60%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .details-table table {
@@ -25,11 +31,22 @@
 
 .details-table th,
 .details-table td {
-    border: 1px solid #ccc;
-    padding: 8px;
+    padding: 10px;
+    /* border: 1px solid #f582c2; */
     text-align: left;
 }
 
 .details-table th {
-    background-color: #f4f4f4;
+    /* background-color: #f8b4d9; */
+    /* color: #5a2d48; */
+}
+
+.pie-chart {
+    flex: 1;
+    /* background-color: #fff5fa; */
+    /* border: 1px solid #f582c2; */
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 13px;
 }

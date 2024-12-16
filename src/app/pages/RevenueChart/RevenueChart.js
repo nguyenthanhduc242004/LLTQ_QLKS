@@ -1,108 +1,68 @@
-import React, { useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import './RevenueChart.css';
+import React, { useState, useEffect } from "react";
+import {
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    Tooltip,
+    ResponsiveContainer,
+    PieChart,
+    Pie,
+    Cell,
+    Legend,
+} from "recharts";
+import "./RevenueChart.css";
 
-const data = [
-    {
-        week: 'Tuần 1',
-        revenue: 1500,
-        details: { 'Phòng Tiêu Chuẩn': 500, 'Phòng Cao Cấp': 700, 'Phòng Hạng Sang': 300 },
-    },
-    {
-        week: 'Tuần 2',
-        revenue: 2000,
-        details: { 'Phòng Tiêu Chuẩn': 800, 'Phòng Cao Cấp': 900, 'Phòng Hạng Sang': 300 },
-    },
-    {
-        week: 'Tuần 3',
-        revenue: 1800,
-        details: { 'Phòng Tiêu Chuẩn': 600, 'Phòng Cao Cấp': 900, 'Phòng Hạng Sang': 300 },
-    },
-    {
-        week: 'Tuần 4',
-        revenue: 2200,
-        details: { 'Phòng Tiêu Chuẩn': 1000, 'Phòng Cao Cấp': 900, 'Phòng Hạng Sang': 300 },
-    },
-    {
-        week: 'Tuần 5',
-        revenue: 1700,
-        details: { 'Phòng Tiêu Chuẩn': 700, 'Phòng Cao Cấp': 700, 'Phòng Hạng Sang': 300 },
-    },
-    {
-        week: 'Tuần 6',
-        revenue: 2100,
-        details: { 'Phòng Tiêu Chuẩn': 900, 'Phòng Cao Cấp': 900, 'Phòng Hạng Sang': 300 },
-    },
-    {
-        week: 'Tuần 7',
-        revenue: 1900,
-        details: { 'Phòng Tiêu Chuẩn': 700, 'Phòng Cao Cấp': 900, 'Phòng Hạng Sang': 300 },
-    },
-    {
-        week: 'Tuần 8',
-        revenue: 2300,
-        details: { 'Phòng Tiêu Chuẩn': 1100, 'Phòng Cao Cấp': 900, 'Phòng Hạng Sang': 300 },
-    },
-    {
-        week: 'Tuần 9',
-        revenue: 1600,
-        details: { 'Phòng Tiêu Chuẩn': 600, 'Phòng Cao Cấp': 700, 'Phòng Hạng Sang': 300 },
-    },
-    {
-        week: 'Tuần 10',
-        revenue: 2500,
-        details: { 'Phòng Tiêu Chuẩn': 1200, 'Phòng Cao Cấp': 1000, 'Phòng Hạng Sang': 300 },
-    },
-    {
-        week: 'Tuần 11',
-        revenue: 1800,
-        details: { 'Phòng Tiêu Chuẩn': 700, 'Phòng Cao Cấp': 800, 'Phòng Hạng Sang': 300 },
-    },
-    {
-        week: 'Tuần 12',
-        revenue: 2000,
-        details: { 'Phòng Tiêu Chuẩn': 900, 'Phòng Cao Cấp': 800, 'Phòng Hạng Sang': 300 },
-    },
-    {
-        week: 'Tuần 13',
-        revenue: 2200,
-        details: { 'Phòng Tiêu Chuẩn': 1000, 'Phòng Cao Cấp': 900, 'Phòng Hạng Sang': 300 },
-    },
-];
+const pinkShades = ["#4CAF50", "#FF9800", "#2196F3", "#e62490", "#bf1d74"];
 
-function RevenueChart() {
-    const [selectedWeek, setSelectedWeek] = useState();
-    const [selectedWeekLabel, setSelectedWeekLabel] = useState('');
+function RevenueChart({data, year}) {
+    
+    const [selectedMonth, setselectedMonth] = useState();
+    const [selectedMonthLabel, setselectedMonthLabel] = useState("");
+
 
     const handleBarClick = (data) => {
-        setSelectedWeek(data.details);
-        setSelectedWeekLabel(data.week); // Ghi nhận tuần được chọn
+        setselectedMonth(data.details); // 'details' vẫn là mảng
+        setselectedMonthLabel(data.month); // Hiển thị tháng
     };
+    
+    
+
+    const pieData = selectedMonth
+    ? selectedMonth.map((item) => ({
+          name: item.roomType,
+          value: item.revenue,
+      }))
+    : [];
+
 
     return (
-        <div className="chart-wrapper">
-            <div className="chart-container">
-                <h2>Doanh thu Quý 1 2024</h2>
-                <ResponsiveContainer width="100%" height={200}>
-                    <BarChart
-                        data={data}
-                        margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                        onClick={(e) => {
-                            if (e && e.activePayload) {
-                                handleBarClick(e.activePayload[0].payload);
-                            }
-                        }}
-                    >
-                        <XAxis dataKey="week" interval={0} />
-                        <YAxis />
-                        <Tooltip />
-                        <Bar dataKey="revenue" fill="#8884d8" />
-                    </BarChart>
-                </ResponsiveContainer>
+        <div className="chart-container">
+            <h2>Doanh thu theo tháng năm {year}</h2>
 
-                {selectedWeek && (
+            <ResponsiveContainer width="100%" height={170}>
+                <BarChart
+                    data={data}
+                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                    onClick={(e) => {
+                        if (e && e.activePayload) {
+                            handleBarClick(e.activePayload[0].payload);
+                        }
+                    }}
+                >
+                    <XAxis dataKey="month" interval={0} />
+
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="revenue" fill="#f582c2" name="Doanh thu" />
+                </BarChart>
+            </ResponsiveContainer>
+
+            {selectedMonth && (
+                <div className="details-container">
                     <div className="details-table">
-                        <h3>Doanh thu chi tiết {selectedWeekLabel}</h3>
+                    <h3>Doanh thu chi tiết {selectedMonthLabel}</h3>
+
                         <table>
                             <thead>
                                 <tr>
@@ -111,17 +71,43 @@ function RevenueChart() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {Object.entries(selectedWeek).map(([roomType, revenue]) => (
-                                    <tr key={roomType}>
-                                        <td>{roomType}</td>
-                                        <td>{revenue.toLocaleString('vi-VN')} VNĐ</td>
+                                {selectedMonth.map((item) => (
+                                    <tr key={item.roomType}>
+                                        <td>{item.roomType}</td>
+<td>{item.revenue.toLocaleString("vi-VN")} VNĐ</td>
                                     </tr>
                                 ))}
                             </tbody>
+
                         </table>
                     </div>
-                )}
-            </div>
+
+                    <div className="pie-chart">
+                        <h3>Phần trăm doanh thu các loại phòng</h3>
+                        <ResponsiveContainer width="100%" height={200}>
+                            <PieChart>
+                                <Pie
+                                    data={pieData}
+                                    dataKey="value"
+                                    nameKey="name"
+                                    cx="50%"
+                                    cy="55%"
+                                    outerRadius={50}
+                                    fill="#f254aa"
+                                    label={({ name, percent }) =>
+                                        `${name}: ${(percent * 100).toFixed(0)}%`
+                                    }
+                                >
+                                    {pieData.map((_, index) => (
+                                        <Cell key={`cell-${index}`} fill={pinkShades[index % pinkShades.length]} />
+                                    ))}
+                                </Pie>
+                                <Legend />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

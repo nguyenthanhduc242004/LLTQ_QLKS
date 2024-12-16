@@ -107,11 +107,6 @@ function ChangePasswordModal({ className }) {
                         },
                         body:JSON.stringify(data)
                     });
-                    if(!response.ok)    
-                    {
-                        alert("Đổi mật khẩu thất bại, mật khẩu cũ không đúng");
-                        return;
-                    }
                     if(response.ok) 
                     {
                         Swal.fire({

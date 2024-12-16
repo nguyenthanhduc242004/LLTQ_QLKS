@@ -59,6 +59,9 @@ function GuestModal({ className, data }) {
                         setIsEditing(true);
                         setSubmitData(data);
                     }}
+                    style={{
+                        display: 'none'
+                    }}
                 >
                     Sửa
                     <EditIcon className={cx('icon')} />
