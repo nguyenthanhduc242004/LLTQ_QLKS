@@ -12,6 +12,7 @@ export default function DefaultLayout({ children }) {
                     style={{
                         height: 'calc(100vh - 56px)',
                         padding: '0 20px',
+                        paddingBottom: '20px',
                         overflowY: 'auto',
                     }}
                 >

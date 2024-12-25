@@ -43,7 +43,6 @@ function RoomList() {
     const getFilteredRooms = (filterOptions) => {
         var res = [];
         var filterState;
-        console.log(roomsWithEarliestDate);
         res = roomsWithEarliestDate.filter((item) => {
             if (filterOptions.floor) if (item.floor !== Number(filterOptions.floor)) return false;
             if (filterOptions.roomTypeId) if (item.roomTypeId !== Number(filterOptions.roomTypeId)) return false;
@@ -111,15 +110,16 @@ function RoomList() {
 
     const getRoomsWithEarliestDate = () => {
         var res = [];
+        console.log(rooms)
         rooms.forEach((room) => {
             if (room.state === 0) res.push(room);
             else {
                 var theBooking = undefined;
                 bookings.forEach((booking) => {
-                    if (!booking.isPaid && Number(room.id) === booking.roomId) {
+                    if (Number(room.id) === booking.roomId) {
                         if (!theBooking) {
                             theBooking = booking;
-                        } else {
+                        } else if (!booking.isPaid) {
                             if (new Date(booking.checkinDate.split('-')) < new Date(theBooking.checkinDate.split('-')))
                                 theBooking = booking;
                         }
@@ -293,7 +293,7 @@ function RoomList() {
                     onClick={handleFilterClick}
                     style={{ minWidth: '160px' }}
                 >
-                    {roomTypes.find((item) => item.id === filterOptions.roomTypeId)?.roomTypeText ?? 'Chọn hạng phòng'}
+                    {roomTypes.find((item) => item.id === Number(filterOptions.roomTypeId))?.roomTypeText ?? 'Chọn hạng phòng'}
                     <CaretDownIcon className={cx('caret-down-icon')} />
                     <ul className={cx('room-type-dropdown')}>
                         {roomTypes.map((item, index) => (
@@ -403,7 +403,6 @@ function RoomList() {
             ))}
             <sShowModal.HardWrap>
                 {(value) => {
-                    console.log('sShowModal re-rendered!');
                     if (value.type === TYPE_ROOM_TYPE) {
                         return (
                             <div id={value.type} className="modal">

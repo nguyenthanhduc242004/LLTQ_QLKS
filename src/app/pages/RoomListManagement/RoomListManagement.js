@@ -81,7 +81,6 @@ function RoomTypeList() {
                 const responseData= await response.json();
                 console.log(responseData);
                 if (result.isConfirmed) {
-                    alert('ADDING A ROOM!');
                     console.log(sSubmitData.value);
                     Swal.fire('Thêm phòng thành công!', '', 'success');
                     setUpdating(false);
@@ -129,7 +128,6 @@ function RoomTypeList() {
             const responseData= await response.json();
             console.log(responseData);
             if (result.isConfirmed) {
-                alert('UPDATING A ROOM!');
                 console.log(refCurrentRoomId.current, sSubmitData.value);
                 Swal.fire('Sửa phòng thành công!', '', 'success');
                 get(
@@ -141,6 +139,8 @@ function RoomTypeList() {
                         alert('Room not found!');
                     },
                 );
+                setUpdating(false)
+                sSubmitData.set({})
             } else {
                 setUpdating(true);
             }
@@ -170,7 +170,6 @@ function RoomTypeList() {
             const responseData= await response.text();
             console.log(responseData);
             if (result.isConfirmed) {
-                alert('DELETING A ROOM!');
                 Swal.fire('Xóa phòng thành công!', '', 'success');
                 console.log(e.target.closest('tr').getAttribute('data-id'));
                 setUpdating(false);
@@ -188,7 +187,7 @@ function RoomTypeList() {
             }
         });
     };
-    
+
     return (
         <div
             className={cx('wrapper') + ' grid'}
@@ -240,7 +239,7 @@ function RoomTypeList() {
                                 borderRadius: '5px',
                             }}
                         >
-                            <option value={-1}>Chọn hạng phòng</option>
+                            <option value={-1} disabled>Chọn hạng phòng</option>
                             {roomTypes.map((item) => (
                                 <option key={item.id} value={item.id}>
                                     {item.roomTypeText}

@@ -94,7 +94,6 @@ function RoomTypeList() {
                         return;
                     }
 
-                    alert('ADDING A ROOM TYPE!');
                     console.log(sSubmitData.value);
                     Swal.fire('Thêm hạng phòng thành công!', '', 'success');
                     setUpdating(false);
@@ -142,7 +141,6 @@ function RoomTypeList() {
             const responseData = await response.json();
             console.log(responseData);
             if (result.isConfirmed) {
-                alert('UPDATING A ROOM TYPE!');
                 console.log(refCurrentRoomTypeId.current, sSubmitData.value);
                 Swal.fire('Sửa hạng phòng thành công!', '', 'success');
                 get(
@@ -182,7 +180,6 @@ function RoomTypeList() {
             const responseData = await response.text();
             console.log(responseData);
             if (result.isConfirmed) {
-                alert('DELETING A ROOM TYPE!');
                 Swal.fire('Xóa hạng phòng thành công!', '', 'success');
                 console.log(e.target.closest('tr').getAttribute('data-id'));
                 setUpdating(false);
